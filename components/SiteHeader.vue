@@ -29,7 +29,7 @@ watch(() => route.fullPath, closeMobileMenu)
   <header class="site-header" :class="{ 'site-header--menu-open': isMobileMenuOpen }">
     <NuxtLink class="brand-mark" to="/" aria-label="ATY home">
       <img :src="logoSrc" alt="ATY" class="brand-logo">
-      <span class="brand-name">ALI TAHA YAPISKAN</span>
+      <span class="brand-name">ALI TAHA Y.</span>
     </NuxtLink>
 
     <button
@@ -56,14 +56,5 @@ watch(() => route.fullPath, closeMobileMenu)
         {{ item.label }}
       </NuxtLink>
     </nav>
-
-    <NuxtLink
-      to="/contact"
-      :class="['site-contact-cta', { 'site-contact-cta--active': isActive('/contact') }]"
-      @click="closeMobileMenu"
-    >
-      Contact
-    </NuxtLink>
-
   </header>
 </template>

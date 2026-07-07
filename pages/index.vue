@@ -85,14 +85,4 @@ const process = [
     </div>
   </section>
 
-  <section class="section section--tight">
-    <div class="contact-card">
-      <p class="eyebrow">Open to opportunities</p>
-      <h2>Have a character brief or studio role in mind?</h2>
-      <p>
-        Send a direct mail with the project scope, timeline, and any visual references. I will get back with availability and next steps.
-      </p>
-      <a class="mail-link" :href="`mailto:${artist.email}`">{{ artist.email }}</a>
-    </div>
-  </section>
 </template>

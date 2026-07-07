@@ -1,20 +1,39 @@
 <script setup lang="ts">
 import { artist } from '~/data/portfolio'
+
+const socialLinks = [
+  { label: 'ArtStation', short: 'AS', href: artist.artstation },
+  { label: 'Linktree', short: 'LT', href: artist.linktree },
+  { label: 'Email', short: '@', href: `mailto:${artist.email}` }
+]
 </script>
 
 <template>
-  <footer class="site-footer">
-    <div>
-      <p class="eyebrow">Available for selected opportunities</p>
-      <h2>Let's build memorable characters.</h2>
-    </div>
+  <footer class="site-footer" aria-label="Site footer">
+    <div class="site-footer__bar">
+      <a class="site-footer__credit" :href="artist.artstation" target="_blank" rel="noreferrer">
+        <span>Portfolio by</span>
+        <strong>{{ artist.name }}</strong>
+      </a>
 
-    <div class="site-footer__links">
-      <a :href="`mailto:${artist.email}`">{{ artist.email }}</a>
-      <a :href="artist.artstation" target="_blank" rel="noreferrer">ArtStation</a>
-      <a :href="artist.linktree" target="_blank" rel="noreferrer">Linktree</a>
-    </div>
+      <a class="site-footer__top" href="#top" aria-label="Back to top">
+        <span>Back to Top</span>
+        <span aria-hidden="true">&uarr;</span>
+      </a>
 
-    <p class="site-footer__meta">© 2026 {{ artist.brand }}. 3D Character Artist based in {{ artist.location }}.</p>
+      <div class="site-footer__socials" aria-label="Social links">
+        <a
+          v-for="link in socialLinks"
+          :key="link.href"
+          class="site-footer__social"
+          :href="link.href"
+          :aria-label="link.label"
+          :target="link.href.startsWith('mailto:') ? undefined : '_blank'"
+          :rel="link.href.startsWith('mailto:') ? undefined : 'noreferrer'"
+        >
+          <span>{{ link.short }}</span>
+        </a>
+      </div>
+    </div>
   </footer>
 </template>
