@@ -53,16 +53,23 @@ const process = [
       </div>
     </div>
 
-    <NuxtLink class="hero__visual" :to="`/portfolio/${homeFeaturedProject.id}`">
-      <img :src="homeHeroImage" :alt="`${homeFeaturedProject.title} character render`">
+    <div class="hero__visual hero__visual--model" :aria-label="`${homeFeaturedProject.title} realtime 3D character model`">
+      <ClientOnly>
+        <HomeModelViewer model-path="models/MissFortune_low.fbx" :label="`${homeFeaturedProject.title} realtime 3D character model`" />
+        <template #fallback>
+          <div class="home-model-viewer home-model-viewer--loading">
+            <div class="home-model-viewer__status">Loading 3D model</div>
+          </div>
+        </template>
+      </ClientOnly>
       <div class="hero__visual-card">
         <div>
-          <p class="eyebrow">Featured project</p>
+          <p class="eyebrow">Realtime model</p>
           <h2>{{ homeFeaturedProject.title }}</h2>
         </div>
-        <span class="button">Open Project</span>
+        <NuxtLink class="button" :to="`/portfolio/${homeFeaturedProject.id}`">Open Project</NuxtLink>
       </div>
-    </NuxtLink>
+    </div>
   </section>
 
   <section class="section">

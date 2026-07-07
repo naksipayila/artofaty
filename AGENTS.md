@@ -14,7 +14,7 @@
 - `components/ProjectCard.vue` exists but is not currently mounted; do not wire it back in unless asked.
 - Portfolio/profile data lives in `data/portfolio.ts`; main project `id` values drive `/portfolio/:id`, prev/next nav, and `nitro.prerender.routes`.
 - Only main `projects` have detail pages. `robloxProjects` render inside `/portfolio` and open the lightbox; do not add Roblox detail routes unless asked.
-- Images are external ArtStation CDN URLs in `data/portfolio.ts`; `public/logo.png` is the local logo/favicon.
+- Images are external ArtStation CDN URLs in `data/portfolio.ts`; `public/logo.png` is the local logo/favicon, and `public/models/MissFortune_low.fbx` plus `public/models/tex/*.webp` power the home hero 3D viewer.
 - Local public asset URLs must respect Nuxt `app.baseURL`; this repo is deployed under `/artofaty/` on GitHub Pages, not a custom domain.
 - `plugins/lenis.client.ts` adds desktop-only smooth wheel scrolling; it disables on touch/reduced-motion and stops whenever `.project-lightbox` exists.
 
