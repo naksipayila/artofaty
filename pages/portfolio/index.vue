@@ -115,31 +115,25 @@ onBeforeUnmount(() => {
   <div class="fabrica-page">
     <div ref="revealRootRef" class="fabrica-page__inner">
       <div class="fabrica-page__top">
-        <div class="fabrica-page__intro fabrica-reveal fabrica-reveal--heading">
-          <h1 class="fabrica-page__title">Portfolio</h1>
-          <p class="fabrica-page__description">
-            Selected 3D character work, stylized studies, and Roblox production pieces.
-          </p>
-        </div>
-
         <div class="fabrica-panel__header fabrica-reveal fabrica-reveal--tabs">
           <div class="fabrica-tabs" role="tablist" aria-label="Portfolio categories">
-            <button
-              v-for="tab in portfolioTabs"
-              :id="`portfolio-tab-${tab.id}`"
-              :key="tab.id"
-              class="fabrica-tabs__button"
-              :class="{ 'fabrica-tabs__button--active': activePortfolioTab === tab.id }"
-              type="button"
-              role="tab"
-              :aria-selected="activePortfolioTab === tab.id"
-              :aria-controls="`portfolio-panel-${tab.id}`"
-              @click="selectPortfolioTab(tab.id)"
-            >
-              <span class="fabrica-tabs__label">{{ tab.label }}</span>
-              <span class="fabrica-tabs__count">{{ tab.count }}</span>
-              <span class="right-curve"></span>
-            </button>
+            <template v-for="(tab, index) in portfolioTabs" :key="tab.id">
+              <button
+                :id="`portfolio-tab-${tab.id}`"
+                class="fabrica-tabs__button"
+                :class="{ 'fabrica-tabs__button--active': activePortfolioTab === tab.id }"
+                type="button"
+                role="tab"
+                :aria-selected="activePortfolioTab === tab.id"
+                :aria-controls="`portfolio-panel-${tab.id}`"
+                @click="selectPortfolioTab(tab.id)"
+              >
+                <span class="fabrica-tabs__label">{{ tab.label }}</span>
+                <span class="fabrica-tabs__count">{{ tab.count }}</span>
+                <span class="right-curve"></span>
+              </button>
+              <span v-if="index < portfolioTabs.length - 1" class="fabrica-tabs__separator" aria-hidden="true">|</span>
+            </template>
           </div>
         </div>
       </div>

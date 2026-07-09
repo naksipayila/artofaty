@@ -14,6 +14,8 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       routes: [
+        '/about',
+        '/contact',
         '/portfolio/anastasia',
         '/portfolio/miss-fortune',
         '/portfolio/mermaid',
