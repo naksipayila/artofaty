@@ -11,25 +11,6 @@ useSeoMeta({
   ogDescription: 'Personal portfolio of Ali Taha Yapışkan, a 3D Character Artist focused on stylized characters, hand-painted textures, and realtime presentation.',
   ogImage: homeHeroImage
 })
-
-const process = [
-  {
-    title: 'Sculpt',
-    text: 'Building readable anatomy, expressive silhouettes, and stylized forms in ZBrush before moving into production.'
-  },
-  {
-    title: 'Retopo',
-    text: 'Preparing clean game-ready topology and UVs with a focus on deformation, texture space, and presentation needs.'
-  },
-  {
-    title: 'Texture',
-    text: 'Painting materials, color hierarchy, and surface detail with hand-painted or PBR workflows depending on the character.'
-  },
-  {
-    title: 'Present',
-    text: 'Rendering final shots, clay views, wireframes, and realtime previews that clearly communicate the character work.'
-  }
-]
 </script>
 
 <template>
@@ -71,25 +52,4 @@ const process = [
       </div>
     </div>
   </section>
-
-  <section class="section">
-    <div class="section-heading">
-      <p class="eyebrow">Process</p>
-      <div>
-        <h2>A character pipeline built for clarity.</h2>
-        <p>
-          From sculpt to final render, every step supports the same goal: a character that reads instantly and holds up under closer inspection.
-        </p>
-      </div>
-    </div>
-
-    <div class="process-grid">
-      <div v-for="(item, index) in process" :key="item.title" class="process-card">
-        <span>{{ String(index + 1).padStart(2, '0') }}</span>
-        <h3>{{ item.title }}</h3>
-        <p>{{ item.text }}</p>
-      </div>
-    </div>
-  </section>
-
 </template>

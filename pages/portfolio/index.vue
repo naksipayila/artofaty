@@ -25,13 +25,7 @@ const portfolioTabs = [
   { id: 'roblox', label: 'Roblox Portfolio', count: robloxProjects.length }
 ]
 
-const activePortfolioSummary = computed(() => (
-  activePortfolioTab.value === 'roblox'
-    ? `${robloxProjects.length} Roblox Works`
-    : `${projects.length} Selected Works`
-))
-
-const getRevealDelay = (index: number) => `${Math.min(index, 10) * 70}ms`
+const getRevealDelay = (index: number) => `${Math.min(index, 5) * 28}ms`
 
 const observePortfolioReveals = () => {
   if (!revealRootRef.value) return
@@ -102,7 +96,7 @@ onMounted(() => {
           }
         })
       },
-      { rootMargin: '0px 0px -12% 0px', threshold: 0.14 }
+      { rootMargin: '280px 0px 360px 0px', threshold: 0.01 }
     )
   }
 
@@ -126,7 +120,6 @@ onBeforeUnmount(() => {
           <p class="fabrica-page__description">
             Selected 3D character work, stylized studies, and Roblox production pieces.
           </p>
-          <p class="fabrica-page__meta">{{ activePortfolioSummary }}</p>
         </div>
 
         <div class="fabrica-panel__header fabrica-reveal fabrica-reveal--tabs">
@@ -173,9 +166,13 @@ onBeforeUnmount(() => {
                     class="fabrica-card"
                   >
                     <div class="fabrica-card__media">
-                      <img :src="project.cover" :alt="project.title" loading="lazy">
+                      <img
+                        :src="project.cover"
+                        :alt="project.title"
+                        :loading="index < 4 ? 'eager' : 'lazy'"
+                        :fetchpriority="index < 2 ? 'high' : 'auto'"
+                      >
                       <div class="fabrica-card__media-overlay"></div>
-                      <span class="fabrica-card__title">{{ project.title }}</span>
                     </div>
                   </NuxtLink>
                 </div>
@@ -201,9 +198,13 @@ onBeforeUnmount(() => {
                     @click="openRobloxProject(index)"
                   >
                     <div class="fabrica-card__media">
-                      <img :src="project.cover" :alt="project.title" loading="lazy">
+                      <img
+                        :src="project.cover"
+                        :alt="project.title"
+                        :loading="index < 9 ? 'eager' : 'lazy'"
+                        :fetchpriority="index < 3 ? 'high' : 'auto'"
+                      >
                       <div class="fabrica-card__media-overlay"></div>
-                      <span class="fabrica-card__title">{{ project.title }}</span>
                     </div>
                   </button>
                 </div>

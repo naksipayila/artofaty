@@ -15,19 +15,10 @@ const previousProject = projects[(projectIndex - 1 + projects.length) % projects
 const nextProject = projects[(projectIndex + 1) % projects.length]
 
 const galleryImages = project.images.length ? project.images : [project.cover]
-const galleryFrameLabels = ['Beauty Render', 'Character Detail', 'Material Study', 'Wireframe View', 'Presentation View', 'Process View']
 const activeGalleryIndex = ref<number | null>(null)
 const activeGalleryImage = computed(() => (
   activeGalleryIndex.value === null ? null : galleryImages[activeGalleryIndex.value]
 ))
-const activeGalleryCount = computed(() => (
-  activeGalleryIndex.value === null ? '' : String(activeGalleryIndex.value + 1).padStart(2, '0')
-))
-const activeGalleryLabel = computed(() => {
-  if (activeGalleryIndex.value === null) return ''
-
-  return galleryFrameLabels[activeGalleryIndex.value] ?? `Gallery Frame ${activeGalleryCount.value}`
-})
 const activeGalleryStyle = computed(() => (
   activeGalleryImage.value ? { '--lightbox-preview': `url(${activeGalleryImage.value})` } : undefined
 ))
@@ -183,11 +174,6 @@ onBeforeUnmount(() => {
         @click.self="closeGalleryImage"
       >
         <div class="project-lightbox__bar project-lightbox__bar--detail">
-          <div class="project-lightbox__identity">
-            <span>Gallery</span>
-            <strong>{{ project.title }}</strong>
-          </div>
-          <span class="project-lightbox__count">{{ activeGalleryCount }} / {{ String(galleryImages.length).padStart(2, '0') }}</span>
           <button class="project-lightbox__close" type="button" aria-label="Close" @click="closeGalleryImage">×</button>
         </div>
 
@@ -206,13 +192,9 @@ onBeforeUnmount(() => {
             <img
               :key="activeGalleryImage"
               :src="activeGalleryImage"
-              :alt="`${project.title} enlarged gallery image ${activeGalleryCount}`"
+              :alt="`${project.title} enlarged gallery image ${activeGalleryIndex === null ? '' : activeGalleryIndex + 1}`"
             >
           </Transition>
-          <figcaption class="project-lightbox__caption project-lightbox__caption--detail">
-            <span>{{ activeGalleryLabel }}</span>
-            <strong>{{ project.category }}</strong>
-          </figcaption>
         </figure>
 
         <button

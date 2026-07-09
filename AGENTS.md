@@ -35,7 +35,7 @@
 - Do not edit generated/ignored folders: `.nuxt/`, `.output/`, `dist/`, `node_modules/`.
 
 ## Current UI Contracts
-- Home page keeps only hero and Process grid; do not re-add removed location/stat/feature/home-card/contact CTA sections unless asked.
+- Home page keeps only the hero; do not re-add removed Process, location, stat, feature, home-card, or contact CTA sections unless asked.
 - Footer is a thin bottom bar only; do not re-add the large footer CTA card unless asked.
 - Portfolio tabs use `.fabrica-panel__header`/`.fabrica-tabs` inside `.fabrica-page__top`; Main Portfolio is 2x2 on desktop and Roblox Portfolio is 3 columns at `min-width: 1200px`.
 - Roblox cards are buttons, not links; the lightbox plays optional `video` URLs and otherwise falls back to the large image.
