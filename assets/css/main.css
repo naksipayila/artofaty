@@ -2533,15 +2533,47 @@ main {
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     justify-content: space-between;
     gap: 0;
+    width: var(--container);
     padding: 4px 10px;
     border: 0;
+    border-radius: 5.5px;
     background: transparent;
     box-shadow: none;
+    isolation: isolate;
+  }
+
+  .site-header::before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    z-index: 0;
+    width: 100vw;
+    content: "";
+    background: transparent;
+    box-shadow: none;
+    pointer-events: none;
+    transform: translateX(-50%);
+    transition: background-color 180ms ease, box-shadow 180ms ease;
+  }
+
+  .site-header.site-header--scrolled,
+  .site-header.site-header--menu-open {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .site-header.site-header--scrolled::before,
+  .site-header.site-header--menu-open::before {
+    background: #05080c;
+    box-shadow: 0 12px 42px rgba(0, 0, 0, 0.28);
   }
 
   .brand-mark {
     grid-column: 2;
     justify-self: center;
+    position: relative;
+    z-index: 1;
   }
 
   .site-nav--left {
@@ -2561,6 +2593,8 @@ main {
   }
 
   .site-nav__link {
+    position: relative;
+    z-index: 1;
     min-height: 44px;
     padding: 0 6px;
     color: rgba(242, 234, 223, 0.58);
