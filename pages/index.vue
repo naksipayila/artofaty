@@ -5,7 +5,8 @@ const homeHeroImage = 'https://cdnb.artstation.com/p/assets/marmosets/images/087
 const homeFeaturedProject = projects.find((project) => project.id === 'miss-fortune') ?? projects[0]
 
 useSeoMeta({
-  title: '3D Character Artist Portfolio',
+  title: 'Home',
+  titleTemplate: '%s',
   ogTitle: 'ATY - 3D Character Artist Portfolio',
   description: 'Personal portfolio of Ali Taha Yapışkan, a 3D Character Artist focused on stylized characters, hand-painted textures, and realtime presentation.',
   ogDescription: 'Personal portfolio of Ali Taha Yapışkan, a 3D Character Artist focused on stylized characters, hand-painted textures, and realtime presentation.',

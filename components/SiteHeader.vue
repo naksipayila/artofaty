@@ -2,6 +2,7 @@
 const route = useRoute()
 const runtimeConfig = useRuntimeConfig()
 const isMobileMenuOpen = ref(false)
+const isScrolled = ref(false)
 const logoSrc = `${runtimeConfig.app.baseURL}logo.png`
 
 const navItems = [
@@ -25,11 +26,30 @@ const closeMobileMenu = () => {
   isMobileMenuOpen.value = false
 }
 
+const updateScrolled = () => {
+  isScrolled.value = window.scrollY > 8
+}
+
+onMounted(() => {
+  updateScrolled()
+  window.addEventListener('scroll', updateScrolled, { passive: true })
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', updateScrolled)
+})
+
 watch(() => route.fullPath, closeMobileMenu)
 </script>
 
 <template>
-  <header class="site-header" :class="{ 'site-header--menu-open': isMobileMenuOpen }">
+  <header
+    class="site-header"
+    :class="{
+      'site-header--menu-open': isMobileMenuOpen,
+      'site-header--scrolled': isScrolled
+    }"
+  >
     <nav class="site-nav site-nav--left" aria-label="Primary navigation left">
       <NuxtLink
         v-for="item in leftNavItems"

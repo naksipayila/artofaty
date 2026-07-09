@@ -9,7 +9,7 @@
   --accent: #62a8ff;
   --accent-soft: rgba(98, 168, 255, 0.12);
   --cream: #fff4e5;
-  --radius: 4px;
+  --radius: 5.5px;
   --container: min(1440px, calc(100vw - 36px));
   --font-display: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -44,6 +44,11 @@ html.lenis.lenis-stopped {
 
 html.lenis [data-lenis-prevent] {
   overscroll-behavior: contain;
+}
+
+html.has-open-lightbox,
+html.has-open-lightbox body {
+  overflow: hidden;
 }
 
 body {
@@ -85,7 +90,9 @@ textarea {
 }
 
 .site-shell {
-  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
   padding-top: 40px;
 }
 
@@ -96,14 +103,20 @@ textarea {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  column-gap: 56px;
+  column-gap: 140px;
   width: var(--container);
   margin: 0 auto;
-  padding: 8px 10px;
+  padding: 4px 10px;
   border: 0;
-  border-radius: 4px;
-  background: rgba(5, 8, 12, 0.64);
-  backdrop-filter: blur(18px);
+  border-radius: 5.5px;
+  background: transparent;
+  box-shadow: none;
+  transition: background-color 180ms ease, box-shadow 180ms ease;
+}
+
+.site-header.site-header--scrolled,
+.site-header.site-header--menu-open {
+  background: #05080c;
   box-shadow: 0 12px 42px rgba(0, 0, 0, 0.28);
 }
 
@@ -116,11 +129,11 @@ textarea {
   gap: 0;
   padding: 0;
   border: none;
-  border-radius: 4px;
+  border-radius: 5.5px;
 }
 
 .brand-logo {
-  height: 76px;
+  height: 112px;
   width: min(100%, 420px);
   display: block;
 }
@@ -129,11 +142,11 @@ textarea {
   grid-row: 1;
   display: flex;
   justify-content: center;
-  gap: 44px;
+  gap: 140px;
   width: fit-content;
   padding: 0;
   border: 0;
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: transparent;
   box-shadow: none;
 }
@@ -158,9 +171,9 @@ textarea {
   justify-content: center;
   min-height: 44px;
   padding: 0 6px;
-  border-radius: 4px;
+  border-radius: 5.5px;
   color: rgba(242, 234, 223, 0.58);
-  font-size: 0.88rem;
+  font-size: 0.94rem;
   font-weight: 650;
   letter-spacing: 0.08em;
   transition: color 180ms ease, transform 180ms ease;
@@ -176,6 +189,7 @@ textarea {
 }
 
 main {
+  flex: 1;
   width: 100%;
 }
 
@@ -269,7 +283,7 @@ main {
   gap: 14px;
   padding: 8px 16px;
   border: 1px solid rgba(242, 234, 223, 0.14);
-  border-radius: 4px;
+  border-radius: 5.5px;
   color: var(--muted);
   font-size: 0.8rem;
   font-weight: 700;
@@ -297,7 +311,7 @@ main {
   min-height: 52px;
   padding: 0 22px;
   border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: 5.5px;
   color: var(--text);
   font-size: 0.8rem;
   font-weight: 800;
@@ -328,7 +342,7 @@ main {
   min-height: clamp(340px, 36vw, 540px);
   overflow: hidden;
   border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: var(--panel);
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.36);
 }
@@ -399,7 +413,7 @@ main {
   min-height: 38px;
   padding: 0 14px;
   border: 1px solid rgba(98, 168, 255, 0.18);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: rgba(5, 8, 12, 0.62);
   color: rgba(213, 234, 255, 0.86);
   font-size: 0.68rem;
@@ -418,7 +432,7 @@ main {
   min-height: 34px;
   padding: 0 12px;
   border: 1px solid rgba(185, 220, 255, 0.32);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: rgba(5, 8, 12, 0.58);
   color: rgba(226, 241, 255, 0.92);
   cursor: pointer;
@@ -449,7 +463,7 @@ main {
   gap: 16px;
   padding: 16px 20px;
   border: 1px solid rgba(242, 234, 223, 0.14);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: rgba(8, 7, 6, 0.62);
   backdrop-filter: blur(18px);
 }
@@ -467,7 +481,7 @@ main {
   gap: 1px;
   overflow: hidden;
   border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: var(--line);
 }
 
@@ -505,7 +519,7 @@ main {
 .project-card {
   overflow: hidden;
   border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: rgba(24, 21, 17, 0.78);
   transition: transform 240ms ease, border-color 240ms ease, background 240ms ease;
 }
@@ -546,7 +560,7 @@ main {
   width: 44px;
   height: 44px;
   border: 1px solid rgba(242, 234, 223, 0.18);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: rgba(8, 7, 6, 0.54);
   color: var(--cream);
   font-size: 0.78rem;
@@ -587,7 +601,7 @@ main {
   min-height: 34px;
   padding: 0 12px;
   border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: 5.5px;
   color: var(--muted);
   font-size: 0.76rem;
   font-weight: 700;
@@ -604,7 +618,7 @@ main {
   overflow: hidden;
   min-height: 620px;
   border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: var(--panel);
 }
 
@@ -621,7 +635,7 @@ main {
   gap: 34px;
   padding: clamp(28px, 4vw, 54px);
   border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: linear-gradient(145deg, rgba(33, 28, 23, 0.94), rgba(16, 15, 13, 0.92));
 }
 
@@ -647,7 +661,7 @@ main {
   gap: 1px;
   overflow: hidden;
   border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: var(--line);
 }
 
@@ -865,7 +879,7 @@ main {
   overflow: hidden;
   margin: 0;
   border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: var(--panel);
 }
 
@@ -883,7 +897,7 @@ main {
 /* ── Fabrica-style projects page ── */
 
 .fabrica-page {
-  --portfolio-content-width: 1240px;
+  --portfolio-content-width: min(1800px, calc(100vw - 72px));
   position: relative;
   isolation: isolate;
   background: transparent;
@@ -894,15 +908,15 @@ main {
 .fabrica-page__inner {
   position: relative;
   z-index: 1;
-  width: var(--container);
+  width: var(--portfolio-content-width);
   max-width: none;
   margin: 0 auto;
-  padding: clamp(36px, 5vw, 56px) 0 clamp(48px, 6vw, 80px);
+  padding: clamp(56px, 6vw, 80px) 0 clamp(48px, 6vw, 80px);
 }
 
 .fabrica-page__top {
   display: grid;
-  justify-items: start;
+  justify-items: center;
   gap: 0;
   width: min(100%, var(--portfolio-content-width));
   margin: 0 auto clamp(22px, 3vw, 36px);
@@ -940,7 +954,7 @@ main {
   margin: 2px 0 0;
   padding: 0 10px;
   border: 1px solid rgba(98, 168, 255, 0.16);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: rgba(98, 168, 255, 0.07);
   color: rgba(159, 208, 255, 0.86);
   font-size: 0.62rem;
@@ -954,19 +968,19 @@ main {
   .fabrica-page__top {
     display: flex;
     align-items: end;
-    justify-content: flex-start;
+    justify-content: center;
   }
 }
 
 @media (min-width: 810px) {
   .fabrica-page__inner {
-    padding-top: clamp(40px, 5vw, 56px);
+    padding-top: clamp(64px, 6vw, 84px);
   }
 }
 
 @media (min-width: 1200px) {
   .fabrica-page__inner {
-    padding-top: 56px;
+    padding-top: 84px;
   }
 }
 
@@ -1019,7 +1033,7 @@ main {
   position: relative;
   z-index: 10;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   gap: 18px;
   width: fit-content;
@@ -1028,7 +1042,7 @@ main {
   padding: 0;
   overflow: visible;
   border: 0;
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: transparent;
   box-shadow: none;
   backdrop-filter: none;
@@ -1058,13 +1072,13 @@ main {
   margin: 0;
   padding: 0;
   border: 0;
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: transparent;
   color: var(--tab-muted-text);
   cursor: pointer;
   font: inherit;
   font-size: clamp(0.86rem, 0.98vw, 0.96rem);
-  font-weight: 680;
+  font-weight: 560;
   letter-spacing: 0.035em;
   line-height: 1;
   text-align: center;
@@ -1078,7 +1092,7 @@ main {
 }
 
 .fabrica-tabs__separator {
-  color: rgba(142, 198, 255, 0.52);
+  color: rgba(242, 234, 223, 0.82);
   font-size: clamp(0.8rem, 0.9vw, 0.9rem);
   font-weight: 500;
   line-height: 1;
@@ -1202,7 +1216,7 @@ main {
   overflow: visible;
   padding: 0;
   border: 0;
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: transparent;
   color: #fff;
   box-shadow: none;
@@ -1223,7 +1237,7 @@ main {
   padding: 0;
   overflow: visible;
   border: 0;
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: transparent;
   box-shadow: none;
   backdrop-filter: none;
@@ -1249,7 +1263,7 @@ main {
   .fabrica-panel__header {
     flex: 0 0 auto;
     padding: 0;
-    border-radius: 4px;
+    border-radius: 5.5px;
   }
 
   .fabrica-tabs {
@@ -1274,7 +1288,7 @@ main {
 
 .fabrica-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(14px, 1.45vw, 24px);
   width: 100%;
   max-width: min(100%, var(--portfolio-content-width));
@@ -1294,7 +1308,11 @@ main {
 
   .fabrica-grid--main {
     max-width: min(100%, var(--portfolio-content-width));
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .fabrica-grid--roblox {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
@@ -1304,7 +1322,7 @@ main {
   overflow: hidden;
   display: block;
   border: 1px solid rgba(242, 234, 223, 0.08);
-  border-radius: 4px;
+  border-radius: 10px;
   background: linear-gradient(180deg, rgba(24, 21, 17, 0.92), rgba(13, 12, 10, 0.94));
   box-shadow: 0 16px 44px rgba(0, 0, 0, 0.22);
   outline: none;
@@ -1323,21 +1341,21 @@ main {
 
 @media (max-width: 809px) {
   .fabrica-card {
-    border-radius: 4px;
+    border-radius: 10px;
   }
 }
 
 .fabrica-card__media {
   position: relative;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 1;
   margin: 0;
   overflow: hidden;
-  border-radius: 4px;
+  border-radius: 10px;
 }
 
 @media (max-width: 809px) {
   .fabrica-card__media {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 1;
   }
 }
 
@@ -1346,12 +1364,13 @@ main {
   height: 100%;
   object-fit: cover;
   object-position: center;
+  transform: scale(var(--cover-scale, 1));
   transition: transform 420ms ease, filter 420ms ease;
 }
 
 .fabrica-card:hover .fabrica-card__media img,
 .fabrica-card:focus-visible .fabrica-card__media img {
-  transform: scale(1.055);
+  transform: scale(calc(var(--cover-scale, 1) + 0.055));
   filter: saturate(1.08) contrast(1.04);
 }
 
@@ -1393,7 +1412,7 @@ main {
   min-height: 28px;
   padding: 0 10px;
   border: 1px solid rgba(242, 234, 223, 0.22);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: rgba(6, 8, 12, 0.46);
   backdrop-filter: blur(18px);
   font-family: var(--font-body);
@@ -1427,7 +1446,7 @@ main {
   justify-items: center;
   padding: clamp(28px, 5vw, 70px);
   border: 1px solid rgba(98, 168, 255, 0.16);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background:
     radial-gradient(circle at 50% 0%, rgba(98, 168, 255, 0.14), transparent 44%),
     linear-gradient(135deg, rgba(16, 20, 28, 0.78), rgba(6, 7, 10, 0.9));
@@ -1495,7 +1514,7 @@ main {
   min-height: 42px;
   padding: 0 14px;
   border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: 5.5px;
   color: var(--muted);
   font-size: 0.74rem;
   font-weight: 900;
@@ -1575,7 +1594,7 @@ main {
   width: 4px;
   height: 4px;
   margin: 0 12px;
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: rgba(98, 168, 255, 0.6);
 }
 
@@ -1658,7 +1677,7 @@ main {
   overflow: hidden;
   margin: 0;
   min-height: clamp(280px, 34vw, 420px);
-  border-radius: 4px;
+  border-radius: 5.5px;
   border: 1px solid rgba(242, 234, 223, 0.1);
   background:
     radial-gradient(circle at 50% 20%, rgba(98, 168, 255, 0.08), transparent 50%),
@@ -1869,7 +1888,7 @@ main {
   width: auto;
   padding: 0;
   border: 0;
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: transparent;
   box-shadow: none;
   transform: none;
@@ -1923,7 +1942,7 @@ main {
   min-height: 42px;
   padding: 0 16px;
   border: 1px solid rgba(242, 234, 223, 0.16);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: rgba(6, 8, 12, 0.58);
   backdrop-filter: blur(18px);
   color: rgba(255, 244, 229, 0.88);
@@ -1981,7 +2000,7 @@ main {
   overflow: hidden;
   padding: clamp(8px, 1vw, 14px);
   border: 1px solid rgba(242, 234, 223, 0.12);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.012)),
     rgba(4, 7, 11, 0.56);
@@ -1994,7 +2013,7 @@ main {
   max-height: calc(100vh - 170px);
   padding: clamp(10px, 1.05vw, 16px);
   border-color: rgba(242, 234, 223, 0.1);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.008)),
     rgba(8, 11, 17, 0.54);
@@ -2008,13 +2027,13 @@ main {
   max-height: calc(100vh - 218px);
   object-fit: contain;
   border: 0;
-  border-radius: 4px;
+  border-radius: 5.5px;
   box-shadow: none;
 }
 
 .project-lightbox__figure--detail img {
   max-height: calc(100vh - 202px);
-  border-radius: 4px;
+  border-radius: 5.5px;
 }
 
 .project-lightbox__figure video {
@@ -2030,7 +2049,7 @@ main {
   max-width: min(82%, 720px);
   padding: 0.7rem 1rem;
   border: 1px solid rgba(242, 234, 223, 0.14);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: rgba(6, 8, 12, 0.62);
   backdrop-filter: blur(18px);
   color: rgba(255, 244, 229, 0.92);
@@ -2047,7 +2066,7 @@ main {
   z-index: 2;
   width: 46px;
   padding: 0;
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: rgba(6, 8, 12, 0.46);
   box-shadow: 0 18px 52px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.035);
   transform: translateY(-50%);
@@ -2064,11 +2083,11 @@ main {
 }
 
 .project-lightbox__nav--prev {
-  left: calc(var(--lightbox-frame-edge) + var(--lightbox-nav-inset));
+  left: max(16px, calc(var(--lightbox-frame-edge) - 46px - var(--lightbox-nav-inset)));
 }
 
 .project-lightbox__nav--next {
-  right: calc(var(--lightbox-frame-edge) + var(--lightbox-nav-inset));
+  right: max(16px, calc(var(--lightbox-frame-edge) - 46px - var(--lightbox-nav-inset)));
 }
 
 .project-lightbox__thumbs {
@@ -2083,7 +2102,7 @@ main {
   padding: 7px;
   overflow-x: auto;
   border: 1px solid rgba(242, 234, 223, 0.1);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: rgba(5, 8, 12, 0.58);
   box-shadow: 0 22px 78px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.035);
   backdrop-filter: blur(22px) saturate(1.08);
@@ -2104,7 +2123,7 @@ main {
   padding: 0;
   overflow: hidden;
   border: 1px solid rgba(242, 234, 223, 0.12);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: rgba(255, 255, 255, 0.035);
   cursor: pointer;
   opacity: 0.58;
@@ -2144,7 +2163,7 @@ main {
   margin: 0 auto;
   padding: clamp(24px, 3.6vw, 42px);
   border: 1px solid rgba(98, 168, 255, 0.28);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background:
     linear-gradient(145deg, rgba(98, 168, 255, 0.13), transparent 48%),
     rgba(24, 21, 17, 0.9);
@@ -2188,7 +2207,7 @@ main {
   min-height: 42px;
   padding: 0 14px;
   border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: 5.5px;
   color: var(--cream);
   font-size: 0.74rem;
   font-weight: 900;
@@ -2209,7 +2228,7 @@ main {
   min-height: 380px;
   overflow: hidden;
   border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: var(--panel);
 }
 
@@ -2256,7 +2275,7 @@ main {
   min-height: 42px;
   padding: 0 16px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: rgba(255, 255, 255, 0.18);
   color: var(--cream);
   font-size: 0.76rem;
@@ -2277,7 +2296,7 @@ main {
   overflow: hidden;
   margin: 0;
   border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: var(--panel);
 }
 
@@ -2298,7 +2317,7 @@ main {
   gap: 28px;
   padding: clamp(28px, 4vw, 58px);
   border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: rgba(24, 21, 17, 0.82);
 }
 
@@ -2335,7 +2354,7 @@ main {
   gap: 6px;
   padding: 16px;
   border: 1px solid rgba(242, 234, 223, 0.1);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: rgba(255, 255, 255, 0.035);
 }
 
@@ -2412,7 +2431,7 @@ main {
   width: 50px;
   height: 40px;
   border: 1px solid rgba(242, 234, 223, 0.12);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: linear-gradient(322deg, rgba(255, 255, 255, 0.08), rgba(98, 168, 255, 0.08));
   color: rgba(242, 234, 223, 0.76);
   box-shadow: inset 0 0 0 1px rgba(5, 6, 9, 0.8);
@@ -2425,7 +2444,7 @@ main {
   justify-content: center;
   width: calc(100% - 2px);
   height: calc(100% - 2px);
-  border-radius: 4px;
+  border-radius: 5.5px;
   background: rgba(8, 7, 6, 0.74);
 }
 
@@ -2496,17 +2515,28 @@ main {
   }
 }
 
+.page-hero--about .page-hero__copy--about,
+.contact-minimal__copy {
+  animation: fade-up 700ms 160ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.page-hero--about .button-row,
+.contact-minimal__links {
+  animation: fade-up 620ms 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
 /* ── Desktop header (>= 761px) ── */
 
 @media (min-width: 761px) {
   .site-header {
+    display: flex;
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-    column-gap: 56px;
-    padding: 8px 10px;
+    justify-content: space-between;
+    gap: 0;
+    padding: 4px 10px;
     border: 0;
-    background: rgba(5, 8, 12, 0.64);
-    backdrop-filter: blur(18px);
-    box-shadow: 0 12px 42px rgba(0, 0, 0, 0.28);
+    background: transparent;
+    box-shadow: none;
   }
 
   .brand-mark {
@@ -2523,18 +2553,18 @@ main {
   }
 
   .brand-logo {
-    height: 76px;
+    height: 112px;
   }
 
   .site-nav {
-    gap: 44px;
+    display: contents;
   }
 
   .site-nav__link {
     min-height: 44px;
     padding: 0 6px;
     color: rgba(242, 234, 223, 0.58);
-    font-size: 0.88rem;
+    font-size: 0.94rem;
     font-weight: 650;
     letter-spacing: 0.08em;
     transition: color 180ms ease, transform 180ms ease;
@@ -2601,6 +2631,11 @@ main {
     grid-template-columns: 1fr;
   }
 
+  .page-hero--about .page-hero__inner {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
   .hero {
     min-height: auto;
   }
@@ -2642,6 +2677,11 @@ main {
     --container: min(100vw - 24px, 720px);
   }
 
+  .fabrica-page {
+    --portfolio-content-width: var(--container);
+    min-height: 0;
+  }
+
   html,
   body {
     overflow-x: hidden;
@@ -2649,11 +2689,10 @@ main {
 
   .site-shell {
     padding-top: 10px;
-    overflow-x: hidden;
   }
 
   main {
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   .site-header {
@@ -2662,11 +2701,11 @@ main {
     align-items: center;
     gap: 10px;
     width: min(calc(100vw - 20px), 720px);
-    padding: 7px;
-    border-radius: 4px;
+    padding: 4px 7px;
+    border-radius: 5.5px;
     border: 0;
-    background: rgba(5, 8, 12, 0.74);
-    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.28);
+    background: transparent;
+    box-shadow: none;
   }
 
   .brand-mark {
@@ -2688,18 +2727,17 @@ main {
     left: 0;
     display: none;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 6px;
+    gap: 8px;
     justify-content: stretch;
     justify-self: stretch;
     width: 100%;
     margin-top: 0;
     overflow: hidden;
-    padding: 4px;
+    padding: 6px;
     border: 1px solid rgba(242, 234, 223, 0.08);
-    border-radius: 4px;
-    background: rgba(5, 8, 12, 0.86);
+    border-radius: 5.5px;
+    background: #05080c;
     box-shadow: 0 12px 34px rgba(0, 0, 0, 0.32);
-    backdrop-filter: blur(18px) saturate(1.08);
   }
 
   .site-header--menu-open .site-mobile-nav {
@@ -2707,10 +2745,10 @@ main {
   }
 
   .site-nav__link {
-    min-height: 44px;
+    min-height: 46px;
     padding: 0 8px;
-    border-radius: 4px;
-    font-size: clamp(0.68rem, 2.9vw, 0.8rem);
+    border-radius: 5.5px;
+    font-size: clamp(0.72rem, 2.9vw, 0.82rem);
     letter-spacing: 0.06em;
   }
 
@@ -2723,11 +2761,11 @@ main {
     align-items: center;
     justify-content: center;
     justify-self: end;
-    width: 42px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     padding: 0;
     border: 1px solid rgba(98, 168, 255, 0.24);
-    border-radius: 4px;
+    border-radius: 5.5px;
     background: rgba(98, 168, 255, 0.08);
     color: rgba(213, 234, 255, 0.92);
     cursor: pointer;
@@ -2737,7 +2775,7 @@ main {
     position: absolute;
     width: 17px;
     height: 2px;
-    border-radius: 4px;
+    border-radius: 5.5px;
     background: currentColor;
     transition: transform 180ms ease, opacity 180ms ease;
   }
@@ -2769,8 +2807,8 @@ main {
   }
 
   .brand-logo {
-    width: 46px;
-    height: 46px;
+    width: 66px;
+    height: 66px;
     object-fit: contain;
   }
 
@@ -2829,6 +2867,12 @@ main {
 
   .page-hero--about .button-row {
     justify-self: stretch;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page-hero--about .button-row .button {
+    width: 100%;
   }
 
   .section-heading p,
@@ -2845,7 +2889,7 @@ main {
     align-items: flex-start;
     gap: 6px 10px;
     padding: 9px 11px;
-    border-radius: 4px;
+    border-radius: 5.5px;
     font-size: 0.66rem;
     line-height: 1.35;
   }
@@ -2939,7 +2983,7 @@ main {
     align-items: flex-start;
     gap: 12px;
     padding: 13px 14px;
-    border-radius: 4px;
+    border-radius: 5.5px;
   }
 
   .hero__visual-card h2 {
@@ -2984,7 +3028,7 @@ main {
   }
 
   .fabrica-page__inner {
-    padding: clamp(24px, 7vw, 36px) 0 clamp(36px, 12vw, 56px);
+    padding: clamp(34px, 8vw, 48px) 0 clamp(36px, 12vw, 56px);
   }
 
   .fabrica-page__top {
@@ -3023,10 +3067,23 @@ main {
     transform: translate3d(0, 24px, 0) scale(0.985);
   }
 
+  .fabrica-reveal {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    transition: none;
+  }
+
+  .project-detail-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
   .fabrica-panel {
     min-height: 0;
     padding: 0;
-    border-radius: 4px;
+    border-radius: 5.5px;
   }
 
   .fabrica-panel__header {
@@ -3034,7 +3091,7 @@ main {
     gap: 0;
     margin-bottom: 0;
     padding: 0;
-    border-radius: 4px;
+    border-radius: 5.5px;
   }
 
   .fabrica-panel__body {
@@ -3051,7 +3108,7 @@ main {
 
   .fabrica-tabs {
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 14px;
     width: fit-content;
     max-width: 100%;
@@ -3064,11 +3121,11 @@ main {
   .fabrica-tabs__button {
     flex: 0 0 auto;
     min-width: 0;
-    min-height: 40px;
+    min-height: 44px;
     margin: 0;
     gap: 0;
     padding: 0;
-    border-radius: 4px;
+    border-radius: 5.5px;
     font-size: clamp(0.72rem, 3.2vw, 0.84rem);
     letter-spacing: 0;
     white-space: nowrap;
@@ -3106,11 +3163,11 @@ main {
   }
 
   .fabrica-card {
-    border-radius: 4px;
+    border-radius: 10px;
   }
 
   .fabrica-card__media {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 1;
   }
 
   .fabrica-grid {
@@ -3182,7 +3239,7 @@ main {
     justify-content: center;
     padding: 8px 10px;
     border: 1px solid rgba(242, 234, 223, 0.1);
-    border-radius: 4px;
+    border-radius: 5.5px;
     background: rgba(255, 244, 229, 0.035);
     text-align: center;
   }
@@ -3218,11 +3275,12 @@ main {
   .project-detail-gallery__item--featured {
     min-height: 0;
     aspect-ratio: 4 / 3;
-    border-radius: 4px;
+    border-radius: 5.5px;
   }
 
   .project-lightbox {
-    min-height: 100svh;
+    min-height: 100dvh;
+    height: 100dvh;
     align-content: center;
     padding: calc(42px + env(safe-area-inset-top)) 10px calc(98px + env(safe-area-inset-bottom));
   }
@@ -3246,22 +3304,22 @@ main {
   .project-lightbox__count,
   .project-lightbox__bar button,
   .project-lightbox__nav {
-    min-height: 36px;
+    min-height: 44px;
     padding: 0 10px;
     font-size: 0.62rem;
     letter-spacing: 0.08em;
   }
 
   .project-lightbox__bar button {
-    width: 36px;
+    width: 44px;
     padding: 0;
     font-size: 1.15rem;
     letter-spacing: 0;
   }
 
   .project-lightbox__bar--detail .project-lightbox__close {
-    width: 40px;
-    min-height: 40px;
+    width: 44px;
+    min-height: 44px;
   }
 
   .project-lightbox__figure {
@@ -3269,34 +3327,36 @@ main {
     gap: 10px;
     justify-items: center;
     width: min(100%, calc(100vw - 20px));
-    max-height: calc(100svh - 210px);
+    grid-template-rows: minmax(0, 1fr) auto;
+    max-height: calc(100dvh - 210px);
     padding: 7px;
-    border-radius: 4px;
+    border-radius: 5.5px;
   }
 
   .project-lightbox__figure--detail {
-    max-height: calc(100svh - 164px);
+    max-height: calc(100dvh - 164px);
     padding: 6px;
-    border-radius: 4px;
+    border-radius: 5.5px;
   }
 
   .project-lightbox__figure img,
   .project-lightbox__figure video {
     max-width: 100%;
-    max-height: min(58svh, calc(100svh - 230px));
-    border-radius: 4px;
+    min-height: 0;
+    max-height: min(58dvh, calc(100dvh - 230px));
+    border-radius: 5.5px;
   }
 
   .project-lightbox__figure--detail img {
-    max-height: min(64svh, calc(100svh - 182px));
-    border-radius: 4px;
+    max-height: min(64dvh, calc(100dvh - 182px));
+    border-radius: 5.5px;
   }
 
   .project-lightbox__caption {
     position: static;
     max-width: 100%;
     padding: 0.55rem 0.75rem;
-    border-radius: 4px;
+    border-radius: 5.5px;
     font-size: 0.66rem;
     transform: none;
   }
@@ -3304,7 +3364,7 @@ main {
   .project-lightbox__nav {
     top: auto;
     bottom: calc(72px + env(safe-area-inset-bottom));
-    width: 40px;
+    width: 44px;
     transform: none;
   }
 
@@ -3326,13 +3386,13 @@ main {
     width: calc(100vw - 20px);
     max-width: none;
     padding: 6px;
-    border-radius: 4px;
+    border-radius: 5.5px;
   }
 
   .project-lightbox__thumb {
     width: 56px;
     height: 42px;
-    border-radius: 4px;
+    border-radius: 5.5px;
   }
 
   .project-detail-share {
@@ -3361,15 +3421,15 @@ main {
 
   .site-footer {
     width: min(100% - 32px, 1320px);
-    margin-top: 56px;
-    padding-bottom: 32px;
+    margin-top: 44px;
+    padding-bottom: 24px;
   }
 
   .site-footer__bar {
     flex-direction: column;
     align-items: center;
-    gap: 16px;
-    padding-top: 24px;
+    gap: 12px;
+    padding-top: 16px;
     text-align: center;
   }
 
@@ -3382,11 +3442,21 @@ main {
     justify-content: center;
     gap: 6px;
   }
+
+  .site-footer__social {
+    width: 44px;
+    height: 44px;
+  }
 }
 
 @media (max-width: 380px) {
+  .site-mobile-nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
   .site-nav__link {
-    font-size: 0.64rem;
+    font-size: 0.72rem;
   }
 
   .fabrica-tabs__button,
@@ -3412,6 +3482,46 @@ main {
   }
 }
 
+@media (max-width: 760px) and (max-height: 600px) {
+  .site-shell {
+    padding-top: 6px;
+  }
+
+  .site-header {
+    top: 6px;
+  }
+
+  .brand-logo {
+    width: 54px;
+    height: 54px;
+  }
+
+  .hero {
+    padding-block: 18px 28px;
+  }
+
+  .hero__visual--model {
+    min-height: 300px;
+  }
+
+  .project-lightbox {
+    padding-top: calc(34px + env(safe-area-inset-top));
+    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+  }
+
+  .project-lightbox__figure {
+    max-height: calc(100dvh - 150px);
+  }
+
+  .project-lightbox__nav {
+    bottom: calc(58px + env(safe-area-inset-bottom));
+  }
+
+  .project-lightbox__thumbs {
+    bottom: calc(6px + env(safe-area-inset-bottom));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .fabrica-intro,
   .fabrica-cards {
@@ -3431,6 +3541,13 @@ main {
 
   .fabrica-card__title::after {
     transition: none;
+  }
+
+  .page-hero--about .page-hero__copy--about,
+  .page-hero--about .button-row,
+  .contact-minimal__copy,
+  .contact-minimal__links {
+    animation: none;
   }
 
   .project-detail-reveal {

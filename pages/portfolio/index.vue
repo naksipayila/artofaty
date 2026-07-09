@@ -163,6 +163,7 @@ onBeforeUnmount(() => {
                       <img
                         :src="project.cover"
                         :alt="project.title"
+                        :style="{ objectPosition: project.coverCrop, transformOrigin: project.coverOrigin, '--cover-scale': project.coverScale }"
                         :loading="index < 4 ? 'eager' : 'lazy'"
                         :fetchpriority="index < 2 ? 'high' : 'auto'"
                       >

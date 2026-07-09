@@ -6,6 +6,9 @@ export type Project = {
   description: string
   artstationUrl: string
   cover: string
+  coverCrop?: string
+  coverScale?: string
+  coverOrigin?: string
   images: string[]
   tags: string[]
   tools: string[]
@@ -152,7 +155,10 @@ export const projects: Project[] = [
     category: 'First Hand-painted Character',
     description: 'A practice character built around hand-painted texture decisions, silhouette clarity, and stylized fantasy presentation.',
     artstationUrl: 'https://www.artstation.com/artwork/wrmZNY',
-    cover: 'https://cdnb.artstation.com/p/assets/covers/images/094/710/607/large/ali-taha-yapiskan-ali-taha-yapiskan-test3.webp?1766170541',
+    cover: 'https://cdnb.artstation.com/p/assets/images/images/088/540/785/large/ali-taha-yapiskan-mermaid-full.jpg?1766042317',
+    coverCrop: 'center top',
+    coverScale: '1.95',
+    coverOrigin: 'center 20%',
     images: [
       'https://cdnb.artstation.com/p/assets/images/images/088/540/785/large/ali-taha-yapiskan-mermaid-full.jpg?1766042317',
       'https://cdnb.artstation.com/p/assets/images/images/085/201/217/large/ali-taha-yapiskan-texturebreakdown.jpg?1740215587',

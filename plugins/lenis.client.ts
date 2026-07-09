@@ -11,9 +11,12 @@ export default defineNuxtPlugin((nuxtApp) => {
   const hasOpenLightbox = () => Boolean(document.querySelector('.project-lightbox'))
 
   const updateLightboxState = () => {
+    const isLightboxOpen = hasOpenLightbox()
+    document.documentElement.classList.toggle('has-open-lightbox', isLightboxOpen)
+
     if (!lenis) return
 
-    if (hasOpenLightbox()) {
+    if (isLightboxOpen) {
       lenis.stop()
       return
     }
@@ -82,6 +85,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   })
 
   window.addEventListener('beforeunload', () => {
+    document.documentElement.classList.remove('has-open-lightbox')
     lightboxObserver?.disconnect()
     destroyLenis()
   })

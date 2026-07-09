@@ -30,10 +30,10 @@
 - Brand accent is blue via `--accent: #62a8ff`; do not restore the old orange accent unless asked.
 - Header is logo-only with split desktop nav and a mobile menu; keep `.site-shell { padding-top: 40px; }` plus `.site-header { top: 40px; margin: 0 auto; }`, not header `margin-top`.
 - Background lives on `html`; do not reintroduce a `body::before` square grid or page-only `.fabrica-page::before` overlay.
-- Portfolio width is coordinated by `.fabrica-page { --portfolio-content-width: 1240px; }`; keep tabs plus Main/Roblox grids on that shared shell.
+- Portfolio width is coordinated by `.fabrica-page { --portfolio-content-width: ...; }`; keep tabs plus Main/Roblox grids on that shared shell.
 - Portfolio tabs are text-only `Main Portfolio | Roblox Portfolio`; no wrapper border/background, underline, or pill state.
 - Portfolio cards have no title overlays; hover should only zoom the image, not lift/glow/border the card.
-- Main Portfolio is 2x2 on desktop; Roblox Portfolio is 3 columns at `min-width: 1200px`.
+- Main and Roblox Portfolio grids use 4 columns at `min-width: 1200px`.
 - Lightboxes must keep `.project-lightbox` and `data-lenis-prevent`; `plugins/lenis.client.ts` uses that class to stop desktop Lenis scrolling behind overlays.
 - Home stays hero-only, footer stays a thin bottom bar, and detail pages stay hero/overview/gallery lightbox/prev-next only.
 - `Project.details.workProcess`, `approach`, `quote`, and `solution` remain in data but are intentionally not rendered.
