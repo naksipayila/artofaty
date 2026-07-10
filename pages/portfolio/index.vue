@@ -172,7 +172,7 @@ onBeforeUnmount(() => {
 
       <section class="fabrica-cards">
         <nav class="work-index" aria-label="Portfolio categories" role="tablist">
-          <span class="work-index__label">WORK INDEX</span>
+          <span class="work-index__label">COLLECTIONS</span>
           <div class="work-index__rows">
             <button
               v-for="(tab, index) in portfolioTabs"
@@ -189,8 +189,12 @@ onBeforeUnmount(() => {
               @keydown="handlePortfolioTabKeydown($event, tab.id)"
             >
               <span class="work-index__num">{{ String(index + 1).padStart(2, '0') }}</span>
-              <span class="work-index__name">{{ tab.label }}</span>
-              <span class="work-index__count">{{ tab.count }} PROJECTS</span>
+              <span class="work-index__name">
+                <span>{{ tab.label.split(' ')[0] }}</span>
+                <span>{{ tab.label.split(' ').slice(1).join(' ') }}</span>
+              </span>
+              <span class="work-index__count">{{ tab.count }} SELECTED WORKS</span>
+              <span v-if="activePortfolioTab === tab.id" class="work-index__active-label">CURRENT</span>
             </button>
           </div>
         </nav>
