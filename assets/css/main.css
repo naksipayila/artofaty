@@ -27,6 +27,7 @@ html {
   color: var(--text);
   font-family: var(--font-body);
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 html.lenis,
@@ -2785,11 +2786,6 @@ main :is(a, button):focus-visible,
   .fabrica-page {
     --portfolio-content-width: var(--container);
     min-height: 0;
-  }
-
-  html,
-  body {
-    overflow-x: hidden;
   }
 
   .site-shell {
