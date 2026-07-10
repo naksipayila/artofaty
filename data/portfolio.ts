@@ -28,6 +28,7 @@ export type Project = {
     solution: string
   }
   heroImage?: string
+  desktopCover?: string
   heroCrop: string
   heroScale: string
   heroOrigin: string
@@ -52,8 +53,11 @@ export const artist = {
   location: 'Eskişehir, Turkey',
   email: 'qaliqtaha@gmail.com',
   artstation: 'https://www.artstation.com/artofaty',
+  instagram: 'https://instagram.com/artofaty',
+  linkedin: 'https://www.linkedin.com/in/artofaty',
+  youtube: 'https://www.youtube.com/@artofaty',
   linktree: 'https://linktr.ee/artofaty',
-  avatar: 'https://cdnb.artstation.com/p/users/avatars/005/843/005/large/b298aca9477b1f990c0d4e2ad0673dd0.jpg?1783327066',
+  avatar: 'https://cdnb.artstation.com/p/users/avatars/005/843/005/large/022dd1ebb4bcefda3a1bd206a375a226.jpg?1783680824',
   availability: ['Full-time', 'Contract', 'Freelance']
 }
 
@@ -66,15 +70,15 @@ export const projects: Project[] = [
     description: 'Personal practice work focused on hand-painted PBR, stylized anatomy, realtime presentation, and fantasy character detail.',
     artstationUrl: 'https://www.artstation.com/artwork/nJy5B1',
     cover: 'https://cdna.artstation.com/p/assets/covers/images/096/089/076/large/ali-taha-yapiskan-ali-taha-yapiskan-thumb3.webp?1770314065',
+    desktopCover: 'https://cdna.artstation.com/p/assets/images/images/095/850/850/large/ali-taha-yapiskan-render1.webp?1770313842',
+    coverCrop: '55% 32%',
     images: [
       'https://cdna.artstation.com/p/assets/images/images/095/850/850/large/ali-taha-yapiskan-render1.webp?1770313842',
       'https://cdnb.artstation.com/p/assets/images/images/095/850/865/large/ali-taha-yapiskan-render2.webp?1769686072',
       'https://cdna.artstation.com/p/assets/images/images/095/850/866/large/ali-taha-yapiskan-render3.webp?1769686078',
-      'https://cdnb.artstation.com/p/assets/images/images/095/850/867/large/ali-taha-yapiskan-render4.webp?1769686085',
-      'https://cdna.artstation.com/p/assets/images/images/095/846/984/large/ali-taha-yapiskan-wireframe.webp?1769677898',
-      'https://cdna.artstation.com/p/assets/images/images/095/846/982/large/ali-taha-yapiskan-clay.webp?1769677879'
+      'https://cdnb.artstation.com/p/assets/images/images/095/850/867/large/ali-taha-yapiskan-render4.webp?1769686085'
     ],
-    imageAspectRatios: ['1 / 1', '1 / 1', '1 / 1', '1 / 1', '2 / 1', '2 / 1'],
+    imageAspectRatios: ['1 / 1', '1 / 1', '1 / 1', '1 / 1'],
     tags: ['Character Design', 'Stylized', 'Fantasy', 'Game Art', 'Realtime', 'PBR', 'Hand-painted'],
     tools: ['ZBrush', 'Maya', 'Substance 3D Painter', 'Marmoset Toolbag', 'Photoshop'],
     stats: {
@@ -114,13 +118,12 @@ export const projects: Project[] = [
     description: 'A hand-painted texturing study made without generators, exploring readable forms, stylized material separation, and game-ready presentation.',
     artstationUrl: 'https://www.artstation.com/artwork/XJ2zL0',
     cover: 'https://cdna.artstation.com/p/assets/covers/images/094/710/214/large/ali-taha-yapiskan-ali-taha-yapiskan-test2.webp?1766169605',
+    coverCrop: '50% 35%',
     images: [
-      'https://cdna.artstation.com/p/assets/images/images/088/540/482/large/ali-taha-yapiskan-missfortune.jpg?1748537997',
       'https://cdna.artstation.com/p/assets/covers/images/094/710/214/large/ali-taha-yapiskan-ali-taha-yapiskan-test2.webp?1766169605',
-      'https://cdnb.artstation.com/p/assets/images/images/087/982/073/large/ali-taha-yapiskan-wireframe.jpg?1747162617',
       'https://cdnb.artstation.com/p/assets/marmosets/images/087/982/587/large/ali-taha-yapiskan-mview-image20250513-12-1yyv867.jpg?1747163415'
     ],
-    imageAspectRatios: ['1 / 1', '1 / 1', '1920 / 687', '16 / 9'],
+    imageAspectRatios: ['1 / 1', '16 / 9'],
     tags: ['Handpaint', 'Character', 'Stylized', 'Fantasy', 'Marmoset'],
     tools: ['ZBrush', 'Maya', 'Substance 3D Painter', 'Marmoset Toolbag', 'Blender'],
     stats: {
@@ -207,6 +210,7 @@ export const projects: Project[] = [
     description: 'A character bust created to practice new workflows, creature anatomy, sculpting discipline, grooming, and realistic rendering.',
     artstationUrl: 'https://www.artstation.com/artwork/g0D6De',
     cover: 'https://cdna.artstation.com/p/assets/images/images/088/472/900/large/ali-taha-yapiskan-orc.jpg?1770710654',
+    coverCrop: '48% 42%',
     images: [
       'https://cdna.artstation.com/p/assets/images/images/088/472/900/large/ali-taha-yapiskan-orc.jpg?1770710654',
       'https://cdna.artstation.com/p/assets/images/images/075/792/404/large/ali-taha-yapiskan-orc-maya.jpg?1715441098',

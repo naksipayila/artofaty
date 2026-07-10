@@ -1,3 +1,5 @@
+import { projects } from './data/portfolio'
+
 const normalizeBaseURL = (value = '/') => {
   const withLeadingSlash = value.startsWith('/') ? value : `/${value}`
 
@@ -16,7 +18,10 @@ export default defineNuxtConfig({
       routes: [
         '/',
         '/works',
-        '/about'
+        '/about',
+        ...projects
+          .filter((project) => project.images.length > 1)
+          .map((project) => `/works/${project.id}`)
       ]
     }
   },

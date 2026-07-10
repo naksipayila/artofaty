@@ -27,7 +27,7 @@ export function useCustomCursor() {
   let currentIcon: CursorIcon | null = null
 
   const supportsCustomCursor = () =>
-    window.matchMedia('(hover: hover) and (pointer: fine)').matches
+    window.innerWidth > 760 && window.matchMedia('(hover: hover) and (pointer: fine)').matches
 
   const createCursorElement = () => {
     if (cursorEl) return
