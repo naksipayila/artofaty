@@ -1,70 +1,83 @@
 <script setup lang="ts">
-import { projects, robloxProjects } from '~/data/portfolio'
+import { projects } from '~/data/portfolio'
 
 type GalleryItem = {
   id: string
   src: string
-  video?: string
   title: string
-  w: number
-  h: number
-  span: number
-  projectId: string
+  aspectRatio: number
+  order: number
+}
+
+const toAspectRatio = (value: string) => {
+  const [width, height] = value.split('/').map(Number)
+  return width && height ? width / height : 1
 }
 
 const galleryItems = computed<GalleryItem[]>(() => {
-  const items: GalleryItem[] = []
+  let order = 0
 
-  for (const project of projects) {
-    const allImages = project.images.length > 0 ? project.images : [project.cover]
-    for (let i = 0; i < allImages.length; i++) {
-      const ratioStr = project.imageAspectRatios[i] || '1 / 1'
-      const [w, h] = ratioStr.split('/').map(Number)
-      const span = (w && h && w / h > 1.4) ? 2 : 1
-      items.push({
-        id: `${project.id}-${i}`,
-        src: allImages[i],
-        title: project.title,
-        w: w || 1,
-        h: h || 1,
-        span,
-        projectId: project.id
-      })
+  return projects.flatMap((project) => {
+    const images = project.images.length > 0 ? project.images : [project.cover]
+
+    return images.map((src, index) => ({
+      id: `${project.id}-${index}`,
+      src,
+      title: project.title,
+      aspectRatio: toAspectRatio(project.imageAspectRatios[index] || '1 / 1'),
+      order: order++
+    }))
+  })
+})
+
+// Carbonmade lays out images in proportional rows instead of independent columns.
+const galleryRows = computed(() => {
+  const rows: GalleryItem[][] = []
+  let row: GalleryItem[] = []
+
+  for (const item of galleryItems.value) {
+    if (row.length === 0 && item.aspectRatio >= 1.6) {
+      rows.push([item])
+      continue
+    }
+
+    row.push(item)
+
+    if (row.length === 2 || row.reduce((sum, entry) => sum + entry.aspectRatio, 0) >= 1.8) {
+      rows.push(row)
+      row = []
     }
   }
 
-  for (const rp of robloxProjects) {
-    items.push({
-      id: rp.id,
-      src: rp.image || rp.cover,
-      video: rp.video,
-      title: rp.title,
-      w: 1,
-      h: 1,
-      span: 1,
-      projectId: rp.id
-    })
-  }
+  if (row.length) rows.push(row)
 
-  return items
+  return rows
 })
 
 useSeoMeta({
   title: 'Works',
-  description: 'Character art, illustrations, and 3D projects by Ali Taha Yapışkan.',
+  description: 'Character art and illustrations by Ali Taha Yapışkan.',
   ogTitle: 'ATY',
-  ogDescription: 'Character art, illustrations, and 3D projects by Ali Taha Yapışkan.',
+  ogDescription: 'Character art and illustrations by Ali Taha Yapışkan.'
 })
 
 const activeIndex = ref<number | null>(null)
 const lightboxRef = ref<HTMLElement | null>(null)
-const closeButtonRef = ref<HTMLButtonElement | null>(null)
+const lightboxOrigin = ref({ x: 0, y: 0, scale: 0.16 })
+const slideDirection = ref<'next' | 'previous' | null>(null)
 let triggerEl: HTMLElement | null = null
-const prefersReducedMotion = ref(false)
+let touchStartX: number | null = null
+let didSwipe = false
 
 const activeItem = computed(() =>
   activeIndex.value === null ? null : galleryItems.value[activeIndex.value] ?? null
 )
+
+const lightboxStyle = computed(() => ({
+  '--lightbox-origin-x': `${lightboxOrigin.value.x}px`,
+  '--lightbox-origin-y': `${lightboxOrigin.value.y}px`,
+  '--lightbox-origin-scale': String(lightboxOrigin.value.scale)
+}))
 
 const { start: startCursor, stop: stopCursor } = useCustomCursor()
 
@@ -73,26 +86,50 @@ const getFocusableElements = (container: HTMLElement) =>
     'button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])'
   )].filter((el) => !el.hasAttribute('disabled'))
 
-const setPageInert = (v: boolean) => {
-  document.querySelector('.site-shell')?.toggleAttribute('inert', v)
+const setPageInert = (value: boolean) => {
+  document.querySelector('.site-shell')?.toggleAttribute('inert', value)
 }
 
-const trapFocus = (e: KeyboardEvent) => {
-  if (e.key !== 'Tab' || !lightboxRef.value) return
-  const els = getFocusableElements(lightboxRef.value)
-  if (!els.length) return
-  const first = els[0]
-  const last = els[els.length - 1]
-  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
-  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
+const trapFocus = (event: KeyboardEvent) => {
+  if (event.key !== 'Tab' || !lightboxRef.value) return
+
+  const elements = getFocusableElements(lightboxRef.value)
+  if (!elements.length) {
+    event.preventDefault()
+    lightboxRef.value.focus()
+    return
+  }
+
+  const first = elements[0]
+  const last = elements[elements.length - 1]
+  const activeElement = document.activeElement
+
+  if (event.shiftKey && (activeElement === first || activeElement === lightboxRef.value)) {
+    event.preventDefault()
+    last.focus()
+  } else if (!event.shiftKey && (activeElement === last || activeElement === lightboxRef.value)) {
+    event.preventDefault()
+    first.focus()
+  }
 }
 
-const openLightbox = async (index: number, event: MouseEvent) => {
+const openLightbox = async (index: number, event: Event) => {
   triggerEl = event.currentTarget instanceof HTMLElement ? event.currentTarget : null
+
+  if (triggerEl) {
+    const rect = triggerEl.getBoundingClientRect()
+    lightboxOrigin.value = {
+      x: rect.left + rect.width / 2 - window.innerWidth / 2,
+      y: rect.top + rect.height / 2 - window.innerHeight / 2,
+      scale: Math.min(1, Math.max(0.08, rect.width / window.innerWidth))
+    }
+  }
+
+  slideDirection.value = null
   activeIndex.value = index
   setPageInert(true)
   await nextTick()
-  closeButtonRef.value?.focus()
+  lightboxRef.value?.focus()
 }
 
 const closeLightbox = async () => {
@@ -104,32 +141,62 @@ const closeLightbox = async () => {
 }
 
 const prevItem = () => {
-  if (activeIndex.value === null) return
-  activeIndex.value = (activeIndex.value - 1 + galleryItems.value.length) % galleryItems.value.length
+  if (activeIndex.value === null || activeIndex.value === 0) return
+  slideDirection.value = 'previous'
+  activeIndex.value -= 1
 }
 
 const nextItem = () => {
-  if (activeIndex.value === null) return
-  activeIndex.value = (activeIndex.value + 1) % galleryItems.value.length
+  if (activeIndex.value === null || activeIndex.value >= galleryItems.value.length - 1) return
+  slideDirection.value = 'next'
+  activeIndex.value += 1
 }
 
-const handleKeydown = (e: KeyboardEvent) => {
+const handleKeydown = (event: KeyboardEvent) => {
   if (activeIndex.value === null) return
-  trapFocus(e)
-  if (e.key === 'Escape') { e.preventDefault(); void closeLightbox() }
-  if (e.target instanceof HTMLVideoElement || e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
-  if (e.key === 'ArrowLeft') { e.preventDefault(); prevItem() }
-  if (e.key === 'ArrowRight') { e.preventDefault(); nextItem() }
+
+  trapFocus(event)
+
+  if (event.key === 'Escape') {
+    event.preventDefault()
+    void closeLightbox()
+  }
+
+  if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) return
+  if (event.key === 'ArrowLeft') {
+    event.preventDefault()
+    prevItem()
+  }
+  if (event.key === 'ArrowRight') {
+    event.preventDefault()
+    nextItem()
+  }
 }
 
-let reducedMotionQuery: MediaQueryList | null = null
-let handleChange: ((e: MediaQueryListEvent) => void) | null = null
+const handleLightboxClick = (event: MouseEvent) => {
+  if (didSwipe || event.target instanceof HTMLElement && event.target.closest('button')) return
+  void closeLightbox()
+}
+
+const handleLightboxPointerDown = (event: PointerEvent) => {
+  if (event.pointerType === 'touch') touchStartX = event.clientX
+}
+
+const handleLightboxPointerUp = (event: PointerEvent) => {
+  if (event.pointerType !== 'touch' || touchStartX === null) return
+
+  const distance = event.clientX - touchStartX
+  touchStartX = null
+
+  if (Math.abs(distance) < 56) return
+
+  didSwipe = true
+  if (distance < 0) nextItem()
+  else prevItem()
+  window.setTimeout(() => { didSwipe = false }, 0)
+}
 
 onMounted(() => {
-  reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-  prefersReducedMotion.value = reducedMotionQuery.matches
-  handleChange = (e) => { prefersReducedMotion.value = e.matches }
-  reducedMotionQuery.addEventListener('change', handleChange)
   window.addEventListener('keydown', handleKeydown)
   startCursor()
 })
@@ -137,7 +204,6 @@ onMounted(() => {
 onBeforeUnmount(() => {
   setPageInert(false)
   stopCursor()
-  reducedMotionQuery?.removeEventListener('change', handleChange!)
   window.removeEventListener('keydown', handleKeydown)
 })
 </script>
@@ -148,28 +214,31 @@ onBeforeUnmount(() => {
       <p class="gallery-page__welcome">Welcome!</p>
       <p class="gallery-page__bio">
         I create stylized and fantasy-focused 3D characters, combining sculpting, hand-painted texture work, and realtime presentation.
-        Selected character art, illustrations, and Roblox projects by Ali Taha Yapışkan.
-        For availability and information, contact me at: <a :href="`mailto:qaliqtaha@gmail.com`">qaliqtaha@gmail.com</a>
+        Selected character art and illustrations by Ali Taha Yapışkan.
+        For availability and information, contact me at: <a href="mailto:qaliqtaha@gmail.com">qaliqtaha@gmail.com</a>
       </p>
     </div>
 
-    <div class="gallery-masonry">
-      <button
-        v-for="(item, index) in galleryItems"
-        :key="item.id"
-        class="gallery-item"
-        :class="{ 'gallery-item--wide': item.span === 2 }"
-        type="button"
-        :aria-label="`Open ${item.title}`"
-        @click="openLightbox(index, $event)"
-      >
-        <img
-          :src="item.src"
-          :alt="item.title"
-          :loading="index < 4 ? 'eager' : 'lazy'"
-          :fetchpriority="index < 2 ? 'high' : 'auto'"
+    <div class="gallery-grid">
+      <div v-for="(row, rowIndex) in galleryRows" :key="rowIndex" class="gallery-grid__row">
+        <button
+          v-for="item in row"
+          :key="item.id"
+          class="gallery-item"
+          type="button"
+          data-cursor="zoom-in"
+          :style="{ '--gallery-ratio': String(item.aspectRatio) }"
+          :aria-label="`Open ${item.title}`"
+          @click="openLightbox(item.order, $event)"
         >
-      </button>
+          <img
+            :src="item.src"
+            :alt="item.title"
+            :loading="item.order < 2 ? 'eager' : 'lazy'"
+            :fetchpriority="item.order < 2 ? 'high' : 'auto'"
+          >
+        </button>
+      </div>
     </div>
   </div>
 
@@ -177,56 +246,50 @@ onBeforeUnmount(() => {
     <div
       v-if="activeItem"
       ref="lightboxRef"
-      class="project-lightbox"
+      class="project-lightbox project-lightbox--reference"
       data-lenis-prevent
+      data-cursor="zoom-out"
       role="dialog"
       aria-modal="true"
       tabindex="-1"
       :aria-label="activeItem.title"
-      @click.self="closeLightbox"
+      :style="lightboxStyle"
+      @click="handleLightboxClick"
+      @pointerdown="handleLightboxPointerDown"
+      @pointerup="handleLightboxPointerUp"
     >
-      <div class="project-lightbox__bar project-lightbox__bar--detail">
-        <span class="project-lightbox__count" role="status">
-          {{ String((activeIndex ?? 0) + 1).padStart(2, '0') }} / {{ String(galleryItems.length).padStart(2, '0') }}
-        </span>
-        <button ref="closeButtonRef" class="project-lightbox__close" type="button" aria-label="Close" @click="closeLightbox">&times;</button>
-      </div>
-
-      <button
-        v-if="galleryItems.length > 1"
-        class="project-lightbox__nav project-lightbox__nav--prev"
-        type="button"
-        aria-label="Previous"
-        @click="prevItem"
-      >
-        <span aria-hidden="true">&larr;</span>
+      <button class="project-lightbox__dismiss" type="button" aria-label="Close image" @click.stop="closeLightbox">
+        <span class="sr-only">Close image</span>
       </button>
 
-      <figure class="project-lightbox__figure project-lightbox__figure--detail">
-        <video
-          v-if="activeItem.video"
-          :key="activeItem.video"
-          class="project-lightbox__video"
-          :poster="activeItem.src"
-          controls
-          :autoplay="!prefersReducedMotion"
-          muted
-          :loop="!prefersReducedMotion"
-          playsinline
-        >
-          <source :src="activeItem.video" type="video/mp4">
-        </video>
-        <img v-else :src="activeItem.src" :alt="activeItem.title">
+      <button
+        v-if="activeIndex !== null && activeIndex > 0"
+        class="project-lightbox__hit project-lightbox__hit--previous"
+        type="button"
+        data-cursor="left-arrow"
+        aria-label="Previous image"
+        @click.stop="prevItem"
+      >
+        <span class="sr-only">Previous image</span>
+      </button>
+
+      <figure
+        :key="activeItem.id"
+        class="project-lightbox__figure project-lightbox__figure--reference"
+        :class="slideDirection ? `project-lightbox__figure--${slideDirection}` : null"
+      >
+        <img :src="activeItem.src" :alt="activeItem.title">
       </figure>
 
       <button
-        v-if="galleryItems.length > 1"
-        class="project-lightbox__nav project-lightbox__nav--next"
+        v-if="activeIndex !== null && activeIndex < galleryItems.length - 1"
+        class="project-lightbox__hit project-lightbox__hit--next"
         type="button"
-        aria-label="Next"
-        @click="nextItem"
+        data-cursor="right-arrow"
+        aria-label="Next image"
+        @click.stop="nextItem"
       >
-        <span aria-hidden="true">&rarr;</span>
+        <span class="sr-only">Next image</span>
       </button>
     </div>
   </Teleport>

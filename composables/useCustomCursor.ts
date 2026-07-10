@@ -1,69 +1,49 @@
-import { ref } from 'vue'
+type CursorIcon = 'zoom-in' | 'zoom-out' | 'left-arrow' | 'right-arrow'
 
-type CursorIcon = 'hidden' | 'zoom-in' | 'zoom-out' | 'left-arrow' | 'right-arrow'
-
-function createSvgContent(icon: CursorIcon): string {
-  switch (icon) {
-    case 'zoom-in':
-      return [
-        '<circle cx="30" cy="30" r="22" fill="none" stroke="#fff" stroke-width="2" />',
-        '<line x1="30" y1="18" x2="30" y2="42" stroke="#fff" stroke-width="2" />',
-        '<line x1="18" y1="30" x2="42" y2="30" stroke="#fff" stroke-width="2" />'
-      ].join('')
-    case 'zoom-out':
-      return [
-        '<circle cx="30" cy="30" r="22" fill="none" stroke="#fff" stroke-width="2" />',
-        '<line x1="18" y1="30" x2="42" y2="30" stroke="#fff" stroke-width="2" />'
-      ].join('')
-    case 'left-arrow':
-      return '<polyline points="36,14 18,30 36,46" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />'
-    case 'right-arrow':
-      return '<polyline points="24,14 42,30 24,46" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />'
-    default:
-      return ''
-  }
+const icons: Record<CursorIcon, string> = {
+  'zoom-in': [
+    '<circle cx="30" cy="30" r="29" fill="none" stroke="#fff" stroke-width="2" />',
+    '<rect x="29" y="20" width="2" height="20" rx="1" fill="#fff" />',
+    '<rect x="40" y="29" width="2" height="20" rx="1" transform="rotate(90 40 29)" fill="#fff" />'
+  ].join(''),
+  'zoom-out': [
+    '<circle cx="30" cy="30" r="29" fill="none" stroke="#fff" stroke-width="2" />',
+    '<rect x="40" y="29" width="2" height="20" rx="1" transform="rotate(90 40 29)" fill="#fff" />'
+  ].join(''),
+  'left-arrow': '<path d="M38 12 20 30l18 18" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />',
+  'right-arrow': '<path d="m22 12 18 18-18 18" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />'
 }
 
-function isTouchDevice(): boolean {
-  if (typeof window === 'undefined') return true
-  return !window.matchMedia('(pointer: fine)').matches || 'ontouchstart' in window
-}
+const isCursorIcon = (value: string | undefined): value is CursorIcon =>
+  value === 'zoom-in' || value === 'zoom-out' || value === 'left-arrow' || value === 'right-arrow'
 
 export function useCustomCursor() {
-  const lightboxOpen = ref(false)
-  const container = ref<HTMLElement | null>(null)
-
   let cursorEl: HTMLDivElement | null = null
   let svgEl: SVGSVGElement | null = null
-  let styleEl: HTMLStyleElement | null = null
   let attached = false
-  let rafId = 0
   let mouseX = 0
   let mouseY = 0
   let mouseDown = false
-  let currentIcon: CursorIcon = 'hidden'
-  let lightboxObserver: MutationObserver | null = null
+  let currentIcon: CursorIcon | null = null
 
-  function createCursorElement() {
+  const supportsCustomCursor = () =>
+    window.matchMedia('(hover: hover) and (pointer: fine)').matches
+
+  const createCursorElement = () => {
     if (cursorEl) return
-
-    styleEl = document.createElement('style')
-    styleEl.textContent = 'body, body * { cursor: none !important; }'
-    document.head.appendChild(styleEl)
 
     cursorEl = document.createElement('div')
     cursorEl.style.position = 'fixed'
     cursorEl.style.top = '0'
     cursorEl.style.left = '0'
+    cursorEl.style.display = 'none'
     cursorEl.style.width = '60px'
     cursorEl.style.height = '60px'
     cursorEl.style.pointerEvents = 'none'
     cursorEl.style.zIndex = '10000'
-    cursorEl.style.opacity = '0'
-    cursorEl.style.transform = 'translate(-30px, -30px) scale(1)'
-    cursorEl.style.transition = 'transform 0.2s ease-out'
     cursorEl.style.mixBlendMode = 'difference'
-    cursorEl.style.willChange = 'transform, opacity'
+    cursorEl.style.willChange = 'transform'
+    cursorEl.style.transition = 'transform 100ms ease-out'
 
     svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
     svgEl.setAttribute('width', '60')
@@ -72,128 +52,86 @@ export function useCustomCursor() {
 
     cursorEl.appendChild(svgEl)
     document.body.appendChild(cursorEl)
-    container.value = cursorEl
   }
 
-  function removeCursorElement() {
-    if (cursorEl?.parentNode) {
-      cursorEl.parentNode.removeChild(cursorEl)
+  const hideCursor = () => {
+    if (cursorEl) cursorEl.style.display = 'none'
+    currentIcon = null
+  }
+
+  const setIcon = (icon: CursorIcon) => {
+    if (!cursorEl || !svgEl) return
+
+    if (currentIcon !== icon) {
+      svgEl.innerHTML = icons[icon]
+      currentIcon = icon
     }
-    cursorEl = null
-    svgEl = null
-    container.value = null
 
-    if (styleEl?.parentNode) {
-      styleEl.parentNode.removeChild(styleEl)
-    }
-    styleEl = null
+    cursorEl.style.display = 'block'
   }
 
-  function setIcon(icon: CursorIcon) {
-    if (currentIcon === icon) return
-    currentIcon = icon
-
-    if (!svgEl || !cursorEl) return
-    svgEl.innerHTML = createSvgContent(icon)
-    cursorEl.style.opacity = icon === 'hidden' ? '0' : '1'
-  }
-
-  function updateTransform() {
+  const updateTransform = () => {
     if (!cursorEl) return
-    const scale = mouseDown ? 0.85 : 1
+    const scale = mouseDown ? 0.84 : 0.7
     cursorEl.style.transform = `translate(${mouseX - 30}px, ${mouseY - 30}px) scale(${scale})`
   }
 
-  function iconForPosition(clientX: number, clientY: number): CursorIcon {
-    const lightbox = document.querySelector('.project-lightbox')
-    if (lightbox) {
-      lightboxOpen.value = true
-      const rect = lightbox.getBoundingClientRect()
-      const relX = clientX - rect.left
-      const relY = clientY - rect.top
-      const w = rect.width
-      const h = rect.height
+  const updateCursor = (target: EventTarget | null) => {
+    const cursorTarget = target instanceof Element
+      ? target.closest<HTMLElement>('[data-cursor]')
+      : null
+    const icon = cursorTarget?.dataset.cursor
 
-      if (relY < h * 0.1 || relY > h - 200) return 'zoom-out'
-      if (relX < w * 0.2) return 'left-arrow'
-      if (relX > w * 0.8) return 'right-arrow'
-      return 'zoom-out'
+    if (!isCursorIcon(icon)) {
+      hideCursor()
+      return
     }
 
-    lightboxOpen.value = false
-    const fromPoint = document.elementFromPoint(clientX, clientY)
-    if (fromPoint?.closest('.fabrica-card__media')) return 'zoom-in'
-    return 'hidden'
+    // Only interactive artwork areas hide the native pointer.
+    cursorTarget.style.cursor = 'none'
+    setIcon(icon)
+    updateTransform()
   }
 
-  function onMouseMove(e: MouseEvent) {
-    mouseX = e.clientX
-    mouseY = e.clientY
-
-    cancelAnimationFrame(rafId)
-    rafId = requestAnimationFrame(() => {
-      setIcon(iconForPosition(e.clientX, e.clientY))
-      updateTransform()
-    })
+  const onMouseMove = (event: MouseEvent) => {
+    mouseX = event.clientX
+    mouseY = event.clientY
+    updateCursor(event.target)
+    updateTransform()
   }
 
-  function onMouseDown() {
+  const onMouseDown = () => {
     mouseDown = true
-    cancelAnimationFrame(rafId)
-    rafId = requestAnimationFrame(updateTransform)
+    updateTransform()
   }
 
-  function onMouseUp() {
+  const onMouseUp = () => {
     mouseDown = false
-    cancelAnimationFrame(rafId)
-    rafId = requestAnimationFrame(updateTransform)
+    updateTransform()
   }
 
-  function onMouseLeave() {
-    if (cursorEl) cursorEl.style.opacity = '0'
-    currentIcon = 'hidden'
-  }
-
-  function startObservingLightbox() {
-    lightboxOpen.value = Boolean(document.querySelector('.project-lightbox'))
-    lightboxObserver = new MutationObserver(() => {
-      lightboxOpen.value = Boolean(document.querySelector('.project-lightbox'))
-    })
-    lightboxObserver.observe(document.body, { childList: true, subtree: true })
-  }
-
-  function start() {
-    if (attached || isTouchDevice()) return
+  const start = () => {
+    if (attached || !supportsCustomCursor()) return
     attached = true
-
     createCursorElement()
     document.addEventListener('mousemove', onMouseMove, { passive: true })
     document.addEventListener('mousedown', onMouseDown, { passive: true })
     document.addEventListener('mouseup', onMouseUp, { passive: true })
-    document.addEventListener('mouseleave', onMouseLeave, { passive: true })
-    startObservingLightbox()
+    window.addEventListener('blur', hideCursor)
   }
 
-  function stop() {
+  const stop = () => {
     if (!attached) return
     attached = false
-
     document.removeEventListener('mousemove', onMouseMove)
     document.removeEventListener('mousedown', onMouseDown)
     document.removeEventListener('mouseup', onMouseUp)
-    document.removeEventListener('mouseleave', onMouseLeave)
-
-    lightboxObserver?.disconnect()
-    lightboxObserver = null
-
-    cancelAnimationFrame(rafId)
-    removeCursorElement()
+    window.removeEventListener('blur', hideCursor)
+    cursorEl?.remove()
+    cursorEl = null
+    svgEl = null
+    currentIcon = null
   }
 
-  return {
-    container,
-    lightboxOpen,
-    start,
-    stop
-  }
+  return { start, stop }
 }

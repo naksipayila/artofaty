@@ -11,8 +11,6 @@ const navItems = [
   { label: 'Works', to: '/works' },
   { label: 'About', to: '/about' }
 ]
-const leftNavItems = navItems.slice(0, 1)
-const rightNavItems = navItems.slice(1)
 
 const isActive = (path: string) => {
   if (path === '/works') {
@@ -104,9 +102,13 @@ watch(() => route.fullPath, closeMobileMenu)
       'site-header--scrolled': isScrolled
     }"
   >
-    <nav class="site-nav site-nav--left" aria-label="Primary navigation left">
+    <NuxtLink class="brand-mark" to="/" aria-label="ATY home">
+      <img :src="logoSrc" alt="ATY" class="brand-logo">
+    </NuxtLink>
+
+    <nav class="site-nav" aria-label="Primary navigation">
       <NuxtLink
-        v-for="item in leftNavItems"
+        v-for="item in navItems"
         :key="item.to"
         :to="item.to"
         :class="['site-nav__link', { 'site-nav__link--active': isActive(item.to) }]"
@@ -114,10 +116,6 @@ watch(() => route.fullPath, closeMobileMenu)
         {{ item.label }}
       </NuxtLink>
     </nav>
-
-    <NuxtLink class="brand-mark" to="/" aria-label="ATY home">
-      <img :src="logoSrc" alt="ATY" class="brand-logo">
-    </NuxtLink>
 
     <button
       ref="toggleRef"
@@ -132,17 +130,6 @@ watch(() => route.fullPath, closeMobileMenu)
       <span></span>
       <span></span>
     </button>
-
-    <nav class="site-nav site-nav--right" aria-label="Primary navigation right">
-      <NuxtLink
-        v-for="item in rightNavItems"
-        :key="item.to"
-        :to="item.to"
-        :class="['site-nav__link', { 'site-nav__link--active': isActive(item.to) }]"
-      >
-        {{ item.label }}
-      </NuxtLink>
-    </nav>
 
     <nav ref="mobileNavRef" id="site-mobile-nav" class="site-mobile-nav" aria-label="Primary navigation" @click="handleMobileNavClickOutside">
       <NuxtLink
