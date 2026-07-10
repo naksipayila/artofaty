@@ -176,7 +176,8 @@ export const projects: Project[] = [
   }
 ]
 
-const toLargeArtStationImage = (url: string) => url.replace('/smaller_square/', '/large/')
+const toLargeArtStationImage = (url: string) =>
+  url.startsWith('http') ? url.replace('/smaller_square/', '/large/') : url
 
 const defineRobloxProject = (project: RobloxProjectSource): RobloxProject => ({
   ...project,
@@ -185,7 +186,7 @@ const defineRobloxProject = (project: RobloxProjectSource): RobloxProject => ({
 })
 
 export const robloxProjects: RobloxProject[] = [
-  defineRobloxProject({ id: 'mANbmy', title: 'Wendigo', cover: 'https://cdnb.artstation.com/p/assets/covers/images/098/058/883/20260429151257/smaller_square/naksi-naksi-videoframe-8835.jpg?1777493577', video: 'https://cdn.artstation.com/p/video_sources/003/217/147/wendigo.mp4' }),
+  defineRobloxProject({ id: 'mANbmy', title: 'Wendigo', cover: 'wendigo-cover.png', video: 'https://cdn.artstation.com/p/video_sources/003/217/147/wendigo.mp4' }),
   defineRobloxProject({ id: 'K3ALqG', title: 'Krampus Shrek', cover: 'https://cdnb.artstation.com/p/assets/covers/images/098/059/805/20260429125129/smaller_square/naksi-naksi-videoframe-0.jpg?1777485089' }),
   defineRobloxProject({ id: 'EzraOq', title: 'Leshen', cover: 'https://cdnb.artstation.com/p/assets/covers/images/098/949/237/20260511143520/smaller_square/naksi-naksi-videoframe-872.jpg?1778528120' }),
   defineRobloxProject({ id: 'dydVeQ', title: 'Wise Mystical Tree', cover: 'https://cdnb.artstation.com/p/assets/covers/images/098/056/669/20260429125200/smaller_square/naksi-naksi-videoframe-443.jpg?1777485120' }),
