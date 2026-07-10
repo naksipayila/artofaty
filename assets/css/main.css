@@ -1139,7 +1139,7 @@ main :is(a, button):focus-visible,
 
 .work-index {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   gap: clamp(24px, 4vw, 48px);
   width: min(100%, var(--portfolio-content-width));
   margin: 0 auto clamp(24px, 3vw, 36px);
