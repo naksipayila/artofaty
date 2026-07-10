@@ -1137,6 +1137,93 @@ main :is(a, button):focus-visible,
   width: 100%;
 }
 
+.work-index {
+  display: grid;
+  gap: 6px;
+  width: min(100%, var(--portfolio-content-width));
+  margin: 0 auto clamp(24px, 3vw, 40px);
+}
+
+.work-index__label {
+  color: rgba(166, 155, 141, 0.38);
+  font-size: 0.56rem;
+  font-weight: 850;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding-left: 2px;
+}
+
+.work-index__rows {
+  display: grid;
+  gap: 0;
+}
+
+.work-index__row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: baseline;
+  gap: clamp(12px, 2vw, 24px);
+  padding: 13px 0;
+  border: 0;
+  border-top: 1px solid rgba(242, 234, 223, 0.06);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.work-index__row:last-child {
+  border-bottom: 1px solid rgba(242, 234, 223, 0.06);
+}
+
+.work-index__row:hover .work-index__name {
+  color: rgba(242, 234, 223, 0.72);
+}
+
+.work-index__row:focus-visible {
+  outline: 2px solid rgba(98, 168, 255, 0.9);
+  outline-offset: 2px;
+}
+
+.work-index__num {
+  color: rgba(98, 168, 255, 0.28);
+  font-size: 0.68rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  min-width: 2ch;
+}
+
+.work-index__row--active .work-index__num {
+  color: var(--accent);
+}
+
+.work-index__name {
+  color: rgba(242, 234, 223, 0.32);
+  font-size: clamp(1.15rem, 1.8vw, 1.7rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.work-index__row--active .work-index__name {
+  color: var(--cream);
+}
+
+.work-index__count {
+  color: rgba(166, 155, 141, 0.38);
+  font-size: 0.54rem;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.work-index__row--active .work-index__count {
+  color: rgba(166, 155, 141, 0.62);
+}
+
 .fabrica-tabs {
   position: relative;
   z-index: 10;
@@ -2947,6 +3034,34 @@ html:has(.fabrica-page--main) .site-footer {
     padding: 0 9px;
     font-size: 0.57rem;
     letter-spacing: 0.11em;
+  }
+
+  .work-index {
+    gap: 4px;
+    margin-bottom: clamp(18px, 3vw, 24px);
+  }
+
+  .work-index__label {
+    font-size: 0.48rem;
+    letter-spacing: 0.14em;
+  }
+
+  .work-index__row {
+    padding: 10px 0;
+    gap: 10px;
+  }
+
+  .work-index__num {
+    font-size: 0.56rem;
+  }
+
+  .work-index__name {
+    font-size: clamp(0.95rem, 4vw, 1.2rem);
+  }
+
+  .work-index__count {
+    font-size: 0.48rem;
+    letter-spacing: 0.08em;
   }
 
   .fabrica-reveal--heading {

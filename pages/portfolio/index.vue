@@ -26,8 +26,8 @@ const activeRobloxCount = computed(() => (
 ))
 
 const portfolioTabs = [
-  { id: 'current', label: 'Main Portfolio', count: projects.length },
-  { id: 'roblox', label: 'Roblox Portfolio', count: robloxProjects.length }
+  { id: 'current', label: 'Main Characters', count: projects.length },
+  { id: 'roblox', label: 'Roblox Worlds', count: robloxProjects.length }
 ] as const
 
 const visibleRobloxProjects = computed(() => robloxProjects.slice(0, visibleRobloxCount.value))
@@ -168,33 +168,32 @@ onBeforeUnmount(() => {
           <h1 class="fabrica-page__title">Portfolio</h1>
           <p class="fabrica-page__description">Character art, hand-painted materials, and realtime presentation studies.</p>
         </div>
-
-        <div class="fabrica-panel__header">
-          <div class="fabrica-tabs" role="tablist" aria-label="Portfolio categories">
-            <template v-for="(tab, index) in portfolioTabs" :key="tab.id">
-              <button
-                :id="`portfolio-tab-${tab.id}`"
-                class="fabrica-tabs__button"
-                :class="{ 'fabrica-tabs__button--active': activePortfolioTab === tab.id }"
-                type="button"
-                role="tab"
-                :aria-selected="activePortfolioTab === tab.id"
-                :aria-controls="`portfolio-panel-${tab.id}`"
-                :tabindex="activePortfolioTab === tab.id ? 0 : -1"
-                @click="selectPortfolioTab(tab.id)"
-                @keydown="handlePortfolioTabKeydown($event, tab.id)"
-              >
-                <span class="fabrica-tabs__label">{{ tab.label }}</span>
-                <span class="sr-only">, {{ tab.count }} projects</span>
-                <span class="right-curve"></span>
-              </button>
-              <span v-if="index < portfolioTabs.length - 1" class="fabrica-tabs__separator" aria-hidden="true">|</span>
-            </template>
-          </div>
-        </div>
       </div>
 
       <section class="fabrica-cards">
+        <nav class="work-index" aria-label="Portfolio categories" role="tablist">
+          <span class="work-index__label">WORK INDEX</span>
+          <div class="work-index__rows">
+            <button
+              v-for="(tab, index) in portfolioTabs"
+              :key="tab.id"
+              :id="`portfolio-tab-${tab.id}`"
+              class="work-index__row"
+              :class="{ 'work-index__row--active': activePortfolioTab === tab.id }"
+              type="button"
+              role="tab"
+              :aria-selected="activePortfolioTab === tab.id"
+              :aria-controls="`portfolio-panel-${tab.id}`"
+              :tabindex="activePortfolioTab === tab.id ? 0 : -1"
+              @click="selectPortfolioTab(tab.id)"
+              @keydown="handlePortfolioTabKeydown($event, tab.id)"
+            >
+              <span class="work-index__num">{{ String(index + 1).padStart(2, '0') }}</span>
+              <span class="work-index__name">{{ tab.label }}</span>
+              <span class="work-index__count">{{ tab.count }} PROJECTS</span>
+            </button>
+          </div>
+        </nav>
         <div class="fabrica-tabbed-panel">
           <div class="fabrica-panel">
             <div class="fabrica-panel__body">
