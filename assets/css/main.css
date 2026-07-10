@@ -2844,35 +2844,45 @@ html:has(.fabrica-page--main) .site-footer {
   }
 
   .site-mobile-nav {
-    position: absolute;
-    top: calc(100% + 8px);
-    right: 0;
-    left: 0;
-    display: none;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 8px;
-    justify-content: stretch;
-    justify-self: stretch;
-    width: 100%;
-    margin-top: 0;
-    overflow: hidden;
-    padding: 6px;
-    border: 1px solid rgba(242, 234, 223, 0.08);
-    border-radius: 5.5px;
-    background: #05080c;
-    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.32);
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(16px, 3.5vw, 28px);
+    padding: 100px 28px 40px;
+    background: rgba(8, 7, 6, 0.96);
+    backdrop-filter: blur(28px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 260ms ease, visibility 260ms ease;
   }
 
   .site-header--menu-open .site-mobile-nav {
-    display: grid;
+    opacity: 1;
+    visibility: visible;
   }
 
-  .site-nav__link {
-    min-height: 46px;
-    padding: 0 8px;
-    border-radius: 5.5px;
-    font-size: clamp(0.72rem, 2.9vw, 0.82rem);
-    letter-spacing: 0.06em;
+  .site-header--menu-open {
+    z-index: 40;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .site-mobile-nav .site-nav__link {
+    min-height: 56px;
+    padding: 0;
+    font-size: clamp(1.6rem, 8vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: rgba(242, 234, 223, 0.72);
+  }
+
+  .site-mobile-nav .site-nav__link:hover,
+  .site-mobile-nav .site-nav__link--active {
+    color: var(--cream);
   }
 
   .site-menu-toggle {
@@ -2927,6 +2937,12 @@ html:has(.fabrica-page--main) .site-footer {
 
   .site-header--menu-open .site-menu-toggle span:nth-child(3) {
     transform: rotate(-45deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-mobile-nav {
+      transition: none;
+    }
   }
 
   .brand-logo {
@@ -3602,13 +3618,8 @@ html:has(.fabrica-page--main) .site-footer {
 }
 
 @media (max-width: 380px) {
-  .site-mobile-nav {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 6px;
-  }
-
-  .site-nav__link {
-    font-size: 0.72rem;
+  .site-mobile-nav .site-nav__link {
+    font-size: 1.4rem;
   }
 
   .fabrica-tabs__button,
