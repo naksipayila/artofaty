@@ -19,9 +19,7 @@ export default defineNuxtConfig({
         '/',
         '/works',
         '/about',
-        ...projects
-          .filter((project) => project.images.length > 1)
-          .map((project) => `/works/${project.id}`)
+        ...projects.map((project) => `/works/${project.id}`)
       ]
     }
   },

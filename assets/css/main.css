@@ -319,7 +319,16 @@ main :is(a, button):focus-visible,
   animation: gallery-lightbox-open 220ms ease-out both;
 }
 
-.project-lightbox--reference .project-lightbox__figure--reference img {
+.project-lightbox--returning {
+  background: transparent;
+}
+
+.project-lightbox--returning .project-lightbox__figure--reference {
+  animation: none;
+  will-change: transform;
+}
+
+.project-lightbox--reference .project-lightbox__figure--reference :is(img, video) {
   display: block;
   width: auto;
   max-width: calc(100vw - 30px);
@@ -422,7 +431,7 @@ main :is(a, button):focus-visible,
   cursor: zoom-in;
 }
 
-.project-gallery__item img {
+.project-gallery__item :is(img, video) {
   display: block;
   width: 100%;
   height: auto;
@@ -560,9 +569,9 @@ main :is(a, button):focus-visible,
   .site-header {
     grid-template-columns: 110px auto 110px;
     align-items: center;
-    gap: 32px;
+    gap: 44px;
     width: min(1100px, calc(100vw - 36px));
-    padding: 24px 0;
+    padding: 48px 0;
   }
 
   .site-nav,
@@ -578,7 +587,8 @@ main :is(a, button):focus-visible,
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.25rem;
+    font-size: 1.125rem;
+    font-weight: 500;
   }
 
   .brand-mark {
@@ -588,7 +598,7 @@ main :is(a, button):focus-visible,
   }
 
   .brand-logo {
-    height: 112px;
+    height: 96px;
   }
 
   .gallery-page {
@@ -728,7 +738,7 @@ main :is(a, button):focus-visible,
   }
 
   .project-lightbox--reference .project-lightbox__figure--reference,
-  .project-lightbox--reference .project-lightbox__figure--reference img {
+  .project-lightbox--reference .project-lightbox__figure--reference :is(img, video) {
     max-width: calc(100vw - 50px);
     max-height: calc(100vh - 50px);
   }

@@ -54,9 +54,11 @@ export const projects: Project[] = [
       'https://cdna.artstation.com/p/assets/images/images/095/850/850/large/ali-taha-yapiskan-render1.webp?1770313842',
       'https://cdnb.artstation.com/p/assets/images/images/095/850/865/large/ali-taha-yapiskan-render2.webp?1769686072',
       'https://cdna.artstation.com/p/assets/images/images/095/850/866/large/ali-taha-yapiskan-render3.webp?1769686078',
-      'https://cdnb.artstation.com/p/assets/images/images/095/850/867/large/ali-taha-yapiskan-render4.webp?1769686085'
+      'https://cdnb.artstation.com/p/assets/images/images/095/850/867/large/ali-taha-yapiskan-render4.webp?1769686085',
+      'https://cdna.artstation.com/p/assets/images/images/095/850/870/large/ali-taha-yapiskan-render5.webp',
+      'https://cdn.artstation.com/p/video_sources/003/074/080/turntable.mp4'
     ],
-    imageAspectRatios: ['1 / 1', '1 / 1', '1 / 1', '1 / 1'],
+    imageAspectRatios: ['1 / 1', '1 / 1', '1 / 1', '1 / 1', '1 / 1', '1 / 1'],
     details: {
       client: 'Personal Practice',
       date: 'Jan 29, 2026',
@@ -85,10 +87,9 @@ export const projects: Project[] = [
     cover: 'https://cdna.artstation.com/p/assets/covers/images/094/710/214/large/ali-taha-yapiskan-ali-taha-yapiskan-test2.webp?1766169605',
     coverCrop: '50% 35%',
     images: [
-      'https://cdna.artstation.com/p/assets/covers/images/094/710/214/large/ali-taha-yapiskan-ali-taha-yapiskan-test2.webp?1766169605',
-      'https://cdnb.artstation.com/p/assets/marmosets/images/087/982/587/large/ali-taha-yapiskan-mview-image20250513-12-1yyv867.jpg?1747163415'
+      'https://cdna.artstation.com/p/assets/covers/images/094/710/214/large/ali-taha-yapiskan-ali-taha-yapiskan-test2.webp?1766169605'
     ],
-    imageAspectRatios: ['1 / 1', '16 / 9'],
+    imageAspectRatios: ['1 / 1'],
     details: {
       client: 'Personal Practice',
       date: 'May 13, 2025',
@@ -118,11 +119,10 @@ export const projects: Project[] = [
     coverCrop: 'center top',
     images: [
       'https://cdnb.artstation.com/p/assets/images/images/088/540/785/large/ali-taha-yapiskan-mermaid-full.jpg?1766042317',
-      'https://cdnb.artstation.com/p/assets/images/images/085/201/217/large/ali-taha-yapiskan-texturebreakdown.jpg?1740215587',
       'https://cdna.artstation.com/p/assets/images/images/084/515/504/large/ali-taha-yapiskan-ue.jpg?1738579987',
       'https://cdnb.artstation.com/p/assets/images/images/084/515/375/large/ali-taha-yapiskan-zb.jpg?1738579680'
     ],
-    imageAspectRatios: ['1920 / 2824', '1920 / 881', '16 / 9', '1920 / 1126'],
+    imageAspectRatios: ['1920 / 2824', '16 / 9', '1920 / 1126'],
     details: {
       client: 'Personal Practice',
       date: 'Jan 24, 2025',
@@ -151,11 +151,9 @@ export const projects: Project[] = [
     cover: 'https://cdna.artstation.com/p/assets/images/images/088/472/900/large/ali-taha-yapiskan-orc.jpg?1770710654',
     coverCrop: '48% 42%',
     images: [
-      'https://cdna.artstation.com/p/assets/images/images/088/472/900/large/ali-taha-yapiskan-orc.jpg?1770710654',
-      'https://cdna.artstation.com/p/assets/images/images/075/792/404/large/ali-taha-yapiskan-orc-maya.jpg?1715441098',
-      'https://cdnb.artstation.com/p/assets/images/images/088/544/999/large/ali-taha-yapiskan-zb.jpg?1748546747'
+      'https://cdna.artstation.com/p/assets/images/images/088/472/900/large/ali-taha-yapiskan-orc.jpg?1770710654'
     ],
-    imageAspectRatios: ['1 / 1', '622 / 806', '1442 / 822'],
+    imageAspectRatios: ['1 / 1'],
     details: {
       client: 'Personal Practice',
       date: 'Feb 08, 2024',

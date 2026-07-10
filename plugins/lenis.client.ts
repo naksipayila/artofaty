@@ -9,14 +9,16 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   const shouldUseLenis = () => desktopQuery.matches && !reducedMotionQuery.matches
   const hasOpenLightbox = () => Boolean(document.querySelector('.project-lightbox'))
+  const hasScrollDismissLightbox = () =>
+    window.innerWidth > 760 && Boolean(document.querySelector('.project-lightbox[data-scroll-dismiss-lightbox]'))
 
   const updateLightboxState = () => {
-    const isLightboxOpen = hasOpenLightbox()
-    document.documentElement.classList.toggle('has-open-lightbox', isLightboxOpen)
+    const isLightboxBlockingScroll = hasOpenLightbox() && !hasScrollDismissLightbox()
+    document.documentElement.classList.toggle('has-open-lightbox', isLightboxBlockingScroll)
 
     if (!lenis) return
 
-    if (isLightboxOpen) {
+    if (isLightboxBlockingScroll) {
       lenis.stop()
       return
     }
