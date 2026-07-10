@@ -28,9 +28,37 @@ useSeoMeta({
       <div class="hero__actions">
         <NuxtLink class="button button--primary" to="/portfolio">View portfolio</NuxtLink>
       </div>
+
+      <p class="hero__status-line">Currently exploring — stylized faces, readable silhouettes, hand-painted materials</p>
     </div>
 
     <div class="hero__visual hero__visual--model" :aria-label="`${homeFeaturedProject.title} realtime 3D character model`">
+      <div class="passport-frame" aria-hidden="true">
+        <div class="passport-topline">
+          <span>CHARACTER DOSSIER</span>
+          <span>NO. 01</span>
+        </div>
+        <ul class="passport-specs passport-specs--left">
+          <li>SCULPT</li>
+          <li>HAND-PAINTED</li>
+          <li>GAME-READY</li>
+        </ul>
+        <ul class="passport-specs passport-specs--right">
+          <li>~18K TRIS</li>
+          <li>2K PBR TEX</li>
+          <li>REALTIME</li>
+        </ul>
+        <div class="passport-name">MISS FORTUNE</div>
+        <div class="passport-year">ART OF ATY</div>
+        <div class="passport-rule passport-rule--top"></div>
+        <div class="passport-rule passport-rule--left"></div>
+        <div class="passport-rule passport-rule--right"></div>
+        <div class="passport-rule passport-rule--bottom"></div>
+        <div class="passport-tick passport-tick--tl"></div>
+        <div class="passport-tick passport-tick--tr"></div>
+        <div class="passport-tick passport-tick--bl"></div>
+        <div class="passport-tick passport-tick--br"></div>
+      </div>
       <HomeModelViewer
         model-path="models/MissFortune_low.fbx"
         :poster-path="homeHeroImage"
