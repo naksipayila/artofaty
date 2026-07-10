@@ -2843,9 +2843,9 @@ html:has(.fabrica-page--main) .site-footer {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: clamp(16px, 3.5vw, 28px);
-    padding: 100px 28px 40px;
+    padding: clamp(80px, 16vh, 140px) 28px 40px;
     background: rgba(8, 7, 6, 0.96);
     backdrop-filter: blur(28px);
     opacity: 0;
