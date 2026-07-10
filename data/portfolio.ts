@@ -1,22 +1,11 @@
 export type Project = {
   id: string
   title: string
-  year: string
-  category: string
   description: string
-  artstationUrl: string
   cover: string
   coverCrop?: string
-  coverScale?: string
-  coverOrigin?: string
   images: string[]
   imageAspectRatios: string[]
-  tags: string[]
-  tools: string[]
-  stats: {
-    likes: number
-    views: number
-  }
   details: {
     client: string
     date: string
@@ -27,11 +16,7 @@ export type Project = {
     quote: string
     solution: string
   }
-  heroImage?: string
   desktopCover?: string
-  heroCrop: string
-  heroScale: string
-  heroOrigin: string
 }
 
 type RobloxProjectSource = {
@@ -47,7 +32,6 @@ export type RobloxProject = RobloxProjectSource & {
 }
 
 export const artist = {
-  brand: 'ATY',
   name: 'Ali Taha Yapışkan',
   role: '3D Character Artist',
   location: 'Eskişehir, Turkey',
@@ -55,20 +39,14 @@ export const artist = {
   artstation: 'https://www.artstation.com/artofaty',
   instagram: 'https://instagram.com/artofaty',
   linkedin: 'https://www.linkedin.com/in/artofaty',
-  youtube: 'https://www.youtube.com/@artofaty',
-  linktree: 'https://linktr.ee/artofaty',
-  avatar: 'https://cdnb.artstation.com/p/users/avatars/005/843/005/large/022dd1ebb4bcefda3a1bd206a375a226.jpg?1783680824',
-  availability: ['Full-time', 'Contract', 'Freelance']
+  youtube: 'https://www.youtube.com/@artofaty'
 }
 
 export const projects: Project[] = [
   {
     id: 'anastasia',
     title: 'Anastasia',
-    year: '2026',
-    category: 'Stylized Dark Fantasy Character',
     description: 'Personal practice work focused on hand-painted PBR, stylized anatomy, realtime presentation, and fantasy character detail.',
-    artstationUrl: 'https://www.artstation.com/artwork/nJy5B1',
     cover: 'https://cdna.artstation.com/p/assets/covers/images/096/089/076/large/ali-taha-yapiskan-ali-taha-yapiskan-thumb3.webp?1770314065',
     desktopCover: 'https://cdna.artstation.com/p/assets/images/images/095/850/850/large/ali-taha-yapiskan-render1.webp?1770313842',
     coverCrop: '55% 32%',
@@ -79,12 +57,6 @@ export const projects: Project[] = [
       'https://cdnb.artstation.com/p/assets/images/images/095/850/867/large/ali-taha-yapiskan-render4.webp?1769686085'
     ],
     imageAspectRatios: ['1 / 1', '1 / 1', '1 / 1', '1 / 1'],
-    tags: ['Character Design', 'Stylized', 'Fantasy', 'Game Art', 'Realtime', 'PBR', 'Hand-painted'],
-    tools: ['ZBrush', 'Maya', 'Substance 3D Painter', 'Marmoset Toolbag', 'Photoshop'],
-    stats: {
-      likes: 26,
-      views: 212
-    },
     details: {
       client: 'Personal Practice',
       date: 'Jan 29, 2026',
@@ -104,19 +76,12 @@ export const projects: Project[] = [
       ],
       quote: 'A strong character presentation should show the final image and the thinking behind it: sculpt, texture, wireframe, clay, and the decisions that connect them.',
       solution: 'The final presentation combines polished character renders, breakdown views, clay and wireframe passes, and process material. This gives the viewer a complete read of the character as both a finished artwork and a production-minded 3D asset.'
-    },
-    heroImage: 'https://cdna.artstation.com/p/assets/images/images/095/850/850/large/ali-taha-yapiskan-render1.webp?1770313842',
-    heroCrop: 'center center',
-    heroScale: '2.15',
-    heroOrigin: '50% 0%'
+    }
   },
   {
     id: 'miss-fortune',
     title: 'Miss Fortune',
-    year: '2025',
-    category: 'Hand-painted Character Study',
     description: 'A hand-painted texturing study made without generators, exploring readable forms, stylized material separation, and game-ready presentation.',
-    artstationUrl: 'https://www.artstation.com/artwork/XJ2zL0',
     cover: 'https://cdna.artstation.com/p/assets/covers/images/094/710/214/large/ali-taha-yapiskan-ali-taha-yapiskan-test2.webp?1766169605',
     coverCrop: '50% 35%',
     images: [
@@ -124,12 +89,6 @@ export const projects: Project[] = [
       'https://cdnb.artstation.com/p/assets/marmosets/images/087/982/587/large/ali-taha-yapiskan-mview-image20250513-12-1yyv867.jpg?1747163415'
     ],
     imageAspectRatios: ['1 / 1', '16 / 9'],
-    tags: ['Handpaint', 'Character', 'Stylized', 'Fantasy', 'Marmoset'],
-    tools: ['ZBrush', 'Maya', 'Substance 3D Painter', 'Marmoset Toolbag', 'Blender'],
-    stats: {
-      likes: 51,
-      views: 553
-    },
     details: {
       client: 'Personal Practice',
       date: 'May 13, 2025',
@@ -149,22 +108,14 @@ export const projects: Project[] = [
       ],
       quote: 'Hand-painted texture work is strongest when every color, highlight, and edge supports the form instead of fighting it.',
       solution: 'The project resolves into a compact character presentation with final renders, wireframe information, Marmoset preview material, and texture-focused imagery that communicates a clear step forward in the hand-painted workflow.'
-    },
-    heroCrop: '36% center',
-    heroScale: '1.2',
-    heroOrigin: '40% 30%'
+    }
   },
   {
     id: 'mermaid',
     title: 'Mermaid',
-    year: '2025',
-    category: 'First Hand-painted Character',
     description: 'A practice character built around hand-painted texture decisions, silhouette clarity, and stylized fantasy presentation.',
-    artstationUrl: 'https://www.artstation.com/artwork/wrmZNY',
     cover: 'https://cdnb.artstation.com/p/assets/images/images/088/540/785/large/ali-taha-yapiskan-mermaid-full.jpg?1766042317',
     coverCrop: 'center top',
-    coverScale: '1.95',
-    coverOrigin: 'center 20%',
     images: [
       'https://cdnb.artstation.com/p/assets/images/images/088/540/785/large/ali-taha-yapiskan-mermaid-full.jpg?1766042317',
       'https://cdnb.artstation.com/p/assets/images/images/085/201/217/large/ali-taha-yapiskan-texturebreakdown.jpg?1740215587',
@@ -172,12 +123,6 @@ export const projects: Project[] = [
       'https://cdnb.artstation.com/p/assets/images/images/084/515/375/large/ali-taha-yapiskan-zb.jpg?1738579680'
     ],
     imageAspectRatios: ['1920 / 2824', '1920 / 881', '16 / 9', '1920 / 1126'],
-    tags: ['Mermaid', 'Character Modeling', 'Fantasy', 'Stylized', 'Hand-painted'],
-    tools: ['ZBrush', 'Maya', 'Substance 3D Painter', 'Unreal Engine'],
-    stats: {
-      likes: 41,
-      views: 471
-    },
     details: {
       client: 'Personal Practice',
       date: 'Jan 24, 2025',
@@ -197,18 +142,12 @@ export const projects: Project[] = [
       ],
       quote: 'A first complete character study should teach the full path: concept reading, sculpting, texture choices, engine presentation, and self-review.',
       solution: 'The finished Mermaid project presents the character through final artwork and supporting breakdowns, making it clear how the stylized forms and hand-painted texture decisions come together inside a game-art presentation.'
-    },
-    heroCrop: '58% top',
-    heroScale: '1.85',
-    heroOrigin: '58% 0%'
+    }
   },
   {
     id: 'orc',
     title: 'Orc',
-    year: '2024',
-    category: 'Creature Bust Study',
     description: 'A character bust created to practice new workflows, creature anatomy, sculpting discipline, grooming, and realistic rendering.',
-    artstationUrl: 'https://www.artstation.com/artwork/g0D6De',
     cover: 'https://cdna.artstation.com/p/assets/images/images/088/472/900/large/ali-taha-yapiskan-orc.jpg?1770710654',
     coverCrop: '48% 42%',
     images: [
@@ -217,12 +156,6 @@ export const projects: Project[] = [
       'https://cdnb.artstation.com/p/assets/images/images/088/544/999/large/ali-taha-yapiskan-zb.jpg?1748546747'
     ],
     imageAspectRatios: ['1 / 1', '622 / 806', '1442 / 822'],
-    tags: ['Orc', 'Creature', 'Realistic', 'Bust', 'Character Modeling'],
-    tools: ['ZBrush', 'Maya', 'Xgen', 'Arnold', 'Texturingxyz', 'R3DS Wrap', 'Photoshop'],
-    stats: {
-      likes: 26,
-      views: 473
-    },
     details: {
       client: 'Personal Practice',
       date: 'Feb 08, 2024',
@@ -242,10 +175,7 @@ export const projects: Project[] = [
       ],
       quote: 'Creature studies are valuable when they push both observation and workflow: anatomy, surface, grooming, lighting, and render discipline all need to meet.',
       solution: 'The final bust presentation highlights the completed render alongside production views from Maya and ZBrush, showing the anatomy study and the technical exploration behind the creature asset.'
-    },
-    heroCrop: 'center center',
-    heroScale: '1.18',
-    heroOrigin: '50% 35%'
+    }
   }
 ]
 
@@ -316,7 +246,3 @@ export const robloxProjects: RobloxProject[] = [
   defineRobloxProject({ id: 'AZG42N', title: 'Relaxaurus', cover: 'https://cdnb.artstation.com/p/assets/images/images/091/434/723/20250902033441/smaller_square/naksi-25-relaxaurus.jpg?1756802081' }),
   defineRobloxProject({ id: 'dyD6Qw', title: 'Chikipi', cover: 'https://cdnb.artstation.com/p/assets/images/images/091/433/803/20250902023806/smaller_square/naksi-22-chikipi.jpg?1756798687' })
 ]
-
-export const toolStack = Array.from(new Set(projects.flatMap((project) => project.tools)))
-
-export const featuredProject = projects[0]

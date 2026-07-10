@@ -97,7 +97,6 @@ export function useCustomCursor() {
     mouseX = event.clientX
     mouseY = event.clientY
     updateCursor(event.target)
-    updateTransform()
   }
 
   const onMouseDown = () => {

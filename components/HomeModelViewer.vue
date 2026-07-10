@@ -41,184 +41,6 @@ const textureBaseUrl = computed(() => {
   return url.endsWith('/') ? url : `${url}/`
 })
 
-type FbxProperty = boolean | number | number[] | string | Uint8Array | null
-type SourceTopology = {
-  polygonVertexIndex: number[]
-  vertices: number[]
-}
-
-const normalizeFbxName = (name: string) => name.replace(/\u0000\u0001/g, '::').split('::')[0].trim().toLowerCase()
-
-const parseFbxSourceTopologies = (buffer: ArrayBuffer, inflate: (data: Uint8Array) => Uint8Array) => {
-  const bytes = new Uint8Array(buffer)
-  const view = new DataView(buffer)
-  const header = new TextDecoder().decode(bytes.subarray(0, 18))
-  const topologies = new Map<string, SourceTopology>()
-
-  if (header !== 'Kaydara FBX Binary') {
-    return topologies
-  }
-
-  const version = view.getUint32(23, true)
-  const usesWideOffsets = version >= 7500
-  const geometries = new Map<number, Partial<SourceTopology>>()
-  const models = new Map<number, string>()
-  const connections: Array<{ from: number; to: number }> = []
-  const decoder = new TextDecoder()
-
-  const readUint = (offset: number) => usesWideOffsets ? Number(view.getBigUint64(offset, true)) : view.getUint32(offset, true)
-  const readArray = (offset: number, type: string): { nextOffset: number; value: number[] } => {
-    const length = view.getUint32(offset, true)
-    const encoding = view.getUint32(offset + 4, true)
-    const compressedLength = view.getUint32(offset + 8, true)
-    let raw = bytes.subarray(offset + 12, offset + 12 + compressedLength)
-
-    if (encoding === 1) {
-      raw = inflate(raw)
-    }
-
-    const rawView = new DataView(raw.buffer, raw.byteOffset, raw.byteLength)
-    const value: number[] = []
-    const readers: Record<string, { size: number; read: (index: number) => number }> = {
-      b: { size: 1, read: (index) => rawView.getInt8(index) },
-      c: { size: 1, read: (index) => rawView.getUint8(index) },
-      d: { size: 8, read: (index) => rawView.getFloat64(index, true) },
-      f: { size: 4, read: (index) => rawView.getFloat32(index, true) },
-      i: { size: 4, read: (index) => rawView.getInt32(index, true) },
-      l: { size: 8, read: (index) => Number(rawView.getBigInt64(index, true)) },
-      y: { size: 2, read: (index) => rawView.getInt16(index, true) }
-    }
-    const reader = readers[type]
-
-    if (reader) {
-      for (let index = 0; index < length; index += 1) {
-        value.push(reader.read(index * reader.size))
-      }
-    }
-
-    return { nextOffset: offset + 12 + compressedLength, value }
-  }
-
-  const readProperty = (offset: number): { nextOffset: number; value: FbxProperty } => {
-    const type = String.fromCharCode(view.getUint8(offset))
-    const dataOffset = offset + 1
-
-    switch (type) {
-      case 'Y':
-        return { nextOffset: dataOffset + 2, value: view.getInt16(dataOffset, true) }
-      case 'C':
-        return { nextOffset: dataOffset + 1, value: Boolean(view.getUint8(dataOffset)) }
-      case 'I':
-        return { nextOffset: dataOffset + 4, value: view.getInt32(dataOffset, true) }
-      case 'F':
-        return { nextOffset: dataOffset + 4, value: view.getFloat32(dataOffset, true) }
-      case 'D':
-        return { nextOffset: dataOffset + 8, value: view.getFloat64(dataOffset, true) }
-      case 'L':
-        return { nextOffset: dataOffset + 8, value: Number(view.getBigInt64(dataOffset, true)) }
-      case 'S': {
-        const length = view.getUint32(dataOffset, true)
-        return { nextOffset: dataOffset + 4 + length, value: decoder.decode(bytes.subarray(dataOffset + 4, dataOffset + 4 + length)) }
-      }
-      case 'R': {
-        const length = view.getUint32(dataOffset, true)
-        return { nextOffset: dataOffset + 4 + length, value: bytes.subarray(dataOffset + 4, dataOffset + 4 + length) }
-      }
-      case 'd':
-      case 'f':
-      case 'i':
-      case 'l':
-      case 'b':
-      case 'c':
-      case 'y': {
-        const array = readArray(dataOffset, type)
-        return { nextOffset: array.nextOffset, value: array.value }
-      }
-      default:
-        return { nextOffset: dataOffset, value: null }
-    }
-  }
-
-  const walkNodes = (offset: number, endOffset: number, activeGeometryId: number | null = null) => {
-    let cursor = offset
-
-    while (cursor < endOffset) {
-      const nodeEndOffset = readUint(cursor)
-      const propertyCount = readUint(cursor + (usesWideOffsets ? 8 : 4))
-      const nameLengthOffset = cursor + (usesWideOffsets ? 24 : 12)
-      const nameLength = view.getUint8(nameLengthOffset)
-      const nameStart = nameLengthOffset + 1
-
-      if (nodeEndOffset === 0 || nameLength === 0) {
-        return endOffset
-      }
-
-      const name = decoder.decode(bytes.subarray(nameStart, nameStart + nameLength))
-      let propertyOffset = nameStart + nameLength
-      const properties: FbxProperty[] = []
-
-      for (let index = 0; index < propertyCount; index += 1) {
-        const property = readProperty(propertyOffset)
-        properties.push(property.value)
-        propertyOffset = property.nextOffset
-      }
-
-      let geometryId = activeGeometryId
-
-      if (name === 'Geometry' && typeof properties[0] === 'number') {
-        geometryId = properties[0]
-        geometries.set(geometryId, {})
-      }
-
-      if (name === 'Model' && typeof properties[0] === 'number' && typeof properties[1] === 'string') {
-        models.set(properties[0], normalizeFbxName(properties[1]))
-      }
-
-      if (name === 'C' && properties[0] === 'OO' && typeof properties[1] === 'number' && typeof properties[2] === 'number') {
-        connections.push({ from: properties[1], to: properties[2] })
-      }
-
-      if (geometryId !== null) {
-        const geometry = geometries.get(geometryId)
-
-        if (geometry && name === 'Vertices' && Array.isArray(properties[0])) {
-          geometry.vertices = properties[0]
-        }
-
-        if (geometry && name === 'PolygonVertexIndex' && Array.isArray(properties[0])) {
-          geometry.polygonVertexIndex = properties[0]
-        }
-      }
-
-      if (propertyOffset < nodeEndOffset) {
-        walkNodes(propertyOffset, nodeEndOffset, geometryId)
-      }
-
-      cursor = nodeEndOffset
-    }
-
-    return cursor
-  }
-
-  walkNodes(27, bytes.length)
-
-  geometries.forEach((geometry, id) => {
-    if (!geometry.vertices || !geometry.polygonVertexIndex) return
-
-    const connection = connections.find((item) => item.from === id)
-    const modelName = connection ? models.get(connection.to) : null
-
-    if (modelName) {
-      topologies.set(modelName, {
-        polygonVertexIndex: geometry.polygonVertexIndex,
-        vertices: geometry.vertices
-      })
-    }
-  })
-
-  return topologies
-}
-
 const stopViewer = () => {
   if (frameId) {
     cancelAnimationFrame(frameId)
@@ -243,7 +65,6 @@ onMounted(async () => {
     const THREE = await import('three')
     const { FBXLoader } = await import('three/examples/jsm/loaders/FBXLoader.js')
     const { OrbitControls } = await import('three/examples/jsm/controls/OrbitControls.js')
-    const { unzlibSync } = await import('three/examples/jsm/libs/fflate.module.js')
     if (!container.isConnected) return
 
     const scene: Scene = new THREE.Scene()
@@ -398,7 +219,6 @@ onMounted(async () => {
     }
 
     const modelBuffer = await modelResponse.arrayBuffer()
-    const sourceTopologies = parseFbxSourceTopologies(modelBuffer, unzlibSync)
     const modelBasePath = modelUrl.value.slice(0, modelUrl.value.lastIndexOf('/') + 1)
     const loadedModel = loader.parse(modelBuffer, modelBasePath)
     textureMaps = await textureMapsPromise
@@ -418,53 +238,6 @@ onMounted(async () => {
       hat: 0xffffff,
       necklace: 0xffffff,
       groomeye: 0xffffff
-    }
-
-    const createSourceWireframeGeometry = (topology: SourceTopology) => {
-      const positions: number[] = []
-      const face: number[] = []
-      const edges = new Set<string>()
-
-      const pushEdge = (startIndex: number, endIndex: number) => {
-        if (startIndex === endIndex) return
-
-        const edgeKey = startIndex < endIndex ? `${startIndex}:${endIndex}` : `${endIndex}:${startIndex}`
-        if (edges.has(edgeKey)) return
-
-        const startOffset = startIndex * 3
-        const endOffset = endIndex * 3
-        if (endOffset + 2 >= topology.vertices.length || startOffset + 2 >= topology.vertices.length) return
-
-        edges.add(edgeKey)
-        positions.push(
-          topology.vertices[startOffset],
-          topology.vertices[startOffset + 1],
-          topology.vertices[startOffset + 2],
-          topology.vertices[endOffset],
-          topology.vertices[endOffset + 1],
-          topology.vertices[endOffset + 2]
-        )
-      }
-
-      topology.polygonVertexIndex.forEach((rawIndex) => {
-        const vertexIndex = rawIndex < 0 ? -rawIndex - 1 : rawIndex
-        face.push(vertexIndex)
-
-        if (rawIndex < 0) {
-          for (let index = 0; index < face.length; index += 1) {
-            pushEdge(face[index], face[(index + 1) % face.length])
-          }
-
-          face.length = 0
-        }
-      })
-
-      if (!positions.length) return null
-
-      const geometry = new THREE.BufferGeometry()
-      geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3))
-
-      return geometry
     }
 
     loadedModel.traverse((child: Object3D) => {

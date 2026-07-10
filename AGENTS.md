@@ -41,3 +41,6 @@
 
 ## Tooling
 - `opencode.json` configures Playwright MCP through Brave CDP at `http://127.0.0.1:9222`; browser checks fail if Brave is not running with that endpoint.
+
+
+- ben diyinceye kadar mobil sürüme dokunma

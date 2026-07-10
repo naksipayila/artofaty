@@ -5,38 +5,31 @@ type GalleryItem = {
   id: string
   src: string
   title: string
-  aspectRatio: number
   coverCrop?: string
   desktopSrc?: string
   order: number
   hasGallery: boolean
 }
 
-const toAspectRatio = (value: string) => {
-  const [width, height] = value.split('/').map(Number)
-  return width && height ? width / height : 1
-}
-
-const galleryItems = computed<GalleryItem[]>(() => projects.map((project, order) => ({
+const galleryItems: GalleryItem[] = projects.map((project, order) => ({
   id: project.id,
   src: project.cover || project.images[0],
   title: project.title,
-  aspectRatio: toAspectRatio(project.imageAspectRatios[0] || '1 / 1'),
   coverCrop: project.coverCrop,
   desktopSrc: project.desktopCover,
   order,
   hasGallery: project.images.length > 1
-})))
+}))
 
-const galleryRows = computed(() => {
+const galleryRows = (() => {
   const rows: GalleryItem[][] = []
 
-  for (let index = 0; index < galleryItems.value.length; index += 3) {
-    rows.push(galleryItems.value.slice(index, index + 3))
+  for (let index = 0; index < galleryItems.length; index += 3) {
+    rows.push(galleryItems.slice(index, index + 3))
   }
 
   return rows
-})
+})()
 
 const socialLinks = [
   { name: 'Instagram', href: artist.instagram, icon: 'instagram' },
@@ -58,7 +51,7 @@ const lightboxOrigin = ref({ x: 0, y: 0, scale: 0.16 })
 let triggerEl: HTMLElement | null = null
 
 const activeItem = computed(() =>
-  activeIndex.value === null ? null : galleryItems.value[activeIndex.value] ?? null
+  activeIndex.value === null ? null : galleryItems[activeIndex.value] ?? null
 )
 
 const lightboxStyle = computed(() => ({
@@ -196,7 +189,7 @@ onBeforeUnmount(() => {
           <NuxtLink
             v-if="item.hasGallery"
             class="gallery-item gallery-item--project"
-            :style="{ '--gallery-ratio': String(item.aspectRatio), '--gallery-focus': item.coverCrop || 'center' }"
+            :style="{ '--gallery-focus': item.coverCrop || 'center' }"
             :to="`/works/${item.id}`"
             :aria-label="`View ${item.title}`"
             >
@@ -217,7 +210,7 @@ onBeforeUnmount(() => {
             class="gallery-item"
             type="button"
             data-cursor="zoom-in"
-            :style="{ '--gallery-ratio': String(item.aspectRatio), '--gallery-focus': item.coverCrop || 'center' }"
+            :style="{ '--gallery-focus': item.coverCrop || 'center' }"
             :aria-label="`Open ${item.title}`"
             @click="openLightbox(item.order, $event)"
             >
