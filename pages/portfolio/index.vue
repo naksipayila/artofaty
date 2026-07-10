@@ -172,31 +172,22 @@ onBeforeUnmount(() => {
 
       <section class="fabrica-cards">
         <nav class="work-index" aria-label="Portfolio categories" role="tablist">
-          <span class="work-index__label">COLLECTIONS</span>
-          <div class="work-index__rows">
-            <button
-              v-for="(tab, index) in portfolioTabs"
-              :key="tab.id"
-              :id="`portfolio-tab-${tab.id}`"
-              class="work-index__row"
-              :class="{ 'work-index__row--active': activePortfolioTab === tab.id }"
-              type="button"
-              role="tab"
-              :aria-selected="activePortfolioTab === tab.id"
-              :aria-controls="`portfolio-panel-${tab.id}`"
-              :tabindex="activePortfolioTab === tab.id ? 0 : -1"
-              @click="selectPortfolioTab(tab.id)"
-              @keydown="handlePortfolioTabKeydown($event, tab.id)"
-            >
-              <span class="work-index__num">{{ String(index + 1).padStart(2, '0') }}</span>
-              <span class="work-index__name">
-                <span>{{ tab.label.split(' ')[0] }}</span>
-                <span>{{ tab.label.split(' ').slice(1).join(' ') }}</span>
-              </span>
-              <span class="work-index__count">{{ tab.count }} SELECTED WORKS</span>
-              <span v-if="activePortfolioTab === tab.id" class="work-index__active-label">CURRENT</span>
-            </button>
-          </div>
+          <button
+            v-for="(tab, index) in portfolioTabs"
+            :key="tab.id"
+            :id="`portfolio-tab-${tab.id}`"
+            class="work-index__tab"
+            :class="{ 'work-index__tab--active': activePortfolioTab === tab.id }"
+            type="button"
+            role="tab"
+            :aria-selected="activePortfolioTab === tab.id"
+            :aria-controls="`portfolio-panel-${tab.id}`"
+            :tabindex="activePortfolioTab === tab.id ? 0 : -1"
+            @click="selectPortfolioTab(tab.id)"
+            @keydown="handlePortfolioTabKeydown($event, tab.id)"
+          >
+            {{ tab.label }}
+          </button>
         </nav>
         <div class="fabrica-tabbed-panel">
           <div class="fabrica-panel">

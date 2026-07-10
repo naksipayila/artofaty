@@ -1138,102 +1138,38 @@ main :is(a, button):focus-visible,
 }
 
 .work-index {
-  display: grid;
-  gap: 8px;
+  display: flex;
+  justify-content: center;
+  gap: clamp(24px, 4vw, 48px);
   width: min(100%, var(--portfolio-content-width));
-  margin: 0 auto clamp(24px, 3vw, 40px);
-}
-
-.work-index__label {
-  color: rgba(166, 155, 141, 0.36);
-  font-size: 0.54rem;
-  font-weight: 850;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  padding-left: 2px;
-}
-
-.work-index__rows {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(32px, 4vw, 72px);
-}
-
-.work-index__row {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: clamp(14px, 2vw, 22px);
+  margin: 0 auto clamp(24px, 3vw, 36px);
   padding: 0;
+}
+
+.work-index__tab {
+  min-height: 32px;
+  padding: 0 2px;
   border: 0;
   background: transparent;
-  color: inherit;
+  color: rgba(242, 234, 223, 0.32);
   cursor: pointer;
-  font: inherit;
-  text-align: left;
+  font-size: clamp(0.88rem, 1vw, 1rem);
+  font-weight: 650;
+  letter-spacing: 0.04em;
 }
 
-.work-index__row:hover .work-index__name {
+.work-index__tab:hover {
   color: rgba(242, 234, 223, 0.64);
 }
 
-.work-index__row:focus-visible {
+.work-index__tab:focus-visible {
   outline: 2px solid rgba(98, 168, 255, 0.9);
   outline-offset: 4px;
 }
 
-.work-index__num {
-  grid-row: 1 / 4;
-  align-self: start;
-  color: rgba(98, 168, 255, 0.22);
-  font-size: clamp(2.6rem, 5vw, 5rem);
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-  line-height: 0.82;
-  letter-spacing: -0.04em;
-  padding-top: 2px;
-}
-
-.work-index__row--active .work-index__num {
+.work-index__tab--active {
   color: var(--accent);
-}
-
-.work-index__name {
-  display: grid;
-  color: rgba(242, 234, 223, 0.28);
-  font-size: clamp(1.4rem, 2.2vw, 2.2rem);
   font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 0.92;
-}
-
-.work-index__row--active .work-index__name {
-  color: var(--cream);
-}
-
-.work-index__count {
-  color: rgba(166, 155, 141, 0.34);
-  font-size: 0.52rem;
-  font-weight: 750;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.work-index__row--active .work-index__count {
-  color: rgba(166, 155, 141, 0.58);
-}
-
-.work-index__active-label {
-  display: inline-flex;
-  align-items: center;
-  width: fit-content;
-  min-height: 20px;
-  padding: 0 6px;
-  color: rgba(159, 208, 255, 0.76);
-  font-size: 0.48rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
 }
 
 .fabrica-tabs {
@@ -3049,40 +2985,12 @@ html:has(.fabrica-page--main) .site-footer {
   }
 
   .work-index {
-    gap: 6px;
-    margin-bottom: clamp(18px, 3vw, 24px);
-  }
-
-  .work-index__label {
-    font-size: 0.46rem;
-    letter-spacing: 0.14em;
-  }
-
-  .work-index__rows {
-    grid-template-columns: 1fr;
     gap: clamp(18px, 4vw, 28px);
+    margin-bottom: clamp(14px, 3vw, 20px);
   }
 
-  .work-index__row {
-    gap: clamp(10px, 2vw, 16px);
-  }
-
-  .work-index__num {
-    font-size: clamp(2rem, 8vw, 3.2rem);
-  }
-
-  .work-index__name {
-    font-size: clamp(1.1rem, 4vw, 1.5rem);
-  }
-
-  .work-index__count {
-    font-size: 0.44rem;
-    letter-spacing: 0.08em;
-  }
-
-  .work-index__active-label {
-    font-size: 0.42rem;
-    letter-spacing: 0.1em;
+  .work-index__tab {
+    font-size: clamp(0.8rem, 3.5vw, 0.9rem);
   }
 
   .fabrica-reveal--heading {
