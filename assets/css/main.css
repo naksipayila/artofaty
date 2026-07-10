@@ -278,26 +278,6 @@ main {
   max-width: 540px;
 }
 
-.hero__meta {
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
-  padding: 8px 16px;
-  border: 1px solid rgba(242, 234, 223, 0.14);
-  border-radius: 5.5px;
-  color: var(--muted);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.hero__meta span:first-child {
-  color: var(--cream);
-  padding-right: 12px;
-  border-right: 1px solid rgba(242, 234, 223, 0.14);
-}
-
 .hero__actions,
 .button-row {
   display: flex;
@@ -449,71 +429,6 @@ main :is(a, button):focus-visible,
   text-transform: uppercase;
   transform: translate(-50%, -50%);
   backdrop-filter: blur(18px);
-}
-
-.home-model-viewer__rotation-toggle,
-.home-model-viewer__wireframe-toggle {
-  position: absolute;
-  right: 16px;
-  z-index: 2;
-  min-height: 44px;
-  padding: 0 12px;
-  border: 1px solid rgba(185, 220, 255, 0.32);
-  border-radius: 5.5px;
-  background: rgba(5, 8, 12, 0.58);
-  color: rgba(226, 241, 255, 0.92);
-  cursor: pointer;
-  font: inherit;
-  font-size: 0.7rem;
-  font-weight: 850;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  backdrop-filter: blur(16px);
-  transition: border-color 180ms ease, background 180ms ease, color 180ms ease;
-}
-
-.home-model-viewer__rotation-toggle {
-  top: 16px;
-}
-
-.home-model-viewer__wireframe-toggle {
-  top: 68px;
-}
-
-.home-model-viewer__rotation-toggle:disabled {
-  cursor: not-allowed;
-  opacity: 0.66;
-}
-
-.home-model-viewer__rotation-toggle:hover:not(:disabled),
-.home-model-viewer__wireframe-toggle:hover {
-  border-color: rgba(185, 220, 255, 0.56);
-  background: rgba(98, 168, 255, 0.16);
-  color: #fff;
-}
-
-.hero__visual-card {
-  position: absolute;
-  right: 18px;
-  bottom: 18px;
-  left: 18px;
-  z-index: 1;
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 16px 20px;
-  border: 1px solid rgba(242, 234, 223, 0.14);
-  border-radius: 5.5px;
-  background: rgba(8, 7, 6, 0.62);
-  backdrop-filter: blur(18px);
-}
-
-.hero__visual-card h2 {
-  margin: 6px 0 0;
-  color: var(--cream);
-  font-size: clamp(1.3rem, 2.4vw, 2.2rem);
-  letter-spacing: -0.05em;
 }
 
 .stat-strip {
@@ -2559,17 +2474,6 @@ html:has(.fabrica-page--main) .site-footer {
   }
 }
 
-@keyframes card-slide {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .page-hero--about .page-hero__copy--about,
 .contact-minimal__copy {
   animation: fade-up 700ms 160ms cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -2689,11 +2593,7 @@ html:has(.fabrica-page--main) .site-footer {
   }
 
   .hero__visual {
-    animation: visual-reveal 900ms 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
-  .hero__visual-card {
-    animation: card-slide 600ms 680ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: visual-reveal 700ms 160ms cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -2702,8 +2602,7 @@ html:has(.fabrica-page--main) .site-footer {
     .hero h1,
     .hero__copy,
     .hero__actions,
-    .hero__visual,
-    .hero__visual-card {
+    .hero__visual {
       animation: none;
     }
   }
@@ -2997,37 +2896,6 @@ html:has(.fabrica-page--main) .site-footer {
     line-height: 1.58;
   }
 
-  .hero__meta {
-    width: 100%;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    gap: 6px 10px;
-    padding: 9px 11px;
-    border-radius: 5.5px;
-    font-size: 0.66rem;
-    line-height: 1.35;
-  }
-
-  .hero__meta span {
-    min-width: 0;
-  }
-
-  .hero__meta span:first-child {
-    flex: 0 0 auto;
-    padding-right: 10px;
-  }
-
-  .hero__meta span:last-child {
-    flex: 1 1 180px;
-  }
-
-  .button {
-    min-height: 46px;
-    padding: 0 16px;
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-  }
-
   .hero__actions .button {
     flex: 1 1 100%;
   }
@@ -3089,42 +2957,6 @@ html:has(.fabrica-page--main) .site-footer {
     min-height: 34px;
     padding: 0 12px;
     font-size: 0.68rem;
-  }
-
-  .home-model-viewer__rotation-toggle,
-  .home-model-viewer__wireframe-toggle {
-    right: 12px;
-    min-height: 40px;
-    font-size: 0.62rem;
-  }
-
-  .home-model-viewer__rotation-toggle {
-    top: 12px;
-  }
-
-  .home-model-viewer__wireframe-toggle {
-    top: 60px;
-  }
-
-  .hero__visual-card {
-    right: 12px;
-    bottom: 12px;
-    left: 12px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 13px 14px;
-    border-radius: 5.5px;
-  }
-
-  .hero__visual-card h2 {
-    margin-top: 4px;
-    font-size: clamp(1.15rem, 6vw, 1.6rem);
-  }
-
-  .hero__visual-card .button {
-    width: 100%;
-    min-height: 40px;
   }
 
   .stat-strip,

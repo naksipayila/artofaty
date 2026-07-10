@@ -16,17 +16,11 @@ const props = withDefaults(defineProps<{
 const runtimeConfig = useRuntimeConfig()
 const viewerRef = ref<HTMLElement | null>(null)
 const loadState = ref<'loading' | 'ready' | 'error'>('loading')
-const showWireframe = ref(false)
-const isRotationPaused = ref(false)
-const prefersReducedMotion = ref(false)
 
 let frameId = 0
 let resizeObserver: ResizeObserver | null = null
 let visibilityObserver: IntersectionObserver | null = null
-let reducedMotionQuery: MediaQueryList | null = null
-let handleReducedMotionChange: ((event: MediaQueryListEvent) => void) | null = null
 let cleanupScene: (() => void) | null = null
-let wireframeObjects: Object3D[] = []
 let isViewerVisible = true
 
 const resolvePublicAssetUrl = (path: string) => {
@@ -235,26 +229,8 @@ const stopViewer = () => {
   resizeObserver = null
   visibilityObserver?.disconnect()
   visibilityObserver = null
-  if (reducedMotionQuery && handleReducedMotionChange) {
-    reducedMotionQuery.removeEventListener('change', handleReducedMotionChange)
-  }
-  reducedMotionQuery = null
-  handleReducedMotionChange = null
   cleanupScene?.()
   cleanupScene = null
-  wireframeObjects = []
-}
-
-const toggleWireframe = () => {
-  showWireframe.value = !showWireframe.value
-  wireframeObjects.forEach((wireframe) => {
-    wireframe.visible = showWireframe.value
-  })
-}
-
-const toggleRotation = () => {
-  if (prefersReducedMotion.value) return
-  isRotationPaused.value = !isRotationPaused.value
 }
 
 onMounted(async () => {
@@ -365,14 +341,6 @@ onMounted(async () => {
       { threshold: 0.01 }
     )
     visibilityObserver.observe(container)
-    reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    prefersReducedMotion.value = reducedMotionQuery.matches
-    if (prefersReducedMotion.value) isRotationPaused.value = true
-    handleReducedMotionChange = (event) => {
-      prefersReducedMotion.value = event.matches
-      if (event.matches) isRotationPaused.value = true
-    }
-    reducedMotionQuery.addEventListener('change', handleReducedMotionChange)
     resize()
 
     const animate = () => {
@@ -384,7 +352,7 @@ onMounted(async () => {
 
       mixers.forEach((mixer) => mixer.update(delta))
 
-      if (modelRoot && !isRotationPaused.value && !prefersReducedMotion.value) {
+      if (modelRoot) {
         modelRoot.rotation.y += delta * 0.18
       }
 
@@ -546,23 +514,6 @@ onMounted(async () => {
         mesh.material = Array.isArray(mesh.material) ? unlitMaterials : unlitMaterials[0]
       }
 
-      const sourceTopology = sourceTopologies.get(normalizeFbxName(mesh.name || ''))
-      const sourceWireframeGeometry = sourceTopology ? createSourceWireframeGeometry(sourceTopology) : null
-
-      if (sourceWireframeGeometry) {
-        const wireframe = new THREE.LineSegments(sourceWireframeGeometry, new THREE.LineBasicMaterial({
-          color: 0xffffff,
-          depthWrite: false,
-          linewidth: 0.35,
-          opacity: 0.14,
-          transparent: true
-        }))
-        wireframe.name = `${mesh.name || 'character'} source quad wireframe`
-        wireframe.renderOrder = 2
-        wireframe.visible = showWireframe.value
-        mesh.add(wireframe)
-        wireframeObjects.push(wireframe)
-      }
     })
 
     const box = new THREE.Box3().setFromObject(loadedModel)
@@ -604,25 +555,6 @@ onBeforeUnmount(stopViewer)
 
 <template>
   <div ref="viewerRef" class="home-model-viewer" :class="`home-model-viewer--${loadState}`" :style="viewerStyle">
-    <button
-      v-if="loadState === 'ready'"
-      class="home-model-viewer__rotation-toggle"
-      type="button"
-      :aria-pressed="isRotationPaused"
-      :disabled="prefersReducedMotion"
-      @click.stop="toggleRotation"
-    >
-      {{ prefersReducedMotion ? 'Motion reduced' : isRotationPaused ? 'Resume rotation' : 'Pause rotation' }}
-    </button>
-    <button
-      v-if="loadState === 'ready'"
-      class="home-model-viewer__wireframe-toggle"
-      type="button"
-      :aria-pressed="showWireframe"
-      @click.stop="toggleWireframe"
-    >
-      {{ showWireframe ? 'Hide wireframe' : 'Show wireframe' }}
-    </button>
     <div v-if="loadState === 'loading'" class="home-model-viewer__status" role="status">Loading 3D model</div>
     <div v-else-if="loadState === 'error'" class="home-model-viewer__status" role="status">3D model could not load</div>
   </div>

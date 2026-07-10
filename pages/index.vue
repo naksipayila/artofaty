@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { artist, projects } from '~/data/portfolio'
+import { projects } from '~/data/portfolio'
 
 const homeHeroImage = 'https://cdnb.artstation.com/p/assets/marmosets/images/087/982/587/large/ali-taha-yapiskan-mview-image20250513-12-1yyv867.jpg?1747163415'
 const homeFeaturedProject = projects.find((project) => project.id === 'miss-fortune') ?? projects[0]
@@ -20,10 +20,6 @@ useSeoMeta({
       <h1>Characters with sculpted attitude.</h1>
 
       <div class="hero__copy">
-        <div class="hero__meta">
-          <span>{{ artist.brand }}</span>
-          <span>Available for {{ artist.availability.join(' / ') }}</span>
-        </div>
         <p>
           I create stylized and fantasy-focused 3D characters, combining sculpting, hand-painted texture work, and realtime presentation for game art portfolios and production-ready visuals.
         </p>
@@ -31,7 +27,6 @@ useSeoMeta({
 
       <div class="hero__actions">
         <NuxtLink class="button button--primary" to="/portfolio">View portfolio</NuxtLink>
-        <a class="button" :href="`mailto:${artist.email}`">Contact by mail</a>
       </div>
     </div>
 
@@ -41,13 +36,6 @@ useSeoMeta({
         :poster-path="homeHeroImage"
         :label="`${homeFeaturedProject.title} realtime 3D character model`"
       />
-      <div class="hero__visual-card">
-        <div>
-          <p class="eyebrow">Realtime model</p>
-          <h2>{{ homeFeaturedProject.title }}</h2>
-        </div>
-        <NuxtLink class="button" :to="`/portfolio/${homeFeaturedProject.id}`">Open Project</NuxtLink>
-      </div>
     </div>
   </section>
 </template>
