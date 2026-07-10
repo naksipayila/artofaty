@@ -273,7 +273,6 @@ onBeforeUnmount(() => {
   </div>
 
   <Teleport to="body">
-    <Transition name="project-lightbox">
       <div
         v-if="activeRobloxProject"
         ref="robloxLightboxRef"
@@ -326,6 +325,5 @@ onBeforeUnmount(() => {
           <span aria-hidden="true">→</span>
         </button>
       </div>
-    </Transition>
   </Teleport>
 </template>

@@ -193,7 +193,6 @@ watch(activeGalleryIndex, async (index) => {
   </nav>
 
   <Teleport to="body">
-    <Transition name="project-lightbox">
       <div
         v-if="activeGalleryImage"
         ref="galleryLightboxRef"
@@ -222,13 +221,11 @@ watch(activeGalleryIndex, async (index) => {
         </button>
 
         <figure class="project-lightbox__figure project-lightbox__figure--detail">
-          <Transition name="project-lightbox-image" mode="out-in">
             <img
               :key="activeGalleryImage"
               :src="activeGalleryImage"
               :alt="`${project.title} image ${activeGalleryIndex === null ? '' : activeGalleryIndex + 1}`"
             >
-          </Transition>
         </figure>
 
         <button
@@ -257,6 +254,5 @@ watch(activeGalleryIndex, async (index) => {
           </button>
         </div>
       </div>
-    </Transition>
   </Teleport>
 </template>
