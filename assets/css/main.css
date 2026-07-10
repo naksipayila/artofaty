@@ -94,12 +94,12 @@ textarea {
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
-  padding-top: 40px;
+  padding-top: 0;
 }
 
 .site-header {
   position: sticky;
-  top: 40px;
+  top: 0;
   z-index: 20;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
@@ -2789,7 +2789,7 @@ main :is(a, button):focus-visible,
   }
 
   .site-shell {
-    padding-top: 10px;
+    padding-top: 0;
   }
 
   main {
@@ -2797,7 +2797,7 @@ main :is(a, button):focus-visible,
   }
 
   .site-header {
-    top: 10px;
+    top: 0;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     gap: 10px;
@@ -3614,11 +3614,11 @@ main :is(a, button):focus-visible,
 
 @media (max-width: 760px) and (max-height: 600px) {
   .site-shell {
-    padding-top: 6px;
+    padding-top: 0;
   }
 
   .site-header {
-    top: 6px;
+    top: 0;
   }
 
   .brand-logo {
