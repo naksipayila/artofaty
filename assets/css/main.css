@@ -2832,6 +2832,8 @@ html:has(.fabrica-page--main) .site-footer {
   }
 
   .brand-mark {
+    position: relative;
+    z-index: 31;
     grid-column: 1 / -1;
     grid-row: 1;
     justify-self: center;
@@ -2890,7 +2892,7 @@ html:has(.fabrica-page--main) .site-footer {
     grid-column: 2;
     grid-row: 1;
     display: inline-flex;
-    z-index: 1;
+    z-index: 31;
     align-items: center;
     justify-content: center;
     justify-self: end;
