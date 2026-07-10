@@ -312,7 +312,6 @@ onBeforeUnmount(() => {
             <source :src="activeRobloxProject.video" type="video/mp4">
           </video>
           <img v-else :src="activeRobloxProject.image" :alt="`${activeRobloxProject.title} Roblox project image`">
-          <figcaption class="project-lightbox__caption">{{ activeRobloxProject.title }}</figcaption>
         </figure>
 
         <button
