@@ -29,6 +29,7 @@
 - CSS is mobile-first: `760px` is the mobile breakpoint, and desktop-only overrides start at `@media (min-width: 761px)`.
 - Brand accent is blue via `--accent: #62a8ff`; do not restore the old orange accent unless asked.
 - Header is logo-only with split desktop nav and a mobile menu; keep `.site-shell { padding-top: 40px; }` plus `.site-header { top: 40px; margin: 0 auto; }`, not header `margin-top`.
+- On desktop, `.site-header::before` owns the full-viewport scrolled/menu background; keep the logo and nav links inside the centered `var(--container)` header.
 - Background lives on `html`; do not reintroduce a `body::before` square grid or page-only `.fabrica-page::before` overlay.
 - Portfolio width is coordinated by `.fabrica-page { --portfolio-content-width: ...; }`; keep tabs plus Main/Roblox grids on that shared shell.
 - Portfolio tabs are text-only `Main Portfolio | Roblox Portfolio`; no wrapper border/background, underline, or pill state.
