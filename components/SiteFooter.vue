@@ -28,11 +28,6 @@ const socialLinks = [
         <strong>{{ artist.name }}</strong>
       </a>
 
-      <a class="site-footer__top" href="#top" aria-label="Back to top">
-        <span>Back to Top</span>
-        <span aria-hidden="true">&uarr;</span>
-      </a>
-
       <div class="site-footer__socials" aria-label="Social links">
         <a
           v-for="link in socialLinks"
@@ -43,11 +38,9 @@ const socialLinks = [
           :target="link.href.startsWith('mailto:') ? undefined : '_blank'"
           :rel="link.href.startsWith('mailto:') ? undefined : 'noreferrer'"
         >
-          <span class="site-footer__social-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" focusable="false">
-              <path :d="link.iconPath" />
-            </svg>
-          </span>
+          <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+            <path :d="link.iconPath" />
+          </svg>
           <span class="sr-only">{{ link.label }}</span>
         </a>
       </div>

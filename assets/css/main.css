@@ -2467,8 +2467,7 @@ main :is(a, button):focus-visible,
   color: rgba(242, 234, 223, 0.68);
 }
 
-.site-footer__credit,
-.site-footer__top {
+.site-footer__credit {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -2483,8 +2482,7 @@ main :is(a, button):focus-visible,
   font-weight: 750;
 }
 
-.site-footer__credit:hover,
-.site-footer__top:hover {
+.site-footer__credit:hover {
   color: var(--accent);
 }
 
@@ -2498,37 +2496,20 @@ main :is(a, button):focus-visible,
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  height: 44px;
-  border: 1px solid rgba(242, 234, 223, 0.12);
-  border-radius: 5.5px;
-  background: linear-gradient(322deg, rgba(255, 255, 255, 0.08), rgba(98, 168, 255, 0.08));
-  color: rgba(242, 234, 223, 0.76);
-  box-shadow: inset 0 0 0 1px rgba(5, 6, 9, 0.8);
-  transition: color 180ms ease, border-color 180ms ease, background 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+  width: 36px;
+  height: 36px;
+  color: rgba(242, 234, 223, 0.56);
+  transition: color 180ms ease, transform 180ms ease;
 }
 
-.site-footer__social-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: calc(100% - 2px);
-  height: calc(100% - 2px);
-  border-radius: 5.5px;
-  background: rgba(8, 7, 6, 0.74);
-}
-
-.site-footer__social-icon svg {
-  width: 17px;
-  height: 17px;
+.site-footer__social svg {
+  width: 20px;
+  height: 20px;
   fill: currentColor;
 }
 
 .site-footer__social:hover {
-  border-color: rgba(98, 168, 255, 0.42);
-  background: linear-gradient(322deg, rgba(98, 168, 255, 0.22), rgba(255, 255, 255, 0.09));
   color: var(--accent);
-  box-shadow: 0 0 24px rgba(98, 168, 255, 0.16), inset 0 0 0 1px rgba(98, 168, 255, 0.12);
   transform: translateY(-1px);
 }
 
@@ -3603,11 +3584,6 @@ html:has(.fabrica-page--main) .site-footer {
     justify-content: center;
     gap: 6px;
   }
-
-  .site-footer__social {
-    width: 44px;
-    height: 44px;
-  }
 }
 
 @media (max-width: 380px) {
@@ -3631,10 +3607,6 @@ html:has(.fabrica-page--main) .site-footer {
 
   .project-lightbox__identity {
     display: none;
-  }
-
-  .site-footer__social {
-    width: 46px;
   }
 }
 
