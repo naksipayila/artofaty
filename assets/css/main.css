@@ -3489,9 +3489,12 @@ main :is(a, button):focus-visible,
 /* Carbonmade-style gallery overrides */
 .site-header {
   position: relative;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 64px auto 64px;
+  justify-content: center;
+  gap: 24px;
   width: min(1100px, calc(100vw - 36px));
-  padding: 30px 0;
+  padding: 22px 0;
   background: #ffffff;
 }
 
@@ -3500,8 +3503,15 @@ main :is(a, button):focus-visible,
 .site-nav--right {
   position: static;
   display: flex;
-  gap: 20px;
-  width: auto;
+  width: 64px;
+}
+
+.site-nav--left {
+  justify-content: flex-end;
+}
+
+.site-nav--right {
+  justify-content: flex-start;
 }
 
 .site-nav__link {
@@ -3514,12 +3524,6 @@ main :is(a, button):focus-visible,
 }
 
 .site-nav__link::after {
-  margin-left: 10px;
-  color: #111111;
-  content: "/";
-}
-
-.site-nav__link:last-child::after {
   display: none;
 }
 
@@ -3531,7 +3535,8 @@ main :is(a, button):focus-visible,
 }
 
 .brand-logo {
-  height: 30px;
+  width: auto;
+  height: 76px;
 }
 
 .gallery-page {
@@ -3714,18 +3719,22 @@ main :is(a, button):focus-visible,
 
 @media (max-width: 760px) {
   .site-header {
-    justify-content: space-between;
+    grid-template-columns: 52px auto 52px;
+    justify-content: center;
+    gap: 16px;
     width: min(1100px, calc(100vw - 40px));
-    padding: 20px 0;
+    padding: 16px 0;
   }
 
   .brand-logo {
     width: auto;
-    height: 30px;
+    height: 54px;
   }
 
-  .site-menu-toggle {
-    right: 0;
+  .site-nav,
+  .site-nav--left,
+  .site-nav--right {
+    width: 52px;
   }
 
   .gallery-page__intro {
