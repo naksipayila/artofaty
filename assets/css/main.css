@@ -98,64 +98,53 @@ textarea {
   position: sticky;
   top: 0;
   z-index: 20;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  display: flex;
   align-items: center;
-  column-gap: 140px;
-  width: var(--container);
+  justify-content: center;
+  width: 100%;
   margin: 0 auto;
-  padding: 4px 10px;
+  padding: 30px 40px;
   border: 0;
-  border-radius: 5.5px;
-  background: transparent;
+  background: #ffffff;
   box-shadow: none;
 }
 
 .site-header.site-header--scrolled,
 .site-header.site-header--menu-open {
-  background: #ffffff;
-  box-shadow: 0 12px 42px rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
 }
 
 .brand-mark {
-  grid-column: 2;
-  grid-row: 1;
-  justify-self: center;
   display: inline-flex;
   align-items: center;
   gap: 0;
   padding: 0;
   border: none;
-  border-radius: 5.5px;
+  border-radius: 0;
 }
 
 .brand-logo {
-  height: 112px;
-  width: min(100%, 420px);
+  height: 28px;
+  width: auto;
   display: block;
 }
 
 .site-nav {
-  grid-row: 1;
+  position: absolute;
+  left: 40px;
   display: flex;
-  justify-content: center;
-  gap: 140px;
+  gap: 20px;
   width: fit-content;
-  padding: 0;
-  border: 0;
-  border-radius: 5.5px;
-  background: transparent;
-  box-shadow: none;
 }
 
 .site-nav--left {
-  grid-column: 1;
-  justify-self: end;
+  left: 40px;
 }
 
 .site-nav--right {
-  grid-column: 3;
-  justify-self: start;
+  left: auto;
+  right: 40px;
 }
 
 .site-mobile-nav {
@@ -2350,8 +2339,74 @@ main :is(a, button):focus-visible,
   gap: 10px;
 }
 
+/* ── Gallery (masonry grid) ── */
+
+.gallery-page {
+  --grid-width: min(1100px, calc(100vw - 36px));
+  width: var(--grid-width);
+  margin: 0 auto;
+  padding: 0 0 clamp(48px, 6vw, 80px);
+}
+
+.gallery-page__intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+  gap: clamp(20px, 3vw, 40px);
+  padding: 49px 0 8px;
+}
+
+.gallery-page__welcome {
+  margin: 0;
+  color: var(--accent);
+  font-size: clamp(1.5rem, 2.2vw, 1.8rem);
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.gallery-page__bio {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.2vw, 1.8rem);
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.gallery-page__bio a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.gallery-masonry {
+  columns: 2;
+  column-gap: 18px;
+  width: 100%;
+  margin-top: 18px;
+}
+
+.gallery-item {
+  display: block;
+  break-inside: avoid;
+  margin-bottom: 18px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+  line-height: 0;
+}
+
+.gallery-item--wide {
+  column-span: all;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 .site-footer {
-  width: min(1320px, calc(100vw - 36px));
+  width: min(1100px, calc(100vw - 36px));
+
   margin: clamp(38px, 6vw, 80px) auto 0;
   padding-bottom: clamp(32px, 4vw, 52px);
 }
@@ -2414,85 +2469,62 @@ main :is(a, button):focus-visible,
   outline-offset: 4px;
 }
 
-html:has(.fabrica-page--main) .site-footer {
-  display: none;
-}
-
 /* ── Desktop header (>= 761px) ── */
 
 @media (min-width: 761px) {
   .site-header {
     display: flex;
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-    justify-content: space-between;
-    gap: 0;
-    width: var(--container);
-    padding: 4px 10px;
-    border: 0;
-    border-radius: 5.5px;
-    background: transparent;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 30px 40px;
+    background: #ffffff;
     box-shadow: none;
-    isolation: isolate;
   }
 
   .site-header::before {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 50%;
-    z-index: 0;
-    width: 100vw;
-    content: "";
-    background: transparent;
-    box-shadow: none;
-    pointer-events: none;
-    transform: translateX(-50%);
+    display: none;
   }
 
   .site-header.site-header--scrolled,
   .site-header.site-header--menu-open {
-    background: transparent;
-    box-shadow: none;
-  }
-
-  .site-header.site-header--scrolled::before,
-  .site-header.site-header--menu-open::before {
-    background: #ffffff;
-    box-shadow: 0 12px 42px rgba(0, 0, 0, 0.12);
+    background: rgba(255, 255, 255, 0.97);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
   }
 
   .brand-mark {
-    grid-column: 2;
-    justify-self: center;
     position: relative;
     z-index: 1;
   }
 
-  .site-nav--left {
-    justify-self: end;
-  }
-
-  .site-nav--right {
-    justify-self: start;
-  }
-
   .brand-logo {
-    height: 112px;
+    height: 28px;
   }
 
   .site-nav {
-    display: contents;
+    display: flex;
+    position: absolute;
+    gap: 10px;
+  }
+
+  .site-nav--left {
+    left: 40px;
+  }
+
+  .site-nav--right {
+    left: auto;
+    right: 40px;
   }
 
   .site-nav__link {
     position: relative;
     z-index: 1;
-    min-height: 44px;
-    padding: 0 6px;
-    color: rgba(0, 0, 0, 0.58);
-    font-size: 0.94rem;
-    font-weight: 650;
-    letter-spacing: 0.08em;
+    min-height: auto;
+    padding: 0;
+    color: rgba(0, 0, 0, 0.52);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
   }
 
   .site-nav__link:hover {
@@ -2500,11 +2532,11 @@ html:has(.fabrica-page--main) .site-footer {
   }
 
   .site-nav__link--active {
-    color: #8ec6ff;
+    color: #111;
   }
 
   .site-nav__link--active:hover {
-    color: #8ec6ff;
+    color: #111;
   }
 }
 
@@ -2591,23 +2623,20 @@ html:has(.fabrica-page--main) .site-footer {
 
   .site-header {
     top: 0;
-    grid-template-columns: minmax(0, 1fr) auto;
+    display: flex;
     align-items: center;
-    gap: 10px;
-    width: min(calc(100vw - 20px), 720px);
-    padding: 4px 7px;
-    border-radius: 5.5px;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+    border-radius: 0;
     border: 0;
-    background: transparent;
+    background: #ffffff;
     box-shadow: none;
   }
 
   .brand-mark {
     position: relative;
     z-index: 31;
-    grid-column: 1 / -1;
-    grid-row: 1;
-    justify-self: center;
     min-width: 0;
     gap: 0;
   }
@@ -2655,25 +2684,23 @@ html:has(.fabrica-page--main) .site-footer {
 
   .site-mobile-nav .site-nav__link:hover,
   .site-mobile-nav .site-nav__link--active {
-  color: rgba(255, 255, 255, 0.92);
+    color: #111;
   }
 
   .site-menu-toggle {
-    position: relative;
-    grid-column: 2;
-    grid-row: 1;
+    position: absolute;
+    right: 20px;
     display: inline-flex;
     z-index: 31;
     align-items: center;
     justify-content: center;
-    justify-self: end;
     width: 44px;
     height: 44px;
     padding: 0;
-    border: 1px solid rgba(98, 168, 255, 0.24);
+    border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 5.5px;
-    background: rgba(98, 168, 255, 0.08);
-    color: rgba(213, 234, 255, 0.92);
+    background: rgba(0, 0, 0, 0.04);
+    color: #333;
     cursor: pointer;
   }
 
@@ -2694,9 +2721,9 @@ html:has(.fabrica-page--main) .site-footer {
   }
 
   .site-header--menu-open .site-menu-toggle {
-    border-color: rgba(98, 168, 255, 0.34);
-    background: rgba(98, 168, 255, 0.12);
-    color: #9fd0ff;
+    border-color: rgba(0, 0, 0, 0.25);
+    background: rgba(0, 0, 0, 0.08);
+    color: #111;
   }
 
   .site-header--menu-open .site-menu-toggle span:nth-child(1) {
@@ -2715,6 +2742,25 @@ html:has(.fabrica-page--main) .site-footer {
     width: 66px;
     height: 66px;
     object-fit: contain;
+  }
+
+  .gallery-page__intro {
+    grid-template-columns: 1fr;
+    padding: 30px 0 8px;
+  }
+
+  .gallery-page__welcome,
+  .gallery-page__bio {
+    font-size: 1.25em;
+  }
+
+  .gallery-masonry {
+    columns: 1;
+    column-gap: 0;
+  }
+
+  .gallery-item {
+    margin-bottom: 12px;
   }
 
   .section {

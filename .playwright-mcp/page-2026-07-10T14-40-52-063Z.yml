@@ -1,0 +1,15 @@
+- generic [ref=f13e2]:
+  - banner [ref=f13e4]:
+    - link [ref=f13e5] [cursor=pointer]:
+      - /url: /
+      - heading "The Art of Luis Huerta" [level=1] [ref=f13e6]
+    - navigation [ref=f13e7]:
+      - link "Home/" [ref=f13e8] [cursor=pointer]:
+        - /url: /
+      - link "About Me" [ref=f13e9] [cursor=pointer]:
+        - /url: /about
+  - contentinfo [ref=f13e15]:
+    - generic [ref=f13e16]:
+      - generic [ref=f13e17]: © The Art of Luis Huerta
+      - link [ref=f13e18] [cursor=pointer]:
+        - /url: https://carbonmade.com/?campaign=c4
