@@ -160,7 +160,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="fabrica-page">
+  <div class="fabrica-page" :class="{ 'fabrica-page--main': activePortfolioTab === 'current' }">
     <div class="fabrica-page__inner">
       <div class="fabrica-page__top">
         <div class="fabrica-page__intro">
