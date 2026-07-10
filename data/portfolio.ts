@@ -84,12 +84,13 @@ export const projects: Project[] = [
     id: 'miss-fortune',
     title: 'Miss Fortune',
     description: 'A hand-painted texturing study made without generators, exploring readable forms, stylized material separation, and game-ready presentation.',
-    cover: 'https://cdna.artstation.com/p/assets/covers/images/094/710/214/large/ali-taha-yapiskan-ali-taha-yapiskan-test2.webp?1766169605',
+    cover: 'https://cdna.artstation.com/p/assets/images/images/088/540/482/large/ali-taha-yapiskan-missfortune.jpg?1748537997',
     coverCrop: '50% 35%',
     images: [
-      'https://cdna.artstation.com/p/assets/covers/images/094/710/214/large/ali-taha-yapiskan-ali-taha-yapiskan-test2.webp?1766169605'
+      'https://cdna.artstation.com/p/assets/images/images/088/540/482/large/ali-taha-yapiskan-missfortune.jpg?1748537997',
+      'https://cdn.artstation.com/p/video_sources/002/618/950/video.mp4'
     ],
-    imageAspectRatios: ['1 / 1'],
+    imageAspectRatios: ['1 / 1', '1 / 1'],
     details: {
       client: 'Personal Practice',
       date: 'May 13, 2025',
@@ -118,11 +119,9 @@ export const projects: Project[] = [
     cover: 'https://cdnb.artstation.com/p/assets/images/images/088/540/785/large/ali-taha-yapiskan-mermaid-full.jpg?1766042317',
     coverCrop: 'center top',
     images: [
-      'https://cdnb.artstation.com/p/assets/images/images/088/540/785/large/ali-taha-yapiskan-mermaid-full.jpg?1766042317',
-      'https://cdna.artstation.com/p/assets/images/images/084/515/504/large/ali-taha-yapiskan-ue.jpg?1738579987',
-      'https://cdnb.artstation.com/p/assets/images/images/084/515/375/large/ali-taha-yapiskan-zb.jpg?1738579680'
+      'https://cdnb.artstation.com/p/assets/images/images/088/540/785/large/ali-taha-yapiskan-mermaid-full.jpg?1766042317'
     ],
-    imageAspectRatios: ['1920 / 2824', '16 / 9', '1920 / 1126'],
+    imageAspectRatios: ['1920 / 2824'],
     details: {
       client: 'Personal Practice',
       date: 'Jan 24, 2025',

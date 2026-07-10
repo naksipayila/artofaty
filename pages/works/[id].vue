@@ -57,7 +57,6 @@ const isReturningToSource = ref(false)
 const isLightboxReady = ref(false)
 let triggerEl: HTMLElement | null = null
 const galleryItemRefs: Array<HTMLElement | null> = []
-let lightboxScrollY = 0
 let returnAnimationFrame = 0
 let lightboxReadyTimeout: ReturnType<typeof setTimeout> | null = null
 
@@ -88,7 +87,6 @@ const openLightbox = async (index: number, event: Event) => {
 
   isReturningToSource.value = false
   isLightboxReady.value = false
-  lightboxScrollY = window.scrollY
   triggerEl = event.currentTarget instanceof HTMLElement ? event.currentTarget : null
   activeIndex.value = index
   setPageInert(true)
@@ -199,28 +197,18 @@ const returnToSource = () => {
   returnAnimationFrame = window.requestAnimationFrame(animate)
 }
 
-const handleLightboxScroll = () => {
-  if (
-    window.innerWidth <= 760 ||
-    activeIndex.value === null ||
-    !isLightboxReady.value ||
-    isReturningToSource.value
-  ) return
-
-  if (Math.abs(window.scrollY - lightboxScrollY) > 15) returnToSource()
-}
-
 const handleLightboxWheel = (event: WheelEvent) => {
-  if (window.innerWidth <= 760 || activeIndex.value === null || isReturningToSource.value) return
+  if (window.innerWidth <= 760 || activeIndex.value === null) return
 
   event.preventDefault()
-  const distance = event.deltaMode === WheelEvent.DOM_DELTA_LINE ? event.deltaY * 16 : event.deltaY
-  window.scrollBy({ top: distance })
+  if (!isLightboxReady.value || isReturningToSource.value || event.deltaY <= 0) return
+
+  returnToSource()
 }
 
 onMounted(() => {
   window.addEventListener('keydown', handleKeydown)
-  window.addEventListener('scroll', handleLightboxScroll, { passive: true })
+  window.addEventListener('wheel', handleLightboxWheel, { capture: true, passive: false })
   startCursor()
 })
 
@@ -230,7 +218,7 @@ onBeforeUnmount(() => {
   setPageInert(false)
   stopCursor()
   window.removeEventListener('keydown', handleKeydown)
-  window.removeEventListener('scroll', handleLightboxScroll)
+  window.removeEventListener('wheel', handleLightboxWheel, true)
 })
 </script>
 
@@ -289,7 +277,6 @@ onBeforeUnmount(() => {
       :aria-label="project.title"
       style="--lightbox-origin-x: 0px; --lightbox-origin-y: 0px; --lightbox-origin-scale: 0.96"
       @click="handleLightboxClick"
-      @wheel="handleLightboxWheel"
     >
       <button class="project-lightbox__dismiss" type="button" aria-label="Close image" @click.stop="closeLightbox">
         <span class="sr-only">Close image</span>
