@@ -1,29 +1,41 @@
 <script setup lang="ts">
 import { projects, robloxProjects } from '~/data/portfolio'
 
+const { start: startCursor, stop: stopCursor } = useCustomCursor()
+
 useSeoMeta({
-  title: 'Portfolio',
-  description: 'A selected portfolio of 3D character projects by Ali Taha Yapışkan.',
-  ogTitle: 'Portfolio - ATY',
-  ogDescription: 'A selected portfolio of 3D character projects by Ali Taha Yapışkan.',
+  title: 'Works',
+  description: 'Selected character art, hand-painted materials, and realtime presentation studies by Ali Taha Yapışkan.',
+  ogTitle: 'Works - ATY',
+  ogDescription: 'Selected character art, hand-painted materials, and realtime presentation studies by Ali Taha Yapışkan.',
   ogImage: projects[0].cover
 })
 
 const activePortfolioTab = ref<'current' | 'roblox'>('current')
-const activeRobloxIndex = ref<number | null>(null)
+const activeLightboxIndex = ref<number | null>(null)
+const lightboxRef = ref<HTMLElement | null>(null)
+const lightboxCloseButtonRef = ref<HTMLButtonElement | null>(null)
 const visibleRobloxCount = ref(24)
-const robloxLightboxRef = ref<HTMLElement | null>(null)
-const robloxCloseButtonRef = ref<HTMLButtonElement | null>(null)
-let robloxTrigger: HTMLElement | null = null
+let lightboxTrigger: HTMLElement | null = null
 const prefersReducedMotion = ref(false)
 let reducedMotionQuery: MediaQueryList | null = null
 let handleReducedMotionChange: ((event: MediaQueryListEvent) => void) | null = null
-const activeRobloxProject = computed(() => (
-  activeRobloxIndex.value === null ? null : robloxProjects[activeRobloxIndex.value] ?? null
-))
-const activeRobloxCount = computed(() => (
-  activeRobloxIndex.value === null ? '' : String(activeRobloxIndex.value + 1).padStart(2, '0')
-))
+
+const currentTabItems = computed(() => activePortfolioTab.value === 'current' ? projects : visibleRobloxProjects.value)
+
+const activeLightboxProject = computed(() => {
+  if (activeLightboxIndex.value === null) return null
+  const items = currentTabItems.value
+  return items[activeLightboxIndex.value] ?? null
+})
+
+const activeLightboxCount = computed(() =>
+  activeLightboxIndex.value === null ? '' : String(activeLightboxIndex.value + 1).padStart(2, '0')
+)
+
+const activeLightboxTotal = computed(() =>
+  String(currentTabItems.value.length).padStart(2, '0')
+)
 
 const portfolioTabs = [
   { id: 'current', label: 'Main Characters', count: projects.length },
@@ -44,10 +56,10 @@ const setPageInert = (isInert: boolean) => {
   document.querySelector('.site-shell')?.toggleAttribute('inert', isInert)
 }
 
-const trapRobloxLightboxFocus = (event: KeyboardEvent) => {
-  if (event.key !== 'Tab' || !robloxLightboxRef.value) return
+const trapLightboxFocus = (event: KeyboardEvent) => {
+  if (event.key !== 'Tab' || !lightboxRef.value) return
 
-  const focusableElements = getFocusableElements(robloxLightboxRef.value)
+  const focusableElements = getFocusableElements(lightboxRef.value)
   if (!focusableElements.length) return
 
   const firstElement = focusableElements[0]
@@ -91,52 +103,66 @@ const showMoreRobloxProjects = () => {
   visibleRobloxCount.value = Math.min(visibleRobloxCount.value + 24, robloxProjects.length)
 }
 
-const openRobloxProject = async (index: number, event: MouseEvent) => {
-  robloxTrigger = event.currentTarget instanceof HTMLElement ? event.currentTarget : null
-  activeRobloxIndex.value = index
+const getLightboxImage = (item: any) => {
+  if (activePortfolioTab.value === 'current') {
+    return item.images?.[0] ?? item.cover
+  }
+  return item.image ?? item.cover
+}
+
+const getLightboxVideo = (item: any) => {
+  if (activePortfolioTab.value === 'roblox') {
+    return item.video ?? null
+  }
+  return null
+}
+
+const openLightbox = async (index: number, event: MouseEvent) => {
+  lightboxTrigger = event.currentTarget instanceof HTMLElement ? event.currentTarget : null
+  activeLightboxIndex.value = index
   setPageInert(true)
   await nextTick()
-  robloxCloseButtonRef.value?.focus()
+  lightboxCloseButtonRef.value?.focus()
 }
 
-const closeRobloxProject = async () => {
-  activeRobloxIndex.value = null
+const closeLightbox = async () => {
+  activeLightboxIndex.value = null
   setPageInert(false)
   await nextTick()
-  robloxTrigger?.focus()
-  robloxTrigger = null
+  lightboxTrigger?.focus()
+  lightboxTrigger = null
 }
 
-const showPreviousRobloxProject = () => {
-  if (activeRobloxIndex.value === null) return
-  activeRobloxIndex.value = (activeRobloxIndex.value - 1 + robloxProjects.length) % robloxProjects.length
+const showPreviousLightboxItem = () => {
+  if (activeLightboxIndex.value === null) return
+  activeLightboxIndex.value = (activeLightboxIndex.value - 1 + currentTabItems.value.length) % currentTabItems.value.length
 }
 
-const showNextRobloxProject = () => {
-  if (activeRobloxIndex.value === null) return
-  activeRobloxIndex.value = (activeRobloxIndex.value + 1) % robloxProjects.length
+const showNextLightboxItem = () => {
+  if (activeLightboxIndex.value === null) return
+  activeLightboxIndex.value = (activeLightboxIndex.value + 1) % currentTabItems.value.length
 }
 
-const handleRobloxLightboxKeydown = (event: KeyboardEvent) => {
-  if (activeRobloxIndex.value === null) return
+const handleLightboxKeydown = (event: KeyboardEvent) => {
+  if (activeLightboxIndex.value === null) return
 
-  trapRobloxLightboxFocus(event)
+  trapLightboxFocus(event)
 
   if (event.key === 'Escape') {
     event.preventDefault()
-    void closeRobloxProject()
+    void closeLightbox()
   }
 
   if (event.target instanceof HTMLVideoElement || event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) return
 
   if (event.key === 'ArrowLeft') {
     event.preventDefault()
-    showPreviousRobloxProject()
+    showPreviousLightboxItem()
   }
 
   if (event.key === 'ArrowRight') {
     event.preventDefault()
-    showNextRobloxProject()
+    showNextLightboxItem()
   }
 }
 
@@ -147,15 +173,17 @@ onMounted(() => {
     prefersReducedMotion.value = event.matches
   }
   reducedMotionQuery.addEventListener('change', handleReducedMotionChange)
-  window.addEventListener('keydown', handleRobloxLightboxKeydown)
+  window.addEventListener('keydown', handleLightboxKeydown)
+  startCursor()
 })
 
 onBeforeUnmount(() => {
   setPageInert(false)
+  stopCursor()
   if (reducedMotionQuery && handleReducedMotionChange) {
     reducedMotionQuery.removeEventListener('change', handleReducedMotionChange)
   }
-  window.removeEventListener('keydown', handleRobloxLightboxKeydown)
+  window.removeEventListener('keydown', handleLightboxKeydown)
 })
 </script>
 
@@ -165,7 +193,7 @@ onBeforeUnmount(() => {
       <div class="fabrica-page__top">
         <div class="fabrica-page__intro">
           <p class="eyebrow">Selected work</p>
-          <h1 class="fabrica-page__title">Portfolio</h1>
+          <h1 class="fabrica-page__title">Works</h1>
           <p class="fabrica-page__description">Character art, hand-painted materials, and realtime presentation studies.</p>
         </div>
       </div>
@@ -204,9 +232,11 @@ onBeforeUnmount(() => {
                   :key="project.id"
                   class="fabrica-reveal fabrica-reveal--card"
                 >
-                  <NuxtLink
-                    :to="`/portfolio/${project.id}`"
-                    class="fabrica-card"
+                  <button
+                    class="fabrica-card fabrica-card--button"
+                    type="button"
+                    :aria-label="`Open ${project.title}`"
+                    @click="openLightbox(index, $event)"
                   >
                     <div class="fabrica-card__media">
                       <img
@@ -218,7 +248,7 @@ onBeforeUnmount(() => {
                       >
                     </div>
                     <span class="fabrica-card__name">{{ project.title }}</span>
-                  </NuxtLink>
+                  </button>
                 </div>
               </div>
 
@@ -238,7 +268,7 @@ onBeforeUnmount(() => {
                     class="fabrica-card fabrica-card--button"
                     type="button"
                     :aria-label="`Open ${project.title} Roblox project preview`"
-                    @click="openRobloxProject(index, $event)"
+                    @click="openLightbox(index, $event)"
                   >
                     <div class="fabrica-card__media">
                       <img
@@ -268,52 +298,54 @@ onBeforeUnmount(() => {
 
   <Teleport to="body">
       <div
-        v-if="activeRobloxProject"
-        ref="robloxLightboxRef"
-        class="project-lightbox project-lightbox--roblox"
+        v-if="activeLightboxProject"
+        ref="lightboxRef"
+        class="project-lightbox"
         data-lenis-prevent
         role="dialog"
         aria-modal="true"
         tabindex="-1"
-        :aria-label="`${activeRobloxProject.title} Roblox project preview`"
-        @click.self="closeRobloxProject"
+        :aria-label="`${activeLightboxProject.title}`"
+        @click.self="closeLightbox"
       >
-        <div class="project-lightbox__bar">
-          <span class="project-lightbox__count" role="status" :aria-label="`Project ${activeRobloxIndex === null ? '' : activeRobloxIndex + 1} of ${robloxProjects.length}`">{{ activeRobloxCount }} / {{ String(robloxProjects.length).padStart(2, '0') }}</span>
-          <button ref="robloxCloseButtonRef" class="project-lightbox__close" type="button" aria-label="Close" @click="closeRobloxProject">×</button>
+        <div class="project-lightbox__bar project-lightbox__bar--detail">
+          <span class="project-lightbox__count" role="status" :aria-label="`Project ${activeLightboxIndex === null ? '' : activeLightboxIndex + 1} of ${currentTabItems.length}`">{{ activeLightboxCount }} / {{ activeLightboxTotal }}</span>
+          <button ref="lightboxCloseButtonRef" class="project-lightbox__close" type="button" aria-label="Close" @click="closeLightbox">×</button>
         </div>
 
         <button
+          v-if="currentTabItems.length > 1"
           class="project-lightbox__nav project-lightbox__nav--prev"
           type="button"
-          aria-label="Previous Roblox project"
-          @click="showPreviousRobloxProject"
+          aria-label="Previous"
+          @click="showPreviousLightboxItem"
         >
           <span aria-hidden="true">←</span>
         </button>
 
         <figure class="project-lightbox__figure">
           <video
-            v-if="activeRobloxProject.video"
-            :key="activeRobloxProject.video"
+            v-if="getLightboxVideo(activeLightboxProject)"
+            :key="getLightboxVideo(activeLightboxProject)"
             class="project-lightbox__video"
-            :poster="activeRobloxProject.cover"
+            :poster="activeLightboxProject.cover"
             controls
             :autoplay="!prefersReducedMotion"
             muted
             :loop="!prefersReducedMotion"
             playsinline
           >
-            <source :src="activeRobloxProject.video" type="video/mp4">
+            <source :src="getLightboxVideo(activeLightboxProject)" type="video/mp4">
           </video>
-          <img v-else :src="activeRobloxProject.image" :alt="`${activeRobloxProject.title} Roblox project image`">
+          <img v-else :src="getLightboxImage(activeLightboxProject)" :alt="activeLightboxProject.title">
         </figure>
 
         <button
+          v-if="currentTabItems.length > 1"
           class="project-lightbox__nav project-lightbox__nav--next"
           type="button"
-          aria-label="Next Roblox project"
-          @click="showNextRobloxProject"
+          aria-label="Next"
+          @click="showNextLightboxItem"
         >
           <span aria-hidden="true">→</span>
         </button>

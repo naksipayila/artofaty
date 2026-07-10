@@ -14,12 +14,8 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       routes: [
-        '/about',
-        '/contact',
-        '/portfolio/anastasia',
-        '/portfolio/miss-fortune',
-        '/portfolio/mermaid',
-        '/portfolio/orc'
+        '/works',
+        '/about'
       ]
     }
   },
@@ -31,7 +27,7 @@ export default defineNuxtConfig({
       },
       titleTemplate: '%s | ATY',
       meta: [
-        { name: 'theme-color', content: '#080706' },
+        { name: 'theme-color', content: '#ffffff' },
         { name: 'description', content: 'ATY is the portfolio of Ali Taha Yapışkan, a 3D Character Artist based in Eskişehir, Turkey.' },
         { property: 'og:type', content: 'website' },
         { property: 'og:site_name', content: 'ATY' }

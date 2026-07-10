@@ -8,17 +8,15 @@ const toggleRef = ref<HTMLButtonElement | null>(null)
 const mobileNavRef = ref<HTMLElement | null>(null)
 
 const navItems = [
-  { label: 'Home', to: '/' },
-  { label: 'Portfolio', to: '/portfolio' },
-  { label: 'About', to: '/about' },
-  { label: 'Contact', to: '/contact' }
+  { label: 'Works', to: '/works' },
+  { label: 'About', to: '/about' }
 ]
-const leftNavItems = navItems.slice(0, 2)
-const rightNavItems = navItems.slice(2)
+const leftNavItems = navItems.slice(0, 1)
+const rightNavItems = navItems.slice(1)
 
 const isActive = (path: string) => {
-  if (path === '/') {
-    return route.path === '/'
+  if (path === '/works') {
+    return route.path.startsWith('/works')
   }
 
   return route.path.startsWith(path)
