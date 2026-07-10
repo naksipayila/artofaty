@@ -5,21 +5,29 @@ const props = withDefaults(defineProps<{
   label?: string
   modelPath?: string
   texturePath?: string
+  posterPath?: string
 }>(), {
   label: 'Miss Fortune realtime 3D character model',
   modelPath: 'models/MissFortune_low.fbx',
-  texturePath: 'models/tex/'
+  texturePath: 'models/tex/',
+  posterPath: ''
 })
 
 const runtimeConfig = useRuntimeConfig()
 const viewerRef = ref<HTMLElement | null>(null)
 const loadState = ref<'loading' | 'ready' | 'error'>('loading')
-const showWireframe = ref(true)
+const showWireframe = ref(false)
+const isRotationPaused = ref(false)
+const prefersReducedMotion = ref(false)
 
 let frameId = 0
 let resizeObserver: ResizeObserver | null = null
+let visibilityObserver: IntersectionObserver | null = null
+let reducedMotionQuery: MediaQueryList | null = null
+let handleReducedMotionChange: ((event: MediaQueryListEvent) => void) | null = null
 let cleanupScene: (() => void) | null = null
 let wireframeObjects: Object3D[] = []
+let isViewerVisible = true
 
 const resolvePublicAssetUrl = (path: string) => {
   if (/^https?:\/\//.test(path)) {
@@ -30,6 +38,8 @@ const resolvePublicAssetUrl = (path: string) => {
 }
 
 const modelUrl = computed(() => resolvePublicAssetUrl(props.modelPath))
+const posterUrl = computed(() => props.posterPath ? resolvePublicAssetUrl(props.posterPath) : '')
+const viewerStyle = computed(() => posterUrl.value ? { '--model-poster': `url("${posterUrl.value}")` } : undefined)
 
 const textureBaseUrl = computed(() => {
   const url = resolvePublicAssetUrl(props.texturePath)
@@ -223,6 +233,13 @@ const stopViewer = () => {
 
   resizeObserver?.disconnect()
   resizeObserver = null
+  visibilityObserver?.disconnect()
+  visibilityObserver = null
+  if (reducedMotionQuery && handleReducedMotionChange) {
+    reducedMotionQuery.removeEventListener('change', handleReducedMotionChange)
+  }
+  reducedMotionQuery = null
+  handleReducedMotionChange = null
   cleanupScene?.()
   cleanupScene = null
   wireframeObjects = []
@@ -233,6 +250,11 @@ const toggleWireframe = () => {
   wireframeObjects.forEach((wireframe) => {
     wireframe.visible = showWireframe.value
   })
+}
+
+const toggleRotation = () => {
+  if (prefersReducedMotion.value) return
+  isRotationPaused.value = !isRotationPaused.value
 }
 
 onMounted(async () => {
@@ -255,7 +277,7 @@ onMounted(async () => {
       antialias: true,
       powerPreference: 'high-performance'
     })
-    const clock = new THREE.Clock()
+    let previousFrameTime = performance.now()
     const mixers: AnimationMixer[] = []
     let modelRoot: Group | null = null
     let textureMaps = new Map<string, Texture>()
@@ -265,6 +287,7 @@ onMounted(async () => {
     renderer.toneMapping = THREE.NoToneMapping
     renderer.toneMappingExposure = 1
     renderer.domElement.className = 'home-model-viewer__canvas'
+    renderer.domElement.setAttribute('role', 'img')
     renderer.domElement.setAttribute('aria-label', props.label)
     container.appendChild(renderer.domElement)
 
@@ -335,15 +358,33 @@ onMounted(async () => {
 
     resizeObserver = new ResizeObserver(resize)
     resizeObserver.observe(container)
+    visibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        isViewerVisible = entry?.isIntersecting ?? true
+      },
+      { threshold: 0.01 }
+    )
+    visibilityObserver.observe(container)
+    reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    prefersReducedMotion.value = reducedMotionQuery.matches
+    if (prefersReducedMotion.value) isRotationPaused.value = true
+    handleReducedMotionChange = (event) => {
+      prefersReducedMotion.value = event.matches
+      if (event.matches) isRotationPaused.value = true
+    }
+    reducedMotionQuery.addEventListener('change', handleReducedMotionChange)
     resize()
 
     const animate = () => {
       frameId = requestAnimationFrame(animate)
-      const delta = clock.getDelta()
+      const frameTime = performance.now()
+      const delta = Math.min((frameTime - previousFrameTime) / 1000, 0.1)
+      previousFrameTime = frameTime
+      if (!isViewerVisible || document.visibilityState !== 'visible') return
 
       mixers.forEach((mixer) => mixer.update(delta))
 
-      if (modelRoot) {
+      if (modelRoot && !isRotationPaused.value && !prefersReducedMotion.value) {
         modelRoot.rotation.y += delta * 0.18
       }
 
@@ -562,7 +603,17 @@ onBeforeUnmount(stopViewer)
 </script>
 
 <template>
-  <div ref="viewerRef" class="home-model-viewer" :class="`home-model-viewer--${loadState}`">
+  <div ref="viewerRef" class="home-model-viewer" :class="`home-model-viewer--${loadState}`" :style="viewerStyle">
+    <button
+      v-if="loadState === 'ready'"
+      class="home-model-viewer__rotation-toggle"
+      type="button"
+      :aria-pressed="isRotationPaused"
+      :disabled="prefersReducedMotion"
+      @click.stop="toggleRotation"
+    >
+      {{ prefersReducedMotion ? 'Motion reduced' : isRotationPaused ? 'Resume rotation' : 'Pause rotation' }}
+    </button>
     <button
       v-if="loadState === 'ready'"
       class="home-model-viewer__wireframe-toggle"
@@ -572,7 +623,7 @@ onBeforeUnmount(stopViewer)
     >
       {{ showWireframe ? 'Hide wireframe' : 'Show wireframe' }}
     </button>
-    <div v-if="loadState === 'loading'" class="home-model-viewer__status">Loading 3D model</div>
-    <div v-else-if="loadState === 'error'" class="home-model-viewer__status">3D model could not load</div>
+    <div v-if="loadState === 'loading'" class="home-model-viewer__status" role="status">Loading 3D model</div>
+    <div v-else-if="loadState === 'error'" class="home-model-viewer__status" role="status">3D model could not load</div>
   </div>
 </template>

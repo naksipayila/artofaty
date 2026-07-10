@@ -15,7 +15,12 @@ const previousProject = projects[(projectIndex - 1 + projects.length) % projects
 const nextProject = projects[(projectIndex + 1) % projects.length]
 
 const galleryImages = project.images.length ? project.images : [project.cover]
+const heroImage = project.heroImage ?? galleryImages[0]
 const activeGalleryIndex = ref<number | null>(null)
+const galleryLightboxRef = ref<HTMLElement | null>(null)
+const galleryCloseButtonRef = ref<HTMLButtonElement | null>(null)
+const galleryThumbsRef = ref<HTMLElement | null>(null)
+let galleryTrigger: HTMLElement | null = null
 const activeGalleryImage = computed(() => (
   activeGalleryIndex.value === null ? null : galleryImages[activeGalleryIndex.value]
 ))
@@ -24,20 +29,54 @@ const activeGalleryStyle = computed(() => (
 ))
 
 const projectFacts = [
-  project.details.client,
-  project.category,
-  project.details.date,
-  project.tools.slice(0, 3).join(', ')
+  { label: 'Client', value: project.details.client },
+  { label: 'Category', value: project.category },
+  { label: 'Date', value: project.details.date },
+  { label: 'Tools', value: project.tools.slice(0, 3).join(', ') }
 ]
 
-let revealObserver: IntersectionObserver | undefined
+const getFocusableElements = (container: HTMLElement) => (
+  [...container.querySelectorAll<HTMLElement>(
+    'button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])'
+  )].filter((element) => !element.hasAttribute('disabled'))
+)
 
-const openGalleryImage = (index: number) => {
-  activeGalleryIndex.value = index
+const setPageInert = (isInert: boolean) => {
+  document.querySelector('.site-shell')?.toggleAttribute('inert', isInert)
 }
 
-const closeGalleryImage = () => {
+const trapGalleryLightboxFocus = (event: KeyboardEvent) => {
+  if (event.key !== 'Tab' || !galleryLightboxRef.value) return
+
+  const focusableElements = getFocusableElements(galleryLightboxRef.value)
+  if (!focusableElements.length) return
+
+  const firstElement = focusableElements[0]
+  const lastElement = focusableElements[focusableElements.length - 1]
+
+  if (event.shiftKey && document.activeElement === firstElement) {
+    event.preventDefault()
+    lastElement.focus()
+  } else if (!event.shiftKey && document.activeElement === lastElement) {
+    event.preventDefault()
+    firstElement.focus()
+  }
+}
+
+const openGalleryImage = async (index: number, event?: MouseEvent) => {
+  galleryTrigger = event?.currentTarget instanceof HTMLElement ? event.currentTarget : galleryTrigger
+  activeGalleryIndex.value = index
+  setPageInert(true)
+  await nextTick()
+  galleryCloseButtonRef.value?.focus()
+}
+
+const closeGalleryImage = async () => {
   activeGalleryIndex.value = null
+  setPageInert(false)
+  await nextTick()
+  galleryTrigger?.focus()
+  galleryTrigger = null
 }
 
 const showPreviousGalleryImage = () => {
@@ -53,9 +92,11 @@ const showNextGalleryImage = () => {
 const handleGalleryKeydown = (event: KeyboardEvent) => {
   if (activeGalleryIndex.value === null) return
 
+  trapGalleryLightboxFocus(event)
+
   if (event.key === 'Escape') {
     event.preventDefault()
-    closeGalleryImage()
+    void closeGalleryImage()
   }
 
   if (event.key === 'ArrowLeft') {
@@ -69,17 +110,6 @@ const handleGalleryKeydown = (event: KeyboardEvent) => {
   }
 }
 
-const observeDetailReveal = () => {
-  const elements = document.querySelectorAll<HTMLElement>('.project-detail-reveal')
-
-  if (!revealObserver) {
-    elements.forEach((element) => element.classList.add('is-visible'))
-    return
-  }
-
-  elements.forEach((element) => revealObserver?.observe(element))
-}
-
 useSeoMeta({
   title: project.title,
   description: project.description,
@@ -89,27 +119,19 @@ useSeoMeta({
 })
 
 onMounted(() => {
-  if ('IntersectionObserver' in window) {
-    revealObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible')
-            revealObserver?.unobserve(entry.target)
-          }
-        })
-      },
-      { threshold: 0.14 }
-    )
-  }
-
-  observeDetailReveal()
   window.addEventListener('keydown', handleGalleryKeydown)
 })
 
 onBeforeUnmount(() => {
-  revealObserver?.disconnect()
+  setPageInert(false)
   window.removeEventListener('keydown', handleGalleryKeydown)
+})
+
+watch(activeGalleryIndex, async (index) => {
+  if (index === null) return
+
+  await nextTick()
+  galleryThumbsRef.value?.querySelector('.project-lightbox__thumb--active')?.scrollIntoView({ block: 'nearest', inline: 'center' })
 })
 </script>
 
@@ -121,16 +143,22 @@ onBeforeUnmount(() => {
       <h1>{{ project.title }}</h1>
       <p>{{ project.description }}</p>
 
-      <aside class="project-detail-facts" aria-label="Project information">
-        <span v-for="fact in projectFacts" :key="fact">{{ fact }}</span>
-      </aside>
+      <dl class="project-detail-facts" aria-label="Project information">
+        <div v-for="fact in projectFacts" :key="fact.label">
+          <dt>{{ fact.label }}</dt>
+          <dd>{{ fact.value }}</dd>
+        </div>
+      </dl>
     </div>
 
+    <figure class="project-detail-hero__visual project-detail-reveal" style="--stagger: 1">
+      <img :src="heroImage" alt="" :style="{ objectPosition: project.heroCrop, transformOrigin: project.heroOrigin, '--hero-scale': project.heroScale }">
+    </figure>
   </section>
 
   <section class="section project-detail-content-section project-detail-body">
     <article class="project-copy-block project-detail-overview project-detail-reveal" style="--stagger: 2">
-      <p class="eyebrow">Overview</p>
+      <h2 class="eyebrow">Overview</h2>
       <p>{{ project.details.overview }}</p>
     </article>
 
@@ -141,40 +169,46 @@ onBeforeUnmount(() => {
           :key="image"
           class="project-detail-gallery__item"
           :class="{ 'project-detail-gallery__item--featured': index === 0 }"
-          role="button"
-          tabindex="0"
-          :aria-label="`Open ${project.title} gallery image ${index + 1}`"
-          @click="openGalleryImage(index)"
-          @keydown.enter.prevent="openGalleryImage(index)"
-          @keydown.space.prevent="openGalleryImage(index)"
+          :style="{ '--gallery-aspect-ratio': project.imageAspectRatios[index] }"
         >
-          <img :src="image" :alt="`${project.title} gallery image ${index + 1}`" loading="lazy">
+          <button
+            class="project-detail-gallery__button"
+            type="button"
+            :aria-label="`Open ${project.title} image ${index + 1}`"
+            aria-haspopup="dialog"
+            @click="openGalleryImage(index, $event)"
+          >
+            <img :src="image" alt="" loading="lazy">
+          </button>
         </figure>
       </div>
     </div>
   </section>
 
-  <section class="section project-detail-share-section project-detail-share project-detail-reveal">
+  <nav class="section project-detail-share-section project-detail-share project-detail-reveal" aria-label="Project navigation">
     <div class="project-detail-nav">
-      <NuxtLink :to="`/portfolio/${previousProject.id}#banner`" class="button">Previous</NuxtLink>
-      <NuxtLink :to="`/portfolio/${nextProject.id}#banner`" class="button button--primary">Next</NuxtLink>
+      <NuxtLink :to="`/portfolio/${previousProject.id}`" class="button">Previous: {{ previousProject.title }}</NuxtLink>
+      <NuxtLink :to="`/portfolio/${nextProject.id}`" class="button button--primary">Next: {{ nextProject.title }}</NuxtLink>
     </div>
-  </section>
+  </nav>
 
   <Teleport to="body">
     <Transition name="project-lightbox">
       <div
         v-if="activeGalleryImage"
+        ref="galleryLightboxRef"
         class="project-lightbox"
         data-lenis-prevent
         :style="activeGalleryStyle"
         role="dialog"
         aria-modal="true"
+        tabindex="-1"
         :aria-label="`${project.title} enlarged gallery image`"
         @click.self="closeGalleryImage"
       >
         <div class="project-lightbox__bar project-lightbox__bar--detail">
-          <button class="project-lightbox__close" type="button" aria-label="Close" @click="closeGalleryImage">×</button>
+          <button ref="galleryCloseButtonRef" class="project-lightbox__close" type="button" aria-label="Close" @click="closeGalleryImage">×</button>
+          <span class="sr-only" role="status">Image {{ activeGalleryIndex === null ? '' : activeGalleryIndex + 1 }} of {{ galleryImages.length }}</span>
         </div>
 
         <button
@@ -192,7 +226,7 @@ onBeforeUnmount(() => {
             <img
               :key="activeGalleryImage"
               :src="activeGalleryImage"
-              :alt="`${project.title} enlarged gallery image ${activeGalleryIndex === null ? '' : activeGalleryIndex + 1}`"
+              :alt="`${project.title} image ${activeGalleryIndex === null ? '' : activeGalleryIndex + 1}`"
             >
           </Transition>
         </figure>
@@ -207,7 +241,7 @@ onBeforeUnmount(() => {
           <span aria-hidden="true">→</span>
         </button>
 
-        <div v-if="galleryImages.length > 1" class="project-lightbox__thumbs" aria-label="Gallery thumbnails">
+        <div v-if="galleryImages.length > 1" ref="galleryThumbsRef" class="project-lightbox__thumbs" aria-label="Gallery thumbnails">
           <button
             v-for="(image, index) in galleryImages"
             :key="`${image}-thumb`"

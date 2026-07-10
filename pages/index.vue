@@ -36,14 +36,11 @@ useSeoMeta({
     </div>
 
     <div class="hero__visual hero__visual--model" :aria-label="`${homeFeaturedProject.title} realtime 3D character model`">
-      <ClientOnly>
-        <HomeModelViewer model-path="models/MissFortune_low.fbx" :label="`${homeFeaturedProject.title} realtime 3D character model`" />
-        <template #fallback>
-          <div class="home-model-viewer home-model-viewer--loading">
-            <div class="home-model-viewer__status">Loading 3D model</div>
-          </div>
-        </template>
-      </ClientOnly>
+      <HomeModelViewer
+        model-path="models/MissFortune_low.fbx"
+        :poster-path="homeHeroImage"
+        :label="`${homeFeaturedProject.title} realtime 3D character model`"
+      />
       <div class="hero__visual-card">
         <div>
           <p class="eyebrow">Realtime model</p>

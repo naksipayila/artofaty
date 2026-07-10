@@ -10,6 +10,7 @@ export type Project = {
   coverScale?: string
   coverOrigin?: string
   images: string[]
+  imageAspectRatios: string[]
   tags: string[]
   tools: string[]
   stats: {
@@ -73,6 +74,7 @@ export const projects: Project[] = [
       'https://cdna.artstation.com/p/assets/images/images/095/846/984/large/ali-taha-yapiskan-wireframe.webp?1769677898',
       'https://cdna.artstation.com/p/assets/images/images/095/846/982/large/ali-taha-yapiskan-clay.webp?1769677879'
     ],
+    imageAspectRatios: ['1 / 1', '1 / 1', '1 / 1', '1 / 1', '2 / 1', '2 / 1'],
     tags: ['Character Design', 'Stylized', 'Fantasy', 'Game Art', 'Realtime', 'PBR', 'Hand-painted'],
     tools: ['ZBrush', 'Maya', 'Substance 3D Painter', 'Marmoset Toolbag', 'Photoshop'],
     stats: {
@@ -118,6 +120,7 @@ export const projects: Project[] = [
       'https://cdnb.artstation.com/p/assets/images/images/087/982/073/large/ali-taha-yapiskan-wireframe.jpg?1747162617',
       'https://cdnb.artstation.com/p/assets/marmosets/images/087/982/587/large/ali-taha-yapiskan-mview-image20250513-12-1yyv867.jpg?1747163415'
     ],
+    imageAspectRatios: ['1 / 1', '1 / 1', '1920 / 687', '16 / 9'],
     tags: ['Handpaint', 'Character', 'Stylized', 'Fantasy', 'Marmoset'],
     tools: ['ZBrush', 'Maya', 'Substance 3D Painter', 'Marmoset Toolbag', 'Blender'],
     stats: {
@@ -165,6 +168,7 @@ export const projects: Project[] = [
       'https://cdna.artstation.com/p/assets/images/images/084/515/504/large/ali-taha-yapiskan-ue.jpg?1738579987',
       'https://cdnb.artstation.com/p/assets/images/images/084/515/375/large/ali-taha-yapiskan-zb.jpg?1738579680'
     ],
+    imageAspectRatios: ['1920 / 2824', '1920 / 881', '16 / 9', '1920 / 1126'],
     tags: ['Mermaid', 'Character Modeling', 'Fantasy', 'Stylized', 'Hand-painted'],
     tools: ['ZBrush', 'Maya', 'Substance 3D Painter', 'Unreal Engine'],
     stats: {
@@ -208,6 +212,7 @@ export const projects: Project[] = [
       'https://cdna.artstation.com/p/assets/images/images/075/792/404/large/ali-taha-yapiskan-orc-maya.jpg?1715441098',
       'https://cdnb.artstation.com/p/assets/images/images/088/544/999/large/ali-taha-yapiskan-zb.jpg?1748546747'
     ],
+    imageAspectRatios: ['1 / 1', '622 / 806', '1442 / 822'],
     tags: ['Orc', 'Creature', 'Realistic', 'Bust', 'Character Modeling'],
     tools: ['ZBrush', 'Maya', 'Xgen', 'Arnold', 'Texturingxyz', 'R3DS Wrap', 'Photoshop'],
     stats: {

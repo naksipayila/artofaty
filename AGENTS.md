@@ -17,7 +17,7 @@
 - Portfolio/profile data lives in `data/portfolio.ts`; main `projects[].id` values drive `/portfolio/:id`, prev/next nav, and `nitro.prerender.routes`.
 - Only main `projects` have detail pages. `robloxProjects` render inside `/portfolio`, use button cards, and open the lightbox; do not add Roblox detail routes unless asked.
 - `components/ProjectCard.vue` exists but is unused; do not wire it back in unless asked.
-- Home hero 3D viewer uses `public/models/MissFortune_low.fbx` and `public/models/tex/*.webp`; artwork images are ArtStation CDN URLs in `data/portfolio.ts`.
+- Home hero 3D viewer uses `components/HomeModelViewer.vue`, `public/models/MissFortune_low.fbx`, and `public/models/tex/*.webp`; artwork images are ArtStation CDN URLs in `data/portfolio.ts`.
 
 ## Routing
 - Keep the portfolio list at `pages/portfolio/index.vue` and details at `pages/portfolio/[id].vue`; replacing this with `pages/portfolio.vue` breaks child detail routing unless it renders `<NuxtPage />`.
