@@ -59,6 +59,7 @@ let triggerEl: HTMLElement | null = null
 const galleryItemRefs: Array<HTMLElement | null> = []
 let returnAnimationFrame = 0
 let lightboxReadyTimeout: ReturnType<typeof setTimeout> | null = null
+let touchStart: { x: number, y: number } | null = null
 
 useSeoMeta({
   title: project.value.title,
@@ -131,6 +132,33 @@ const nextImage = () => {
   if (activeIndex.value === null || activeIndex.value >= images.value.length - 1) return
   activeIndex.value += 1
   triggerEl = galleryItemRefs[activeIndex.value] ?? triggerEl
+}
+
+const handleLightboxTouchStart = (event: TouchEvent) => {
+  if (event.touches.length !== 1 || event.target instanceof HTMLElement && event.target.closest('button')) {
+    touchStart = null
+    return
+  }
+
+  const touch = event.touches[0]
+  touchStart = { x: touch.clientX, y: touch.clientY }
+}
+
+const handleLightboxTouchEnd = (event: TouchEvent) => {
+  if (!touchStart || event.changedTouches.length !== 1) return
+
+  const touch = event.changedTouches[0]
+  const distanceX = touch.clientX - touchStart.x
+  const distanceY = touch.clientY - touchStart.y
+  touchStart = null
+
+  if (Math.abs(distanceX) < 48 || Math.abs(distanceX) <= Math.abs(distanceY)) return
+
+  if (distanceX < 0) {
+    nextImage()
+  } else {
+    prevImage()
+  }
 }
 
 const handleKeydown = (event: KeyboardEvent) => {
@@ -280,6 +308,8 @@ onBeforeUnmount(() => {
       :aria-label="project.title"
       style="--lightbox-origin-x: 0px; --lightbox-origin-y: 0px; --lightbox-origin-scale: 0.96"
       @click="handleLightboxClick"
+      @touchstart.passive="handleLightboxTouchStart"
+      @touchend="handleLightboxTouchEnd"
     >
       <button class="project-lightbox__dismiss" type="button" aria-label="Close image" @click.stop="closeLightbox">
         <span class="sr-only">Close image</span>

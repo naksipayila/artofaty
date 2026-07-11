@@ -169,7 +169,7 @@ main {
 .site-subnav {
   position: absolute;
   top: calc(100% + 12px);
-  right: 0;
+  left: 0;
   z-index: 2;
   display: grid;
   min-width: 168px;
@@ -430,7 +430,7 @@ main :is(a, button):focus-visible,
   top: 50%;
   bottom: auto;
   z-index: 2;
-  display: grid;
+  display: none;
   width: 44px;
   height: 44px;
   place-items: center;
@@ -807,6 +807,8 @@ main :is(a, button):focus-visible,
   }
 
   .site-subnav {
+    right: 0;
+    left: auto;
     border-color: rgba(255, 255, 255, 0.14);
     background: var(--chrome);
     box-shadow: 0 18px 34px rgba(0, 0, 0, 0.28);
@@ -1029,6 +1031,7 @@ main :is(a, button):focus-visible,
     position: absolute;
     top: 0;
     bottom: 0;
+    display: block;
     width: 20vw;
     height: auto;
     border-radius: 0;

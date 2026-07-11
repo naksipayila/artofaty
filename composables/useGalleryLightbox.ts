@@ -15,6 +15,7 @@ export function useGalleryLightbox(items: GalleryLightboxItem[] = []) {
   const lightboxRef = ref<HTMLElement | null>(null)
   const lightboxOrigin = ref({ x: 0, y: 0, scale: 0.16 })
   let triggerEl: HTMLElement | null = null
+  let touchStart: { x: number, y: number } | null = null
 
   const lightboxStyle = computed(() => ({
     '--lightbox-origin-x': `${lightboxOrigin.value.x}px`,
@@ -157,6 +158,33 @@ export function useGalleryLightbox(items: GalleryLightboxItem[] = []) {
     void closeLightbox()
   }
 
+  const handleLightboxTouchStart = (event: TouchEvent) => {
+    if (event.touches.length !== 1 || event.target instanceof HTMLElement && event.target.closest('button')) {
+      touchStart = null
+      return
+    }
+
+    const touch = event.touches[0]
+    touchStart = { x: touch.clientX, y: touch.clientY }
+  }
+
+  const handleLightboxTouchEnd = (event: TouchEvent) => {
+    if (!touchStart || event.changedTouches.length !== 1) return
+
+    const touch = event.changedTouches[0]
+    const distanceX = touch.clientX - touchStart.x
+    const distanceY = touch.clientY - touchStart.y
+    touchStart = null
+
+    if (Math.abs(distanceX) < 48 || Math.abs(distanceX) <= Math.abs(distanceY)) return
+
+    if (distanceX < 0) {
+      void nextMedia()
+    } else {
+      void previousMedia()
+    }
+  }
+
   onMounted(() => {
     window.addEventListener('keydown', handleKeydown)
     startCursor()
@@ -174,6 +202,8 @@ export function useGalleryLightbox(items: GalleryLightboxItem[] = []) {
     activeMediaIndex,
     closeLightbox,
     handleLightboxClick,
+    handleLightboxTouchEnd,
+    handleLightboxTouchStart,
     hasNextMedia,
     hasPreviousMedia,
     lightboxOrigin,

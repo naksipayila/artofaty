@@ -30,6 +30,8 @@ const {
   activeMediaIndex,
   closeLightbox,
   handleLightboxClick,
+  handleLightboxTouchEnd,
+  handleLightboxTouchStart,
   hasNextMedia,
   hasPreviousMedia,
   lightboxRef,
@@ -78,6 +80,8 @@ const {
       :aria-label="activeItem.title"
       :style="lightboxStyle"
       @click="handleLightboxClick"
+      @touchstart.passive="handleLightboxTouchStart"
+      @touchend="handleLightboxTouchEnd"
     >
       <button class="project-lightbox__dismiss" type="button" aria-label="Close image" @click.stop="closeLightbox">
         <span class="sr-only">Close image</span>
