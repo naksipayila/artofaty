@@ -124,7 +124,6 @@ const {
           controls
           loop
           playsinline
-          @click.stop
         />
         <img v-else-if="activeMedia" :src="activeMedia.src" :alt="activeItem.title">
 

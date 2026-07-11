@@ -1,17 +1,10 @@
 type CursorIcon = 'zoom-in' | 'zoom-out' | 'left-arrow' | 'right-arrow'
 
 const icons: Record<CursorIcon, string> = {
-  'zoom-in': [
-    '<circle cx="30" cy="30" r="29" fill="none" stroke="#fff" stroke-width="2" />',
-    '<rect x="29" y="20" width="2" height="20" rx="1" fill="#fff" />',
-    '<rect x="40" y="29" width="2" height="20" rx="1" transform="rotate(90 40 29)" fill="#fff" />'
-  ].join(''),
-  'zoom-out': [
-    '<circle cx="30" cy="30" r="29" fill="none" stroke="#fff" stroke-width="2" />',
-    '<rect x="40" y="29" width="2" height="20" rx="1" transform="rotate(90 40 29)" fill="#fff" />'
-  ].join(''),
-  'left-arrow': '<path d="M38 12 20 30l18 18" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />',
-  'right-arrow': '<path d="m22 12 18 18-18 18" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />'
+  'zoom-in': '<path d="M25 15H15v10m20-10h10v10m0 10v10H35M25 45H15V35" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />',
+  'zoom-out': '<path d="m21 21 18 18m0-18L21 39" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" />',
+  'left-arrow': '<path d="m36 17-13 13 13 13M23 30h23" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />',
+  'right-arrow': '<path d="m24 17 13 13-13 13m13-13H14" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />'
 }
 
 const isCursorIcon = (value: string | undefined): value is CursorIcon =>
@@ -37,8 +30,8 @@ export function useCustomCursor() {
     cursorEl.style.top = '0'
     cursorEl.style.left = '0'
     cursorEl.style.display = 'none'
-    cursorEl.style.width = '60px'
-    cursorEl.style.height = '60px'
+    cursorEl.style.width = '52px'
+    cursorEl.style.height = '52px'
     cursorEl.style.pointerEvents = 'none'
     cursorEl.style.zIndex = '10000'
     cursorEl.style.mixBlendMode = 'difference'
@@ -46,8 +39,8 @@ export function useCustomCursor() {
     cursorEl.style.transition = 'transform 100ms ease-out'
 
     svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-    svgEl.setAttribute('width', '60')
-    svgEl.setAttribute('height', '60')
+    svgEl.setAttribute('width', '52')
+    svgEl.setAttribute('height', '52')
     svgEl.setAttribute('viewBox', '0 0 60 60')
 
     cursorEl.appendChild(svgEl)
@@ -72,8 +65,8 @@ export function useCustomCursor() {
 
   const updateTransform = () => {
     if (!cursorEl) return
-    const scale = mouseDown ? 0.84 : 0.7
-    cursorEl.style.transform = `translate(${mouseX - 30}px, ${mouseY - 30}px) scale(${scale})`
+    const scale = mouseDown ? 0.78 : 0.92
+    cursorEl.style.transform = `translate(${mouseX - 26}px, ${mouseY - 26}px) scale(${scale})`
   }
 
   const updateCursor = (target: EventTarget | null) => {

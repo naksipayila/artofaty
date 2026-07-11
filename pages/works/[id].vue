@@ -334,7 +334,6 @@ onBeforeUnmount(() => {
           controls
           loop
           playsinline
-          @click.stop
         />
         <img v-else :src="activeMedia" :alt="project.title">
 
