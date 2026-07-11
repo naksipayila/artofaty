@@ -232,7 +232,7 @@ onBeforeUnmount(() => {
           <path d="M19 12H5M11 18l-6-6 6-6" />
         </svg>
       </NuxtLink>
-      <h1>{{ project.title }}</h1>
+      <h1 v-if="project.id !== 'anastasia'">{{ project.title }}</h1>
     </header>
 
     <div class="project-gallery">

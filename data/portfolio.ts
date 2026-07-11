@@ -6,16 +6,6 @@ export type Project = {
   coverCrop?: string
   images: string[]
   imageAspectRatios: string[]
-  details: {
-    client: string
-    date: string
-    availableOn: string
-    overview: string
-    workProcess: string[]
-    approach: string[]
-    quote: string
-    solution: string
-  }
   desktopCover?: string
 }
 
@@ -26,10 +16,7 @@ type RobloxProjectSource = {
   video?: string
 }
 
-export type RobloxProject = RobloxProjectSource & {
-  image: string
-  artstationUrl: string
-}
+export type RobloxProject = RobloxProjectSource
 
 export const artist = {
   name: 'Ali Taha Yapışkan',
@@ -59,26 +46,6 @@ export const projects: Project[] = [
       'https://cdn.artstation.com/p/video_sources/003/074/080/turntable.mp4'
     ],
     imageAspectRatios: ['1 / 1', '1 / 1', '1 / 1', '1 / 1', '1 / 1', '1 / 1'],
-    details: {
-      client: 'Personal Practice',
-      date: 'Jan 29, 2026',
-      availableOn: 'ArtStation',
-      overview: 'Anastasia is a stylized dark fantasy character study focused on combining sculptural clarity, hand-painted PBR material work, and realtime presentation. The project explores a strong fantasy silhouette, readable face planes, layered costume detail, and a final render set that shows both the artistic result and the construction behind it.',
-      workProcess: [
-        'Collected the original concept reference and defined the main shape language for a dark fantasy character.',
-        'Blocked the major forms in ZBrush with attention to silhouette, proportion, and facial expression.',
-        'Refined secondary forms, costume rhythm, and readable surface details before moving into production cleanup.',
-        'Prepared UVs and texture passes for a hand-painted PBR presentation workflow.',
-        'Built final renders, wireframe views, clay views, and process images for portfolio review.',
-        'Presented the character through ArtStation with breakdown images and a turntable preview.'
-      ],
-      approach: [
-        'The project was guided by readability first: every form needed to work from a distance before adding surface detail. This kept the design clear even with fantasy accessories and layered shapes.',
-        'Texture work was handled with a restrained material hierarchy so the face, silhouette, and focal points remained stronger than smaller decorative elements.'
-      ],
-      quote: 'A strong character presentation should show the final image and the thinking behind it: sculpt, texture, wireframe, clay, and the decisions that connect them.',
-      solution: 'The final presentation combines polished character renders, breakdown views, clay and wireframe passes, and process material. This gives the viewer a complete read of the character as both a finished artwork and a production-minded 3D asset.'
-    }
   },
   {
     id: 'miss-fortune',
@@ -87,30 +54,9 @@ export const projects: Project[] = [
     cover: 'https://cdna.artstation.com/p/assets/images/images/088/540/482/large/ali-taha-yapiskan-missfortune.jpg?1748537997',
     coverCrop: '50% 35%',
     images: [
-      'https://cdna.artstation.com/p/assets/images/images/088/540/482/large/ali-taha-yapiskan-missfortune.jpg?1748537997',
-      'https://cdn.artstation.com/p/video_sources/002/618/950/video.mp4'
+      'https://cdna.artstation.com/p/assets/images/images/088/540/482/large/ali-taha-yapiskan-missfortune.jpg?1748537997'
     ],
-    imageAspectRatios: ['1 / 1', '1 / 1'],
-    details: {
-      client: 'Personal Practice',
-      date: 'May 13, 2025',
-      availableOn: 'ArtStation',
-      overview: 'Miss Fortune is a hand-painted character study and a second attempt at stylized texturing without generator-based shortcuts. The work focuses on material separation, readable color choices, and a clean game-art presentation that shows both final renders and technical breakdowns.',
-      workProcess: [
-        'Studied the concept and separated the design into clear forms, materials, and focal areas.',
-        'Sculpted the main body, clothing, and accessories with simplified but readable stylized forms.',
-        'Prepared topology, UVs, and baking support for a game-art texture workflow.',
-        'Painted textures manually with attention to value grouping, color accents, and edge readability.',
-        'Rendered final shots and supporting wireframe and viewer images for portfolio clarity.',
-        'Reviewed the work as a learning exercise to improve the next hand-painted character pipeline.'
-      ],
-      approach: [
-        'The central challenge was keeping the texture work expressive without relying on procedural generators. Each material needed enough information to be readable while staying cohesive with the stylized art direction.',
-        'The presentation balances beauty shots with technical images so the viewer can judge both artistic taste and production discipline.'
-      ],
-      quote: 'Hand-painted texture work is strongest when every color, highlight, and edge supports the form instead of fighting it.',
-      solution: 'The project resolves into a compact character presentation with final renders, wireframe information, Marmoset preview material, and texture-focused imagery that communicates a clear step forward in the hand-painted workflow.'
-    }
+    imageAspectRatios: ['1 / 1'],
   },
   {
     id: 'mermaid',
@@ -122,26 +68,6 @@ export const projects: Project[] = [
       'https://cdnb.artstation.com/p/assets/images/images/088/540/785/large/ali-taha-yapiskan-mermaid-full.jpg?1766042317'
     ],
     imageAspectRatios: ['1920 / 2824'],
-    details: {
-      client: 'Personal Practice',
-      date: 'Jan 24, 2025',
-      availableOn: 'ArtStation',
-      overview: 'Mermaid is a first hand-painted character practice piece built around stylized fantasy appeal, texture breakdowns, and a compact presentation workflow. The project focuses on learning how to translate a concept into a readable 3D character while keeping the texture work expressive and organized.',
-      workProcess: [
-        'Analyzed the concept and defined the strongest silhouette, proportions, and fantasy character cues.',
-        'Blocked the sculpt in ZBrush to establish the body rhythm and main character shapes.',
-        'Modeled supporting forms in Maya and prepared the asset for texture work.',
-        'Painted texture information with emphasis on readable color groups and stylized material changes.',
-        'Set up presentation images in Unreal Engine and supporting software views.',
-        'Created breakdown images to show both the final look and the learning process behind it.'
-      ],
-      approach: [
-        'As a first hand-painted character, the priority was learning a complete pipeline instead of overcomplicating any single stage. The work needed to stay clean enough to review and honest enough to show the learning process.',
-        'The image set was selected to make the hand-painted texture decisions visible: final character render, texture breakdown, engine view, and sculpt view.'
-      ],
-      quote: 'A first complete character study should teach the full path: concept reading, sculpting, texture choices, engine presentation, and self-review.',
-      solution: 'The finished Mermaid project presents the character through final artwork and supporting breakdowns, making it clear how the stylized forms and hand-painted texture decisions come together inside a game-art presentation.'
-    }
   },
   {
     id: 'orc',
@@ -153,37 +79,10 @@ export const projects: Project[] = [
       'https://cdna.artstation.com/p/assets/images/images/088/472/900/large/ali-taha-yapiskan-orc.jpg?1770710654'
     ],
     imageAspectRatios: ['1 / 1'],
-    details: {
-      client: 'Personal Practice',
-      date: 'Feb 08, 2024',
-      availableOn: 'ArtStation',
-      overview: 'Orc is a creature bust study made to practice new software, anatomy, sculpting decisions, grooming, and realistic rendering. The project focuses on building a believable head study with strong forms, surface detail, and a presentation that shows both Maya and ZBrush stages.',
-      workProcess: [
-        'Blocked the head and major muscle forms to establish a believable orc structure.',
-        'Refined anatomy landmarks, facial planes, skin folds, and creature-specific proportions in ZBrush.',
-        'Prepared the asset in Maya and explored grooming support with Xgen.',
-        'Used Texturingxyz and supporting tools to push surface detail and skin believability.',
-        'Rendered the bust with Arnold and polished presentation values in Photoshop.',
-        'Shared final render, Maya view, ZBrush view, and process video material for review.'
-      ],
-      approach: [
-        'The study was designed as a workflow expansion project. Instead of focusing only on the final render, it tested how sculpting, grooming, rendering, and surface detail tools could work together.',
-        'The character needed enough realism to feel grounded while still keeping the exaggerated structure expected from an orc bust.'
-      ],
-      quote: 'Creature studies are valuable when they push both observation and workflow: anatomy, surface, grooming, lighting, and render discipline all need to meet.',
-      solution: 'The final bust presentation highlights the completed render alongside production views from Maya and ZBrush, showing the anatomy study and the technical exploration behind the creature asset.'
-    }
   }
 ]
 
-const toLargeArtStationImage = (url: string) =>
-  url.startsWith('http') ? url.replace('/smaller_square/', '/large/') : url
-
-const defineRobloxProject = (project: RobloxProjectSource): RobloxProject => ({
-  ...project,
-  image: toLargeArtStationImage(project.cover),
-  artstationUrl: `https://www.artstation.com/artwork/${project.id}`
-})
+const defineRobloxProject = (project: RobloxProjectSource): RobloxProject => project
 
 export const robloxProjects: RobloxProject[] = [
   defineRobloxProject({ id: 'mANbmy', title: 'Wendigo', cover: 'https://cdnb.artstation.com/p/assets/covers/images/098/058/883/large/naksi-naksi-videoframe-8835.webp?1777493577', video: 'https://cdn.artstation.com/p/video_sources/003/217/147/wendigo.mp4' }),

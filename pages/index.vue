@@ -1,19 +1,14 @@
 <script setup lang="ts">
-import { artist, projects, robloxProjects } from '~/data/portfolio'
+import { artist, projects } from '~/data/portfolio'
+import { type GalleryLightboxItem, useGalleryLightbox } from '~/composables/useGalleryLightbox'
 
-type GalleryItem = {
+type GalleryItem = GalleryLightboxItem & {
   id: string
-  src: string
-  title: string
   coverCrop?: string
   desktopSrc?: string
   order: number
   hasGallery: boolean
-  media?: Array<{ src: string, type: 'image' | 'video' }>
 }
-
-const runtimeConfig = useRuntimeConfig()
-const assetUrl = (src: string) => src.startsWith('http') ? src : `${runtimeConfig.app.baseURL}${src}`
 
 const galleryItems: GalleryItem[] = projects.map((project, order) => ({
   id: project.id,
@@ -23,18 +18,6 @@ const galleryItems: GalleryItem[] = projects.map((project, order) => ({
   desktopSrc: project.desktopCover,
   order,
   hasGallery: project.images.length > 1
-}))
-
-const robloxGalleryItems: GalleryItem[] = robloxProjects.slice(0, 6).map((project, order) => ({
-  id: project.id,
-  src: assetUrl(project.image),
-  title: project.title,
-  order,
-  hasGallery: false,
-  media: [
-    ...(project.video ? [{ src: project.video, type: 'video' as const }] : []),
-    { src: assetUrl(project.image), type: 'image' as const }
-  ]
 }))
 
 const galleryRows = (() => {
@@ -54,8 +37,6 @@ const socialLinks = [
   { name: 'YouTube', href: artist.youtube, icon: 'youtube' }
 ]
 
-const activePortfolioTab = ref<'main' | 'roblox'>('main')
-
 useSeoMeta({
   title: 'Works',
   description: 'Character art and illustrations by Ali Taha Yapışkan.',
@@ -63,123 +44,16 @@ useSeoMeta({
   ogDescription: 'Character art and illustrations by Ali Taha Yapışkan.'
 })
 
-const activeItem = ref<GalleryItem | null>(null)
-const activeMediaIndex = ref(0)
-const lightboxRef = ref<HTMLElement | null>(null)
-const lightboxOrigin = ref({ x: 0, y: 0, scale: 0.16 })
-let triggerEl: HTMLElement | null = null
-
-const lightboxStyle = computed(() => ({
-  '--lightbox-origin-x': `${lightboxOrigin.value.x}px`,
-  '--lightbox-origin-y': `${lightboxOrigin.value.y}px`,
-  '--lightbox-origin-scale': String(lightboxOrigin.value.scale)
-}))
-
-const lightboxMedia = computed(() =>
-  activeItem.value?.media || (activeItem.value ? [{ src: activeItem.value.src, type: 'image' as const }] : [])
-)
-
-const activeMedia = computed(() => lightboxMedia.value[activeMediaIndex.value] || null)
-
-const { start: startCursor, stop: stopCursor, refresh: refreshCursor } = useCustomCursor()
-
-const getFocusableElements = (container: HTMLElement) =>
-  [...container.querySelectorAll<HTMLElement>(
-    'button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])'
-  )].filter((element) => !element.hasAttribute('disabled'))
-
-const setPageInert = (value: boolean) => {
-  document.querySelector('.site-shell')?.toggleAttribute('inert', value)
-}
-
-const trapFocus = (event: KeyboardEvent) => {
-  if (event.key !== 'Tab' || !lightboxRef.value) return
-
-  const elements = getFocusableElements(lightboxRef.value)
-  if (!elements.length) {
-    event.preventDefault()
-    lightboxRef.value.focus()
-    return
-  }
-
-  const first = elements[0]
-  const last = elements[elements.length - 1]
-  const activeElement = document.activeElement
-
-  if (event.shiftKey && (activeElement === first || activeElement === lightboxRef.value)) {
-    event.preventDefault()
-    last.focus()
-  } else if (!event.shiftKey && (activeElement === last || activeElement === lightboxRef.value)) {
-    event.preventDefault()
-    first.focus()
-  }
-}
-
-const openLightbox = async (item: GalleryItem, event: Event) => {
-  triggerEl = event.currentTarget instanceof HTMLElement ? event.currentTarget : null
-
-  if (triggerEl) {
-    const rect = triggerEl.getBoundingClientRect()
-    lightboxOrigin.value = {
-      x: rect.left + rect.width / 2 - window.innerWidth / 2,
-      y: rect.top + rect.height / 2 - window.innerHeight / 2,
-      scale: Math.min(1, Math.max(0.08, rect.width / window.innerWidth))
-    }
-  }
-
-  activeItem.value = item
-  activeMediaIndex.value = 0
-  setPageInert(true)
-  await nextTick()
-  refreshCursor()
-  lightboxRef.value?.focus()
-}
-
-const closeLightbox = async () => {
-  activeItem.value = null
-  activeMediaIndex.value = 0
-  setPageInert(false)
-  await nextTick()
-  refreshCursor()
-  triggerEl?.focus()
-  triggerEl = null
-}
-
-const handleKeydown = (event: KeyboardEvent) => {
-  if (!activeItem.value) return
-  trapFocus(event)
-
-  if (event.key === 'Escape') {
-    event.preventDefault()
-    void closeLightbox()
-  }
-
-  if (event.key === 'ArrowLeft' && activeMediaIndex.value > 0) {
-    event.preventDefault()
-    activeMediaIndex.value -= 1
-  }
-
-  if (event.key === 'ArrowRight' && activeMediaIndex.value < lightboxMedia.value.length - 1) {
-    event.preventDefault()
-    activeMediaIndex.value += 1
-  }
-}
-
-const handleLightboxClick = (event: MouseEvent) => {
-  if (event.target instanceof HTMLElement && event.target.closest('button, video')) return
-  void closeLightbox()
-}
-
-onMounted(() => {
-  window.addEventListener('keydown', handleKeydown)
-  startCursor()
-})
-
-onBeforeUnmount(() => {
-  setPageInert(false)
-  stopCursor()
-  window.removeEventListener('keydown', handleKeydown)
-})
+const {
+  activeItem,
+  activeMedia,
+  activeMediaIndex,
+  closeLightbox,
+  handleLightboxClick,
+  lightboxRef,
+  lightboxStyle,
+  openLightbox
+} = useGalleryLightbox()
 </script>
 
 <template>
@@ -209,7 +83,7 @@ onBeforeUnmount(() => {
             <path d="M6.1 8.3H3.2V20h2.9V8.3ZM4.65 3.6A1.7 1.7 0 1 0 4.7 7a1.7 1.7 0 0 0-.05-3.4ZM20.8 13.3c0-3.53-1.88-5.17-4.4-5.17-2.03 0-2.94 1.12-3.45 1.9V8.3H10V20h2.95v-5.8c0-1.53.3-3.02 2.18-3.02 1.85 0 1.87 1.73 1.87 3.12V20H20.8v-6.7Z" />
           </svg>
           <svg v-else-if="social.icon === 'artstation'" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M8.4 3 2 14.2h9.7L8.4 3Zm4.7 8.2L10.3 16h10L13.1 3.4v7.8ZM2 17.5l2.4 3.5h15.1l1.9-3.5H2Z" />
+            <path d="M0 17.723l2.027 3.505h.001a2.424 2.424 0 0 0 2.164 1.333h13.457l-2.792-4.838H0zm24 .025c0-.484-.143-.935-.388-1.314L15.728 2.728a2.424 2.424 0 0 0-2.142-1.289H9.419L21.598 22.54l1.92-3.325c.378-.637.482-.919.482-1.467zm-11.129-3.462L7.428 4.858l-5.444 9.428h10.887z" />
           </svg>
           <svg v-else viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M21.58 7.19a2.96 2.96 0 0 0-2.08-2.1C17.67 4.6 12 4.6 12 4.6s-5.67 0-7.5.49a2.96 2.96 0 0 0-2.08 2.1A31.2 31.2 0 0 0 2 12a31.2 31.2 0 0 0 .42 4.81 2.96 2.96 0 0 0 2.08 2.1c1.83.49 7.5.49 7.5.49s5.67 0 7.5-.49a2.96 2.96 0 0 0 2.08-2.1A31.2 31.2 0 0 0 22 12a31.2 31.2 0 0 0-.42-4.81ZM10.2 15.1V8.9l5.2 3.1-5.2 3.1Z" />
@@ -218,86 +92,46 @@ onBeforeUnmount(() => {
       </nav>
     </div>
 
-    <nav class="portfolio-tabs" aria-label="Portfolio type">
-      <button
-        :class="{ 'portfolio-tabs__button--active': activePortfolioTab === 'main' }"
-        type="button"
-        :aria-pressed="activePortfolioTab === 'main'"
-        @click="activePortfolioTab = 'main'"
-      >
-        <span class="portfolio-tabs__index" aria-hidden="true">01</span>
-        <span>Main Portfolio</span>
-      </button>
-      <button
-        :class="{ 'portfolio-tabs__button--active': activePortfolioTab === 'roblox' }"
-        type="button"
-        :aria-pressed="activePortfolioTab === 'roblox'"
-        @click="activePortfolioTab = 'roblox'"
-      >
-        <span class="portfolio-tabs__index" aria-hidden="true">02</span>
-        <span>Roblox Portfolio</span>
-      </button>
-    </nav>
-
-    <section :class="['portfolio-panel portfolio-panel--main', { 'portfolio-panel--active': activePortfolioTab === 'main' }]">
-      <div class="gallery-grid">
-        <div v-for="(row, rowIndex) in galleryRows" :key="rowIndex" class="gallery-grid__row">
-          <template v-for="item in row" :key="item.id">
-            <NuxtLink
-              v-if="item.hasGallery"
-              class="gallery-item gallery-item--project"
-              :style="{ '--gallery-focus': item.coverCrop || 'center' }"
-              :to="`/works/${item.id}`"
-              :aria-label="`View ${item.title}`"
+    <div class="gallery-grid">
+      <div v-for="(row, rowIndex) in galleryRows" :key="rowIndex" class="gallery-grid__row">
+        <template v-for="item in row" :key="item.id">
+          <NuxtLink
+            v-if="item.hasGallery"
+            class="gallery-item gallery-item--project"
+            :style="{ '--gallery-focus': item.coverCrop || 'center' }"
+            :to="`/works/${item.id}`"
+            :aria-label="`View ${item.title}`"
+          >
+            <picture>
+              <source v-if="item.desktopSrc" :srcset="item.desktopSrc" media="(min-width: 761px)">
+              <img
+                :src="item.src"
+                :alt="item.title"
+                :loading="item.order < 2 ? 'eager' : 'lazy'"
+                :fetchpriority="item.order < 2 ? 'high' : 'auto'"
               >
-                <picture>
-                  <source v-if="item.desktopSrc" :srcset="item.desktopSrc" media="(min-width: 761px)">
-                  <img
-                    :src="item.src"
-                    :alt="item.title"
-                    :loading="item.order < 2 ? 'eager' : 'lazy'"
-                    :fetchpriority="item.order < 2 ? 'high' : 'auto'"
-                  >
-                </picture>
-                <span class="gallery-item__title" aria-hidden="true">{{ item.title }}</span>
-              </NuxtLink>
+            </picture>
+            <span class="gallery-item__title" aria-hidden="true">{{ item.title }}</span>
+          </NuxtLink>
 
-            <button
-              v-else
-              class="gallery-item"
-              type="button"
-              data-cursor="zoom-in"
-              :style="{ '--gallery-focus': item.coverCrop || 'center' }"
-              :aria-label="`Open ${item.title}`"
-              @click="openLightbox(item, $event)"
-              >
-                <picture>
-                  <source v-if="item.desktopSrc" :srcset="item.desktopSrc" media="(min-width: 761px)">
-                  <img :src="item.src" :alt="item.title">
-                </picture>
-                <span class="gallery-item__title" aria-hidden="true">{{ item.title }}</span>
-              </button>
-          </template>
-        </div>
+          <button
+            v-else
+            class="gallery-item"
+            type="button"
+            data-cursor="zoom-in"
+            :style="{ '--gallery-focus': item.coverCrop || 'center' }"
+            :aria-label="`Open ${item.title}`"
+            @click="openLightbox(item, $event)"
+          >
+            <picture>
+              <source v-if="item.desktopSrc" :srcset="item.desktopSrc" media="(min-width: 761px)">
+              <img :src="item.src" :alt="item.title">
+            </picture>
+            <span class="gallery-item__title" aria-hidden="true">{{ item.title }}</span>
+          </button>
+        </template>
       </div>
-    </section>
-
-    <section :class="['portfolio-panel portfolio-panel--roblox', { 'portfolio-panel--active': activePortfolioTab === 'roblox' }]">
-      <div class="roblox-gallery">
-        <button
-          v-for="item in robloxGalleryItems"
-          :key="item.id"
-          class="gallery-item roblox-gallery__item"
-          type="button"
-          data-cursor="zoom-in"
-          :aria-label="`Open ${item.title}`"
-          @click="openLightbox(item, $event)"
-        >
-          <img :src="item.src" :alt="item.title" :loading="item.order < 2 ? 'eager' : 'lazy'">
-          <span class="gallery-item__title" aria-hidden="true">{{ item.title }}</span>
-        </button>
-      </div>
-    </section>
+    </div>
   </div>
 
   <Teleport to="body">
@@ -342,7 +176,7 @@ onBeforeUnmount(() => {
       </figure>
 
       <button
-        v-if="activeMediaIndex < lightboxMedia.length - 1"
+        v-if="activeMediaIndex < (activeItem.media?.length || 1) - 1"
         class="project-lightbox__hit project-lightbox__hit--next"
         type="button"
         data-cursor="right-arrow"

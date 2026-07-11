@@ -102,9 +102,7 @@ main {
   background: var(--bg);
 }
 
-.site-nav,
-.site-nav--left,
-.site-nav--right {
+.site-nav {
   display: flex;
   width: 52px;
 }
@@ -117,10 +115,81 @@ main {
   justify-content: flex-start;
 }
 
+.site-menu {
+  position: relative;
+  display: inline-flex;
+}
+
 .site-nav__link {
+  display: inline-grid;
+  place-items: center;
   color: var(--text);
   font-size: 1rem;
   font-weight: 400;
+}
+
+.site-nav__link::before,
+.site-nav__label {
+  grid-area: 1 / 1;
+}
+
+.site-nav__link::before {
+  content: attr(data-label);
+  font-weight: 600;
+  visibility: hidden;
+}
+
+.site-nav__button {
+  position: relative;
+  padding: 0 16px 0 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.site-nav__chevron {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+  transition: transform 180ms ease;
+  transform: translateY(-50%);
+}
+
+.site-menu--open .site-nav__chevron {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.site-subnav {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  z-index: 2;
+  display: grid;
+  min-width: 168px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
+}
+
+.site-subnav__link {
+  padding: 10px 12px;
+  color: var(--text);
+  font-size: 0.88rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.site-subnav__link:hover,
+.site-subnav__link[aria-current='page'] {
+  color: var(--accent);
 }
 
 .site-nav__link:hover,
@@ -251,6 +320,12 @@ main :is(a, button):focus-visible,
   padding-bottom: 72px;
 }
 
+.roblox-page {
+  width: min(1100px, calc(100vw - 36px));
+  margin: 0 auto;
+  padding: 0 0 72px;
+}
+
 .gallery-page__intro {
   display: grid;
   gap: 20px;
@@ -266,9 +341,7 @@ main :is(a, button):focus-visible,
 }
 
 .gallery-page__socials,
-.gallery-item__title,
-.portfolio-tabs,
-.portfolio-panel--roblox {
+.gallery-item__title {
   display: none;
 }
 
@@ -278,6 +351,13 @@ main :is(a, button):focus-visible,
   gap: 18px;
   width: 100%;
   margin-top: 18px;
+}
+
+.roblox-gallery {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+  margin-top: 32px;
 }
 
 .gallery-grid__row {
@@ -291,6 +371,7 @@ main :is(a, button):focus-visible,
   padding: 0;
   overflow: hidden;
   border: 0;
+  border-radius: 10px;
   background: transparent;
   cursor: pointer;
 }
@@ -601,22 +682,33 @@ main :is(a, button):focus-visible,
     transform: translateX(-50%);
   }
 
-  .site-nav,
-  .site-nav--left,
-  .site-nav--right {
+  .site-nav {
     gap: 10px;
     width: 110px;
+  }
+
+  .site-menu {
+    z-index: 2;
   }
 
   .site-nav__link {
     position: relative;
     z-index: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: inline-grid;
+    place-items: center;
     color: #f2f2f2;
     font-size: 1.125rem;
     font-weight: 500;
+  }
+
+  .site-subnav {
+    border-color: rgba(255, 255, 255, 0.14);
+    background: var(--chrome);
+    box-shadow: 0 18px 34px rgba(0, 0, 0, 0.28);
+  }
+
+  .site-subnav__link {
+    color: var(--chrome-muted);
   }
 
   .brand-mark {
@@ -635,7 +727,7 @@ main :is(a, button):focus-visible,
   }
 
   .gallery-page__intro {
-    row-gap: 16px;
+    row-gap: 6px;
     padding-top: 49px;
   }
 
@@ -646,21 +738,32 @@ main :is(a, button):focus-visible,
   .gallery-page__socials {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 12px;
+    position: relative;
   }
 
-  .gallery-page__socials::before {
+  .gallery-page__socials::before,
+  .gallery-page__socials::after {
+    position: absolute;
     width: 44px;
     height: 1px;
-    margin-right: 4px;
     background: var(--line);
     content: '';
   }
 
+  .gallery-page__socials::before {
+    right: calc(50% + 118px);
+  }
+
+  .gallery-page__socials::after {
+    left: calc(50% + 118px);
+  }
+
   .gallery-page__social-link {
     display: grid;
-    width: 38px;
-    height: 38px;
+    width: 42px;
+    height: 42px;
     place-items: center;
     border: 1px solid var(--line);
     border-radius: 50%;
@@ -669,8 +772,8 @@ main :is(a, button):focus-visible,
   }
 
   .gallery-page__social-link svg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
   }
 
   .gallery-page__social-link:hover {
@@ -679,69 +782,17 @@ main :is(a, button):focus-visible,
     transform: translateY(-2px);
   }
 
-  .portfolio-tabs {
-    display: flex;
-    align-items: baseline;
-    gap: 36px;
-    width: calc(100vw - 140px);
-    margin-top: 40px;
-    margin-left: calc(50% - 50vw + 70px);
-    color: var(--muted);
+  .roblox-page {
+    padding: 0 0 80px;
   }
 
-  .portfolio-tabs button {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 10px;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: inherit;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 500;
-    letter-spacing: 0.01em;
-    transition: color 180ms ease;
-  }
-
-  .portfolio-tabs__index {
-    color: var(--line);
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    transition: color 180ms ease;
-  }
-
-  .portfolio-tabs button:hover,
-  .portfolio-tabs__button--active {
-    color: var(--text);
-  }
-
-  .portfolio-tabs button:hover .portfolio-tabs__index,
-  .portfolio-tabs__button--active .portfolio-tabs__index {
-    color: var(--accent);
-  }
-
-  .portfolio-panel--main:not(.portfolio-panel--active) {
-    display: none;
-  }
-
-  .portfolio-panel--main .gallery-grid {
-    margin-top: 24px;
-  }
-
-  .portfolio-panel--roblox.portfolio-panel--active {
-    display: block;
-    margin-top: 24px;
-  }
-
-  .roblox-gallery {
+  .roblox-page .roblox-gallery {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
     grid-template-rows: repeat(2, minmax(0, 1fr));
     gap: 18px;
     width: calc(100vw - 140px);
+    margin-top: 56px;
     margin-left: calc(50% - 50vw + 70px);
     aspect-ratio: 4.36 / 1.5;
   }
@@ -780,7 +831,7 @@ main :is(a, button):focus-visible,
     grid-template-columns: 1fr 1fr 1fr 1.36fr;
     grid-template-rows: repeat(2, minmax(0, 1fr));
     width: calc(100vw - 140px);
-    margin-top: 28px;
+    margin-top: 56px;
     margin-left: calc(50% - 50vw + 70px);
     aspect-ratio: 4.36 / 2;
   }
@@ -879,19 +930,13 @@ main :is(a, button):focus-visible,
   }
 
   .project-gallery__item--featured,
-  .project-gallery__item--lead,
-  .project-gallery__item--panorama {
+  .project-gallery__item--lead {
     grid-column: 1 / -1;
   }
 
   .project-gallery__item--lead-portrait,
-  .project-gallery__item--solo-square,
-  .project-gallery__item--solo-portrait {
+  .project-gallery__item--solo-square {
     grid-column: 4 / span 6;
-  }
-
-  .project-gallery__item--solo-landscape {
-    grid-column: 3 / span 8;
   }
 
   .project-gallery__item--pair {
@@ -933,11 +978,17 @@ main :is(a, button):focus-visible,
   }
 
   .site-footer {
-    display: block;
+    display: grid;
+    min-height: 144px;
     width: 100%;
     margin: clamp(72px, 8vw, 120px) 0 0;
-    padding: 37px 0;
+    padding: 0;
+    align-items: center;
     background: var(--chrome);
+  }
+
+  main:has(.gallery-page, .roblox-page) + .site-footer {
+    margin-top: clamp(56px, 6vw, 96px);
   }
 
   .site-footer__bar {
@@ -947,7 +998,7 @@ main :is(a, button):focus-visible,
     width: min(1100px, calc(100vw - 36px));
     margin: 0 auto;
     gap: 32px;
-    color: var(--chrome-muted);
+    color: #f2f2f2;
   }
 
   .site-footer__credit {
@@ -972,7 +1023,7 @@ main :is(a, button):focus-visible,
     place-items: center;
     width: 20px;
     height: 20px;
-    color: var(--chrome-muted);
+    color: #f2f2f2;
     transition: color 180ms ease, transform 180ms ease;
   }
 
@@ -990,7 +1041,7 @@ main :is(a, button):focus-visible,
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    color: var(--chrome-muted);
+    color: #f2f2f2;
     font-size: 0.68rem;
     font-weight: 600;
     letter-spacing: 0.09em;
@@ -1016,12 +1067,10 @@ main :is(a, button):focus-visible,
 
 @keyframes gallery-lightbox-open {
   from {
-    opacity: 0;
     transform: translate(var(--lightbox-origin-x), var(--lightbox-origin-y)) scale(var(--lightbox-origin-scale));
   }
 
   to {
-    opacity: 1;
     transform: translate(0) scale(1);
   }
 }
