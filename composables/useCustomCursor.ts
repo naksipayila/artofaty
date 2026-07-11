@@ -99,6 +99,11 @@ export function useCustomCursor() {
     updateCursor(event.target)
   }
 
+  const refresh = () => {
+    if (!cursorEl) return
+    updateCursor(document.elementFromPoint(mouseX, mouseY))
+  }
+
   const onMouseDown = () => {
     mouseDown = true
     updateTransform()
@@ -132,5 +137,5 @@ export function useCustomCursor() {
     currentIcon = null
   }
 
-  return { start, stop }
+  return { start, stop, refresh }
 }

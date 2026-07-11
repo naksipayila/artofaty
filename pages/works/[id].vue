@@ -71,7 +71,7 @@ const activeMedia = computed(() =>
   activeIndex.value === null ? null : images.value[activeIndex.value] ?? null
 )
 
-const { start: startCursor, stop: stopCursor } = useCustomCursor()
+const { start: startCursor, stop: stopCursor, refresh: refreshCursor } = useCustomCursor()
 
 const setPageInert = (value: boolean) => {
   document.querySelector('.site-shell')?.toggleAttribute('inert', value)
@@ -91,6 +91,7 @@ const openLightbox = async (index: number, event: Event) => {
   activeIndex.value = index
   setPageInert(true)
   await nextTick()
+  refreshCursor()
   lightboxRef.value?.focus()
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -115,6 +116,7 @@ const closeLightbox = async (restoreFocus = true) => {
   activeIndex.value = null
   setPageInert(false)
   await nextTick()
+  refreshCursor()
   if (restoreFocus) triggerEl?.focus({ preventScroll: true })
   triggerEl = null
 }

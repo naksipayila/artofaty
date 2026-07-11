@@ -186,12 +186,12 @@ const defineRobloxProject = (project: RobloxProjectSource): RobloxProject => ({
 })
 
 export const robloxProjects: RobloxProject[] = [
-  defineRobloxProject({ id: 'mANbmy', title: 'Wendigo', cover: 'wendigo-cover.png', video: 'https://cdn.artstation.com/p/video_sources/003/217/147/wendigo.mp4' }),
-  defineRobloxProject({ id: 'K3ALqG', title: 'Krampus Shrek', cover: 'https://cdnb.artstation.com/p/assets/covers/images/098/059/805/20260429125129/smaller_square/naksi-naksi-videoframe-0.jpg?1777485089' }),
-  defineRobloxProject({ id: 'EzraOq', title: 'Leshen', cover: 'https://cdnb.artstation.com/p/assets/covers/images/098/949/237/20260511143520/smaller_square/naksi-naksi-videoframe-872.jpg?1778528120' }),
-  defineRobloxProject({ id: 'dydVeQ', title: 'Wise Mystical Tree', cover: 'https://cdnb.artstation.com/p/assets/covers/images/098/056/669/20260429125200/smaller_square/naksi-naksi-videoframe-443.jpg?1777485120' }),
-  defineRobloxProject({ id: '3EKJbv', title: 'Mind Flayer', cover: 'https://cdna.artstation.com/p/assets/covers/images/098/295/332/20260429124823/smaller_square/naksi-naksi-videoframe-8333.jpg?1777484903' }),
-  defineRobloxProject({ id: 'kNgea0', title: 'Crawler', cover: 'https://cdna.artstation.com/p/assets/covers/images/098/526/608/20260429130324/smaller_square/naksi-naksi-videoframe-9061.jpg?1777485804' }),
+  defineRobloxProject({ id: 'mANbmy', title: 'Wendigo', cover: 'roblox-covers/wendigo.jpg', video: 'https://cdn.artstation.com/p/video_sources/003/217/147/wendigo.mp4' }),
+  defineRobloxProject({ id: 'K3ALqG', title: 'Krampus Shrek', cover: 'roblox-covers/krampus-shrek.jpg' }),
+  defineRobloxProject({ id: 'EzraOq', title: 'Leshen', cover: 'roblox-covers/leshen.jpg' }),
+  defineRobloxProject({ id: 'dydVeQ', title: 'Wise Mystical Tree', cover: 'roblox-covers/wise-mystical-tree.jpg' }),
+  defineRobloxProject({ id: '3EKJbv', title: 'Mind Flayer', cover: 'roblox-covers/mind-flayer.jpg' }),
+  defineRobloxProject({ id: 'kNgea0', title: 'Crawler', cover: 'roblox-covers/crawler.jpg' }),
   defineRobloxProject({ id: '98qrkR', title: 'Ink Bendy', cover: 'https://cdna.artstation.com/p/assets/covers/images/098/063/336/20260429125240/smaller_square/naksi-naksi-videoframe-660.jpg?1777485161' }),
   defineRobloxProject({ id: '0lbwPy', title: 'Terrifier', cover: 'https://cdnb.artstation.com/p/assets/video_clips/images/098/073/123/20260429124929/smaller_square/naksi-thumb.jpg?1777484969' }),
   defineRobloxProject({ id: '4NDq5L', title: 'Scarecrow', cover: 'https://cdnb.artstation.com/p/assets/covers/images/098/081/269/20260512055419/smaller_square/naksi-naksi-videoframe-9582.jpg?1778583259' }),

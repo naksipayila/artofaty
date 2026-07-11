@@ -81,7 +81,7 @@ const lightboxMedia = computed(() =>
 
 const activeMedia = computed(() => lightboxMedia.value[activeMediaIndex.value] || null)
 
-const { start: startCursor, stop: stopCursor } = useCustomCursor()
+const { start: startCursor, stop: stopCursor, refresh: refreshCursor } = useCustomCursor()
 
 const getFocusableElements = (container: HTMLElement) =>
   [...container.querySelectorAll<HTMLElement>(
@@ -131,6 +131,7 @@ const openLightbox = async (item: GalleryItem, event: Event) => {
   activeMediaIndex.value = 0
   setPageInert(true)
   await nextTick()
+  refreshCursor()
   lightboxRef.value?.focus()
 }
 
@@ -139,6 +140,7 @@ const closeLightbox = async () => {
   activeMediaIndex.value = 0
   setPageInert(false)
   await nextTick()
+  refreshCursor()
   triggerEl?.focus()
   triggerEl = null
 }
@@ -223,16 +225,17 @@ onBeforeUnmount(() => {
         :aria-pressed="activePortfolioTab === 'main'"
         @click="activePortfolioTab = 'main'"
       >
-        Main
+        <span class="portfolio-tabs__index" aria-hidden="true">01</span>
+        <span>Main Portfolio</span>
       </button>
-      <span aria-hidden="true">|</span>
       <button
         :class="{ 'portfolio-tabs__button--active': activePortfolioTab === 'roblox' }"
         type="button"
         :aria-pressed="activePortfolioTab === 'roblox'"
         @click="activePortfolioTab = 'roblox'"
       >
-        Roblox
+        <span class="portfolio-tabs__index" aria-hidden="true">02</span>
+        <span>Roblox Portfolio</span>
       </button>
     </nav>
 
