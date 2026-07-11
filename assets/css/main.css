@@ -738,12 +738,12 @@ main :is(a, button):focus-visible,
 
   .roblox-gallery {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-template-rows: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
     gap: 18px;
     width: calc(100vw - 140px);
     margin-left: calc(50% - 50vw + 70px);
-    aspect-ratio: 4.36 / 3;
+    aspect-ratio: 4.36 / 1.5;
   }
 
   .roblox-gallery__item:nth-child(1) {
@@ -762,18 +762,18 @@ main :is(a, button):focus-visible,
   }
 
   .roblox-gallery__item:nth-child(4) {
+    grid-column: 5;
+    grid-row: 1;
+  }
+
+  .roblox-gallery__item:nth-child(5) {
     grid-column: 3;
     grid-row: 2;
   }
 
-  .roblox-gallery__item:nth-child(5) {
-    grid-column: 1 / span 2;
-    grid-row: 3;
-  }
-
   .roblox-gallery__item:nth-child(6) {
-    grid-column: 3 / span 2;
-    grid-row: 3;
+    grid-column: 5;
+    grid-row: 2;
   }
 
   .gallery-grid {

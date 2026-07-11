@@ -32,8 +32,8 @@ const robloxGalleryItems: GalleryItem[] = robloxProjects.slice(0, 6).map((projec
   order,
   hasGallery: false,
   media: [
-    { src: assetUrl(project.image), type: 'image' },
-    ...(project.video ? [{ src: project.video, type: 'video' as const }] : [])
+    ...(project.video ? [{ src: project.video, type: 'video' as const }] : []),
+    { src: assetUrl(project.image), type: 'image' as const }
   ]
 }))
 
