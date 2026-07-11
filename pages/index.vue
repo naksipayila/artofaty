@@ -156,18 +156,18 @@ const {
         <span class="sr-only">Close image</span>
       </button>
 
-      <button
-        v-if="activeMediaIndex > 0"
-        class="project-lightbox__hit project-lightbox__hit--previous"
-        type="button"
-        data-cursor="left-arrow"
-        aria-label="Previous media"
-        @click.stop="activeMediaIndex -= 1"
-      >
-        <span class="sr-only">Previous media</span>
-      </button>
-
       <figure class="project-lightbox__figure project-lightbox__figure--reference">
+        <button
+          v-if="activeMediaIndex > 0"
+          class="project-lightbox__hit project-lightbox__hit--previous"
+          type="button"
+          data-cursor="left-arrow"
+          aria-label="Previous media"
+          @click.stop="activeMediaIndex -= 1"
+        >
+          <span class="sr-only">Previous media</span>
+        </button>
+
         <video
           v-if="activeMedia?.type === 'video'"
           :src="activeMedia.src"
@@ -177,18 +177,18 @@ const {
           playsinline
         />
         <img v-else-if="activeMedia" :src="activeMedia.src" :alt="activeItem.title">
-      </figure>
 
-      <button
-        v-if="activeMediaIndex < (activeItem.media?.length || 1) - 1"
-        class="project-lightbox__hit project-lightbox__hit--next"
-        type="button"
-        data-cursor="right-arrow"
-        aria-label="Next media"
-        @click.stop="activeMediaIndex += 1"
-      >
-        <span class="sr-only">Next media</span>
-      </button>
+        <button
+          v-if="activeMediaIndex < (activeItem.media?.length || 1) - 1"
+          class="project-lightbox__hit project-lightbox__hit--next"
+          type="button"
+          data-cursor="right-arrow"
+          aria-label="Next media"
+          @click.stop="activeMediaIndex += 1"
+        >
+          <span class="sr-only">Next media</span>
+        </button>
+      </figure>
     </div>
   </Teleport>
 </template>

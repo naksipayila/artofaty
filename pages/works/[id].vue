@@ -315,18 +315,18 @@ onBeforeUnmount(() => {
         <span class="sr-only">Close image</span>
       </button>
 
-      <button
-        v-if="activeIndex !== null && activeIndex > 0"
-        class="project-lightbox__hit project-lightbox__hit--previous"
-        type="button"
-        data-cursor="left-arrow"
-        aria-label="Previous image"
-        @click.stop="prevImage"
-      >
-        <span class="sr-only">Previous image</span>
-      </button>
-
       <figure ref="lightboxFigureRef" class="project-lightbox__figure project-lightbox__figure--reference">
+        <button
+          v-if="activeIndex !== null && activeIndex > 0"
+          class="project-lightbox__hit project-lightbox__hit--previous"
+          type="button"
+          data-cursor="left-arrow"
+          aria-label="Previous image"
+          @click.stop="prevImage"
+        >
+          <span class="sr-only">Previous image</span>
+        </button>
+
         <video
           v-if="isVideo(activeMedia)"
           :src="activeMedia"
@@ -337,18 +337,18 @@ onBeforeUnmount(() => {
           @click.stop
         />
         <img v-else :src="activeMedia" :alt="project.title">
-      </figure>
 
-      <button
-        v-if="activeIndex !== null && activeIndex < images.length - 1"
-        class="project-lightbox__hit project-lightbox__hit--next"
-        type="button"
-        data-cursor="right-arrow"
-        aria-label="Next image"
-        @click.stop="nextImage"
-      >
-        <span class="sr-only">Next image</span>
-      </button>
+        <button
+          v-if="activeIndex !== null && activeIndex < images.length - 1"
+          class="project-lightbox__hit project-lightbox__hit--next"
+          type="button"
+          data-cursor="right-arrow"
+          aria-label="Next image"
+          @click.stop="nextImage"
+        >
+          <span class="sr-only">Next image</span>
+        </button>
+      </figure>
     </div>
   </Teleport>
 </template>

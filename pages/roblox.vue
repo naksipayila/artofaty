@@ -7,7 +7,7 @@ type RobloxGalleryItem = GalleryLightboxItem & {
   order: number
 }
 
-const robloxGalleryItems: RobloxGalleryItem[] = robloxProjects.slice(0, 6).map((project, order) => ({
+const robloxGalleryItems: RobloxGalleryItem[] = robloxProjects.slice(0, 14).map((project, order) => ({
   id: project.id,
   src: project.cover,
   title: project.title,
@@ -16,6 +16,8 @@ const robloxGalleryItems: RobloxGalleryItem[] = robloxProjects.slice(0, 6).map((
     ? [{ src: project.video, type: 'video' as const }]
     : [{ src: project.cover, type: 'image' as const }]
 }))
+const featuredRobloxGalleryItems = robloxGalleryItems.slice(0, 6)
+const additionalRobloxGalleryItems = robloxGalleryItems.slice(6)
 
 useSeoMeta({
   title: 'Roblox Portfolio',
@@ -53,7 +55,7 @@ const {
 
     <div class="roblox-gallery">
       <button
-        v-for="item in robloxGalleryItems"
+        v-for="item in featuredRobloxGalleryItems"
         :key="item.id"
         class="gallery-item roblox-gallery__item"
         type="button"
@@ -62,6 +64,21 @@ const {
         @click="openLightbox(item, $event)"
       >
         <img :src="item.src" :alt="item.title" :loading="item.order < 2 ? 'eager' : 'lazy'">
+        <span class="gallery-item__title" aria-hidden="true">{{ item.title }}</span>
+      </button>
+    </div>
+
+    <div class="roblox-gallery roblox-gallery--secondary">
+      <button
+        v-for="item in additionalRobloxGalleryItems"
+        :key="item.id"
+        class="gallery-item roblox-gallery__item"
+        type="button"
+        data-cursor="zoom-in"
+        :aria-label="`Open ${item.title}`"
+        @click="openLightbox(item, $event)"
+      >
+        <img :src="item.src" :alt="item.title" loading="lazy">
         <span class="gallery-item__title" aria-hidden="true">{{ item.title }}</span>
       </button>
     </div>
@@ -87,18 +104,18 @@ const {
         <span class="sr-only">Close image</span>
       </button>
 
-      <button
-        v-if="hasPreviousMedia"
-        class="project-lightbox__hit project-lightbox__hit--previous"
-        type="button"
-        data-cursor="left-arrow"
-        aria-label="Previous item"
-        @click.stop="previousMedia"
-      >
-        <span class="sr-only">Previous item</span>
-      </button>
-
       <figure class="project-lightbox__figure project-lightbox__figure--reference">
+        <button
+          v-if="hasPreviousMedia"
+          class="project-lightbox__hit project-lightbox__hit--previous"
+          type="button"
+          data-cursor="left-arrow"
+          aria-label="Previous item"
+          @click.stop="previousMedia"
+        >
+          <span class="sr-only">Previous item</span>
+        </button>
+
         <video
           v-if="activeMedia?.type === 'video'"
           data-cursor="zoom-out"
@@ -110,18 +127,18 @@ const {
           @click.stop
         />
         <img v-else-if="activeMedia" :src="activeMedia.src" :alt="activeItem.title">
-      </figure>
 
-      <button
-        v-if="hasNextMedia"
-        class="project-lightbox__hit project-lightbox__hit--next"
-        type="button"
-        data-cursor="right-arrow"
-        aria-label="Next item"
-        @click.stop="nextMedia"
-      >
-        <span class="sr-only">Next item</span>
-      </button>
+        <button
+          v-if="hasNextMedia"
+          class="project-lightbox__hit project-lightbox__hit--next"
+          type="button"
+          data-cursor="right-arrow"
+          aria-label="Next item"
+          @click.stop="nextMedia"
+        >
+          <span class="sr-only">Next item</span>
+        </button>
+      </figure>
     </div>
   </Teleport>
 </template>
