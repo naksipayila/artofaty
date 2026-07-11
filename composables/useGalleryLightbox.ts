@@ -152,6 +152,7 @@ export function useGalleryLightbox(items: GalleryLightboxItem[] = []) {
   }
 
   const handleLightboxClick = (event: MouseEvent) => {
+    if (window.innerWidth <= 760 && event.target !== event.currentTarget) return
     if (event.target instanceof HTMLElement && event.target.closest('button, video')) return
     void closeLightbox()
   }

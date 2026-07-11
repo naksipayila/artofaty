@@ -154,6 +154,7 @@ const handleKeydown = (event: KeyboardEvent) => {
 
 const handleLightboxClick = (event: MouseEvent) => {
   if (isReturningToSource.value) return
+  if (window.innerWidth <= 760 && event.target !== event.currentTarget) return
   if (event.target instanceof HTMLElement && event.target.closest('button')) return
   void closeLightbox()
 }
@@ -303,6 +304,7 @@ onBeforeUnmount(() => {
           controls
           loop
           playsinline
+          @click.stop
         />
         <img v-else :src="activeMedia" :alt="project.title">
       </figure>
