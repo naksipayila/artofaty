@@ -1241,7 +1241,8 @@ main :is(a, button):focus-visible,
 
   .site-footer__credit {
     display: flex;
-    grid-column: 2;
+    grid-column: 1;
+    grid-row: 1;
     gap: 14px;
     margin: 0;
     font-size: 0.68rem;
@@ -1256,6 +1257,7 @@ main :is(a, button):focus-visible,
     align-items: center;
     gap: 12px;
     grid-column: 3;
+    grid-row: 1;
     justify-self: end;
   }
 
@@ -1288,8 +1290,9 @@ main :is(a, button):focus-visible,
     letter-spacing: 0.09em;
     text-transform: uppercase;
     transition: color 180ms ease;
-    grid-column: 1;
-    justify-self: start;
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: center;
     min-height: 0;
   }
 
