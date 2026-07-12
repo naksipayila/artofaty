@@ -1321,6 +1321,23 @@ main :is(a, button):focus-visible,
   }
 }
 
+.page-transition,
+.about-page {
+  animation: page-enter 340ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes page-enter {
+  from {
+    clip-path: inset(0 0 10% 0);
+    transform: translate3d(0, 14px, 0);
+  }
+
+  to {
+    clip-path: inset(0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -1332,6 +1349,8 @@ main :is(a, button):focus-visible,
   .site-footer__top,
   .site-footer__top svg,
   .project-page__back,
+  .page-transition,
+  .about-page,
   .project-lightbox--reference .project-lightbox__figure--reference {
     animation: none;
     transition: none;

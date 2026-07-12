@@ -45,15 +45,16 @@ const {
 </script>
 
 <template>
-  <div class="roblox-page">
-    <div class="gallery-page__intro">
-      <p class="gallery-page__bio">
-        I create stylized characters and creatures for Roblox, focusing on expressive silhouettes, readable forms, and game-ready presentation.
-        A selection of character art created for the Roblox platform.
-      </p>
-    </div>
+  <div class="page-transition">
+    <div class="roblox-page">
+      <div class="gallery-page__intro">
+        <p class="gallery-page__bio">
+          I create stylized characters and creatures for Roblox, focusing on expressive silhouettes, readable forms, and game-ready presentation.
+          A selection of character art created for the Roblox platform.
+        </p>
+      </div>
 
-    <div class="roblox-gallery">
+      <div class="roblox-gallery">
       <button
         v-for="item in featuredRobloxGalleryItems"
         :key="item.id"
@@ -66,9 +67,9 @@ const {
         <img :src="item.src" :alt="item.title" :loading="item.order < 2 ? 'eager' : 'lazy'">
         <span class="gallery-item__title" aria-hidden="true">{{ item.title }}</span>
       </button>
-    </div>
+      </div>
 
-    <div class="roblox-gallery roblox-gallery--secondary">
+      <div class="roblox-gallery roblox-gallery--secondary">
       <button
         v-for="item in additionalRobloxGalleryItems"
         :key="item.id"
@@ -81,11 +82,11 @@ const {
         <img :src="item.src" :alt="item.title" loading="lazy">
         <span class="gallery-item__title" aria-hidden="true">{{ item.title }}</span>
       </button>
+      </div>
     </div>
-  </div>
 
-  <Teleport to="body">
-    <div
+    <Teleport to="body">
+      <div
       v-if="activeItem"
       ref="lightboxRef"
       class="project-lightbox project-lightbox--reference"
@@ -138,6 +139,7 @@ const {
           <span class="sr-only">Next item</span>
         </button>
       </figure>
-    </div>
-  </Teleport>
+      </div>
+    </Teleport>
+  </div>
 </template>

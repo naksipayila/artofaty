@@ -63,12 +63,13 @@ const {
 </script>
 
 <template>
-  <div class="gallery-page">
-    <div class="gallery-page__intro">
-      <p class="gallery-page__bio">
-        I create stylized and fantasy-focused 3D characters, combining sculpting, hand-painted texture work, and realtime presentation.
-        Selected character art and illustrations by Ali Taha Yapışkan.
-      </p>
+  <div class="page-transition">
+    <div class="gallery-page">
+      <div class="gallery-page__intro">
+        <p class="gallery-page__bio">
+          I create stylized and fantasy-focused 3D characters, combining sculpting, hand-painted texture work, and realtime presentation.
+          Selected character art and illustrations by Ali Taha Yapışkan.
+        </p>
 
       <nav class="gallery-page__socials" aria-label="Social media">
         <a
@@ -95,12 +96,12 @@ const {
             <path d="M21.58 7.19a2.96 2.96 0 0 0-2.08-2.1C17.67 4.6 12 4.6 12 4.6s-5.67 0-7.5.49a2.96 2.96 0 0 0-2.08 2.1A31.2 31.2 0 0 0 2 12a31.2 31.2 0 0 0 .42 4.81 2.96 2.96 0 0 0 2.08 2.1c1.83.49 7.5.49 7.5.49s5.67 0 7.5-.49a2.96 2.96 0 0 0 2.08-2.1A31.2 31.2 0 0 0 22 12a31.2 31.2 0 0 0-.42-4.81ZM10.2 15.1V8.9l5.2 3.1-5.2 3.1Z" />
           </svg>
         </a>
-      </nav>
-    </div>
+        </nav>
+      </div>
 
-    <div class="gallery-grid">
-      <div v-for="(row, rowIndex) in galleryRows" :key="rowIndex" class="gallery-grid__row">
-        <template v-for="item in row" :key="item.id">
+      <div class="gallery-grid">
+        <div v-for="(row, rowIndex) in galleryRows" :key="rowIndex" class="gallery-grid__row">
+          <template v-for="item in row" :key="item.id">
           <NuxtLink
             v-if="item.hasGallery"
             class="gallery-item gallery-item--project"
@@ -135,13 +136,13 @@ const {
             </picture>
             <span class="gallery-item__title" aria-hidden="true">{{ item.title }}</span>
           </button>
-        </template>
+          </template>
+        </div>
       </div>
     </div>
-  </div>
 
-  <Teleport to="body">
-    <div
+    <Teleport to="body">
+      <div
       v-if="activeItem"
       ref="lightboxRef"
       class="project-lightbox project-lightbox--reference"
@@ -193,6 +194,7 @@ const {
           <span class="sr-only">Next media</span>
         </button>
       </figure>
-    </div>
-  </Teleport>
+      </div>
+    </Teleport>
+  </div>
 </template>

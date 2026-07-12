@@ -254,17 +254,18 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <article class="project-page">
-    <header class="project-page__header">
+  <div class="page-transition">
+    <article class="project-page">
+      <header class="project-page__header">
       <NuxtLink class="project-page__back" to="/" aria-label="Back to works">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M19 12H5M11 18l-6-6 6-6" />
         </svg>
       </NuxtLink>
       <h1 v-if="project.id !== 'anastasia'">{{ project.title }}</h1>
-    </header>
+      </header>
 
-    <div class="project-gallery">
+      <div class="project-gallery">
       <button
         v-for="image in galleryImages"
         :key="image.src"
@@ -290,11 +291,11 @@ onBeforeUnmount(() => {
         />
         <img v-else :src="image.src" :alt="`${project.title} ${image.index + 1}`" :loading="image.index === 0 ? 'eager' : 'lazy'">
       </button>
-    </div>
-  </article>
+      </div>
+    </article>
 
-  <Teleport to="body">
-    <div
+    <Teleport to="body">
+      <div
       v-if="activeMedia"
       ref="lightboxRef"
       class="project-lightbox project-lightbox--reference"
@@ -348,6 +349,7 @@ onBeforeUnmount(() => {
           <span class="sr-only">Next image</span>
         </button>
       </figure>
-    </div>
-  </Teleport>
+      </div>
+    </Teleport>
+  </div>
 </template>
