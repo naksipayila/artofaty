@@ -14,6 +14,7 @@ const galleryItems: GalleryItem[] = projects.map((project, order) => ({
   id: project.id,
   src: project.cover || project.images[0],
   title: project.title,
+  href: project.images.length > 1 ? `/works/${project.id}` : undefined,
   coverCrop: project.coverCrop,
   desktopSrc: project.desktopCover,
   order,
@@ -47,15 +48,18 @@ useSeoMeta({
 const {
   activeItem,
   activeMedia,
-  activeMediaIndex,
   closeLightbox,
   handleLightboxClick,
   handleLightboxTouchEnd,
   handleLightboxTouchStart,
+  hasNextMedia,
+  hasPreviousMedia,
   lightboxRef,
   lightboxStyle,
+  nextMedia,
+  previousMedia,
   openLightbox
-} = useGalleryLightbox()
+} = useGalleryLightbox(galleryItems)
 </script>
 
 <template>
@@ -158,12 +162,12 @@ const {
 
       <figure class="project-lightbox__figure project-lightbox__figure--reference">
         <button
-          v-if="activeMediaIndex > 0"
+          v-if="hasPreviousMedia"
           class="project-lightbox__hit project-lightbox__hit--previous"
           type="button"
           data-cursor="left-arrow"
           aria-label="Previous media"
-          @click.stop="activeMediaIndex -= 1"
+          @click.stop="previousMedia"
         >
           <span class="sr-only">Previous media</span>
         </button>
@@ -179,12 +183,12 @@ const {
         <img v-else-if="activeMedia" :src="activeMedia.src" :alt="activeItem.title">
 
         <button
-          v-if="activeMediaIndex < (activeItem.media?.length || 1) - 1"
+          v-if="hasNextMedia"
           class="project-lightbox__hit project-lightbox__hit--next"
           type="button"
           data-cursor="right-arrow"
           aria-label="Next media"
-          @click.stop="activeMediaIndex += 1"
+          @click.stop="nextMedia"
         >
           <span class="sr-only">Next media</span>
         </button>

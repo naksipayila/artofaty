@@ -7,6 +7,7 @@ export type GalleryLightboxItem = {
   src: string
   title: string
   media?: GalleryLightboxMedia[]
+  href?: string
 }
 
 export function useGalleryLightbox(items: GalleryLightboxItem[] = []) {
@@ -102,6 +103,11 @@ export function useGalleryLightbox(items: GalleryLightboxItem[] = []) {
   }
 
   const selectMedia = async (item: GalleryLightboxItem, index: number) => {
+    if (item.href) {
+      await navigateTo(item.href)
+      return
+    }
+
     activeItem.value = item
     activeMediaIndex.value = index
     await nextTick()

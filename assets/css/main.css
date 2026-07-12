@@ -1241,6 +1241,7 @@ main :is(a, button):focus-visible,
 
   .site-footer__credit {
     display: flex;
+    grid-column: 2;
     gap: 14px;
     margin: 0;
     font-size: 0.68rem;
@@ -1254,6 +1255,8 @@ main :is(a, button):focus-visible,
     display: flex;
     align-items: center;
     gap: 12px;
+    grid-column: 3;
+    justify-self: end;
   }
 
   .site-footer__socials a {
@@ -1285,7 +1288,8 @@ main :is(a, button):focus-visible,
     letter-spacing: 0.09em;
     text-transform: uppercase;
     transition: color 180ms ease;
-    justify-self: end;
+    grid-column: 1;
+    justify-self: start;
     min-height: 0;
   }
 
