@@ -3,7 +3,7 @@
 ## Commands
 - This is an npm project with a v3 lockfile: use `npm install` locally and `npm ci` in CI.
 - Scripts are `npm run dev`, `npm run build`, `npm run generate`, and `npm run preview`; there are no lint, test, formatter, or typecheck scripts. Use `npm run build` for focused verification.
-- GitHub Pages parity in PowerShell: `$env:NUXT_APP_BASE_URL = '/artofaty/'; npm run generate`. The static output is `.output/public`.
+- GitHub Pages parity in PowerShell: `$env:NUXT_APP_BASE_URL = '/artofaty-portfolio/'; npm run generate`. The static output is `.output/public`.
 - Build/generate recreates `.nuxt`; a running dev server can briefly return 503 during that restart.
 
 ## Pages And Content
@@ -21,7 +21,7 @@
 ## Assets And Deployment
 - Public URLs must honor `runtimeConfig.app.baseURL` or `withBaseURL`; never add root-absolute public paths. Montserrat is self-hosted in `public/fonts/` and declared/preloaded in `nuxt.config.ts`.
 - `.gitignore` excludes `*.png`; explicitly unignore a PNG under `public/` before adding it. Do not edit `.nuxt/`, `.output/`, `dist/`, or `node_modules/`.
-- `.github/workflows/deploy.yml` deploys pushes to `main` (or manual runs) with Node 22, `npm ci`, `NUXT_APP_BASE_URL=/artofaty/`, and `npm run generate`.
+- `.github/workflows/deploy.yml` deploys pushes to `main` (or manual runs) with Node 22, `npm ci`, `NUXT_APP_BASE_URL=/artofaty-portfolio/`, and `npm run generate`.
 
 ## Browser Checks
 - `opencode.json` connects Playwright to Chrome DevTools Protocol at `http://127.0.0.1:9222`; a compatible browser must already be listening there for browser validation.
