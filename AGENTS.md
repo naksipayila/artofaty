@@ -10,7 +10,7 @@
 - `app.vue` mounts the default layout (`SiteHeader`, `<main>`, `SiteFooter`). Main routes are `/`, `/roblox`, `/about`, and `/works/[id]`; `/works` is a 301 redirect to `/`.
 - `data/portfolio.ts` is the content source. `projects` drives detail routes, which `nuxt.config.ts` prerenders automatically.
 - `robloxProjects` has no detail routes. `pages/roblox.vue` displays `robloxProjects.slice(0, 14)` as a six-card featured mosaic followed by eight additional cards; a video is the lightbox media when available, otherwise the cover is used.
-- All lightboxes require `.project-lightbox` and `data-lenis-prevent`; main-project detail lightboxes also require `data-scroll-dismiss-lightbox` for desktop wheel dismissal.
+- All lightboxes require `.project-lightbox`, `data-lenis-prevent`, and `data-scroll-dismiss-lightbox` for desktop wheel dismissal.
 
 ## UI Contracts
 - `assets/css/main.css` is global and mobile-first; desktop overrides start at `@media (min-width: 761px)`. Preserve the mobile/desktop split when changing interactions.

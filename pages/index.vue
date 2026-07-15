@@ -147,6 +147,7 @@ const {
       ref="lightboxRef"
       class="project-lightbox project-lightbox--reference"
       data-lenis-prevent
+      data-scroll-dismiss-lightbox
       data-cursor="zoom-out"
       role="dialog"
       aria-modal="true"

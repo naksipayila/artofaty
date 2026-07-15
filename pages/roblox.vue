@@ -91,6 +91,7 @@ const {
       ref="lightboxRef"
       class="project-lightbox project-lightbox--reference"
       data-lenis-prevent
+      data-scroll-dismiss-lightbox
       data-cursor="zoom-out"
       role="dialog"
       aria-modal="true"
@@ -126,7 +127,7 @@ const {
           loop
           playsinline
         />
-        <img v-else-if="activeMedia" :src="activeMedia.src" :alt="activeItem.title">
+        <img v-else-if="activeMedia" data-cursor="zoom-out" :src="activeMedia.src" :alt="activeItem.title">
 
         <button
           v-if="hasNextMedia"

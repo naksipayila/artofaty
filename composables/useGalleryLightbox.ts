@@ -158,6 +158,15 @@ export function useGalleryLightbox(items: GalleryLightboxItem[] = []) {
     }
   }
 
+  const handleLightboxWheel = (event: WheelEvent) => {
+    if (window.innerWidth <= 760 || !activeItem.value) return
+
+    event.preventDefault()
+    if (event.deltaY <= 0) return
+
+    void closeLightbox()
+  }
+
   const handleLightboxClick = (event: MouseEvent) => {
     if (window.innerWidth <= 760 && event.target !== event.currentTarget) return
     if (event.target instanceof HTMLElement && event.target.closest('button')) return
@@ -193,6 +202,7 @@ export function useGalleryLightbox(items: GalleryLightboxItem[] = []) {
 
   onMounted(() => {
     window.addEventListener('keydown', handleKeydown)
+    window.addEventListener('wheel', handleLightboxWheel, { capture: true, passive: false })
     startCursor()
   })
 
@@ -200,6 +210,7 @@ export function useGalleryLightbox(items: GalleryLightboxItem[] = []) {
     setPageInert(false)
     stopCursor()
     window.removeEventListener('keydown', handleKeydown)
+    window.removeEventListener('wheel', handleLightboxWheel, true)
   })
 
   return {
