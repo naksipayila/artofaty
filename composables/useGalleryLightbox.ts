@@ -14,8 +14,13 @@ export function useGalleryLightbox(items: GalleryLightboxItem[] = []) {
   const activeItem = ref<GalleryLightboxItem | null>(null)
   const activeMediaIndex = ref(0)
   const lightboxRef = ref<HTMLElement | null>(null)
+  const lightboxFigureRef = ref<HTMLElement | null>(null)
   const lightboxOrigin = ref({ x: 0, y: 0, scale: 0.16 })
+  const isReturningToSource = ref(false)
+  const isLightboxReady = ref(false)
   let triggerEl: HTMLElement | null = null
+  let returnAnimationFrame = 0
+  let lightboxReadyTimeout: ReturnType<typeof setTimeout> | null = null
   let touchStart: { x: number, y: number } | null = null
 
   const lightboxStyle = computed(() => ({
@@ -49,6 +54,13 @@ export function useGalleryLightbox(items: GalleryLightboxItem[] = []) {
     document.querySelector('.site-shell')?.toggleAttribute('inert', value)
   }
 
+  const sourceForItem = (item: GalleryLightboxItem) => {
+    const index = items.indexOf(toRaw(item))
+    return index < 0
+      ? null
+      : document.querySelector<HTMLElement>(`[data-gallery-lightbox-index="${index}"]`)
+  }
+
   const trapFocus = (event: KeyboardEvent) => {
     if (event.key !== 'Tab' || !lightboxRef.value) return
 
@@ -73,6 +85,11 @@ export function useGalleryLightbox(items: GalleryLightboxItem[] = []) {
   }
 
   const openLightbox = async (item: GalleryLightboxItem, event: Event) => {
+    if (lightboxReadyTimeout) window.clearTimeout(lightboxReadyTimeout)
+    if (returnAnimationFrame) window.cancelAnimationFrame(returnAnimationFrame)
+
+    isReturningToSource.value = false
+    isLightboxReady.value = false
     triggerEl = event.currentTarget instanceof HTMLElement ? event.currentTarget : null
 
     if (triggerEl) {
@@ -90,15 +107,32 @@ export function useGalleryLightbox(items: GalleryLightboxItem[] = []) {
     await nextTick()
     refreshCursor()
     lightboxRef.value?.focus()
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      isLightboxReady.value = true
+      return
+    }
+
+    lightboxReadyTimeout = window.setTimeout(() => {
+      isLightboxReady.value = true
+      lightboxReadyTimeout = null
+    }, 220)
   }
 
-  const closeLightbox = async () => {
+  const closeLightbox = async (restoreFocus = true) => {
+    if (lightboxReadyTimeout) window.clearTimeout(lightboxReadyTimeout)
+    if (returnAnimationFrame) window.cancelAnimationFrame(returnAnimationFrame)
+
+    lightboxReadyTimeout = null
+    returnAnimationFrame = 0
+    isReturningToSource.value = false
+    isLightboxReady.value = false
     activeItem.value = null
     activeMediaIndex.value = 0
     setPageInert(false)
     await nextTick()
     refreshCursor()
-    triggerEl?.focus()
+    if (restoreFocus) triggerEl?.focus({ preventScroll: true })
     triggerEl = null
   }
 
@@ -110,8 +144,8 @@ export function useGalleryLightbox(items: GalleryLightboxItem[] = []) {
 
     activeItem.value = item
     activeMediaIndex.value = index
+    triggerEl = sourceForItem(item) ?? triggerEl
     await nextTick()
-    refreshCursor()
   }
 
   const previousMedia = async () => {
@@ -158,16 +192,58 @@ export function useGalleryLightbox(items: GalleryLightboxItem[] = []) {
     }
   }
 
+  const returnToSource = () => {
+    const figure = lightboxFigureRef.value
+    const source = triggerEl
+
+    if (!figure || !source || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      void closeLightbox(false)
+      return
+    }
+
+    const startRect = figure.getBoundingClientRect()
+    if (!startRect.width || !startRect.height) {
+      void closeLightbox(false)
+      return
+    }
+
+    isReturningToSource.value = true
+    figure.style.transformOrigin = 'top left'
+    const startedAt = performance.now()
+
+    const animate = (now: number) => {
+      const progress = Math.min((now - startedAt) / 200, 1)
+      const eased = 1 - (1 - progress) ** 2
+      const targetRect = source.getBoundingClientRect()
+      const translateX = (targetRect.left - startRect.left) * eased
+      const translateY = (targetRect.top - startRect.top) * eased
+      const scale = 1 + ((targetRect.width / startRect.width) - 1) * eased
+
+      figure.style.transform = `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`
+
+      if (progress < 1) {
+        returnAnimationFrame = window.requestAnimationFrame(animate)
+        return
+      }
+
+      returnAnimationFrame = 0
+      void closeLightbox(false)
+    }
+
+    returnAnimationFrame = window.requestAnimationFrame(animate)
+  }
+
   const handleLightboxWheel = (event: WheelEvent) => {
     if (window.innerWidth <= 760 || !activeItem.value) return
 
     event.preventDefault()
-    if (event.deltaY <= 0) return
+    if (!isLightboxReady.value || isReturningToSource.value || event.deltaY <= 0) return
 
-    void closeLightbox()
+    returnToSource()
   }
 
   const handleLightboxClick = (event: MouseEvent) => {
+    if (isReturningToSource.value) return
     if (window.innerWidth <= 760 && event.target !== event.currentTarget) return
     if (event.target instanceof HTMLElement && event.target.closest('button')) return
     void closeLightbox()
@@ -207,6 +283,8 @@ export function useGalleryLightbox(items: GalleryLightboxItem[] = []) {
   })
 
   onBeforeUnmount(() => {
+    if (lightboxReadyTimeout) window.clearTimeout(lightboxReadyTimeout)
+    if (returnAnimationFrame) window.cancelAnimationFrame(returnAnimationFrame)
     setPageInert(false)
     stopCursor()
     window.removeEventListener('keydown', handleKeydown)
@@ -223,6 +301,8 @@ export function useGalleryLightbox(items: GalleryLightboxItem[] = []) {
     handleLightboxTouchStart,
     hasNextMedia,
     hasPreviousMedia,
+    isReturningToSource,
+    lightboxFigureRef,
     lightboxOrigin,
     lightboxRef,
     lightboxStyle,

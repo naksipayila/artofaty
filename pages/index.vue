@@ -54,6 +54,8 @@ const {
   handleLightboxTouchStart,
   hasNextMedia,
   hasPreviousMedia,
+  isReturningToSource,
+  lightboxFigureRef,
   lightboxRef,
   lightboxStyle,
   nextMedia,
@@ -126,6 +128,7 @@ const {
             class="gallery-item"
             type="button"
             data-cursor="zoom-in"
+            :data-gallery-lightbox-index="item.order"
             :style="{ '--gallery-focus': item.coverCrop || 'center' }"
             :aria-label="`Open ${item.title}`"
             @click="openLightbox(item, $event)"
@@ -146,6 +149,7 @@ const {
       v-if="activeItem"
       ref="lightboxRef"
       class="project-lightbox project-lightbox--reference"
+      :class="{ 'project-lightbox--returning': isReturningToSource }"
       data-lenis-prevent
       data-scroll-dismiss-lightbox
       data-cursor="zoom-out"
@@ -162,7 +166,7 @@ const {
         <span class="sr-only">Close image</span>
       </button>
 
-      <figure class="project-lightbox__figure project-lightbox__figure--reference">
+      <figure ref="lightboxFigureRef" class="project-lightbox__figure project-lightbox__figure--reference">
         <button
           v-if="hasPreviousMedia"
           class="project-lightbox__hit project-lightbox__hit--previous"
